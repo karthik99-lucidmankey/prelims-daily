@@ -4,10 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0F5E5C">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Prelims Daily">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="Five UPSC Prelims questions a day, with explanations, spaced revision and streaks.">
 <title>Prelims Daily</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -19,110 +20,168 @@
 :root{
   --bg:#F7F3EC; --card:#FFFFFF; --ink:#1D2433; --muted:#6B7280; --line:#E7E1D6;
   --brand:#0F5E5C; --brand-ink:#FFFFFF; --brand-soft:#E3F0EE;
-  --saffron:#D9731A; --ok:#1F7A4D; --ok-soft:#E3F4EA; --bad:#B4372B; --bad-soft:#FBE8E5;
+  --saffron:#D9731A; --saffron-soft:#FCEBD9; --ok:#1F7A4D; --ok-soft:#E3F4EA; --bad:#B4372B; --bad-soft:#FBE8E5;
   --shadow:0 1px 2px rgba(20,20,30,.05),0 6px 20px rgba(20,20,30,.06);
 }
 @media (prefers-color-scheme:dark){:root{
   --bg:#12161C; --card:#1B2129; --ink:#E9ECF1; --muted:#9AA3AF; --line:#2A323C;
   --brand:#4FB3A9; --brand-ink:#0D1B1A; --brand-soft:#1D3533;
-  --saffron:#F0A050; --ok:#5BC48A; --ok-soft:#173326; --bad:#F07A6E; --bad-soft:#3A1F1C;
+  --saffron:#F0A050; --saffron-soft:#3A2A18; --ok:#5BC48A; --ok-soft:#173326; --bad:#F07A6E; --bad-soft:#3A1F1C;
   --shadow:none;
 }}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
-#app{max-width:520px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom))}
+#app{max-width:520px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) 16px calc(130px + env(safe-area-inset-bottom))}
 h1,h2,.serif{font-family:Fraunces,Georgia,serif;letter-spacing:-.01em}
 h1{font-size:28px;margin:2px 0 0;line-height:1.15}
-h2{font-size:22px;margin:4px 0 12px}
-button{font-family:inherit}
+button,input,textarea{font-family:inherit}
 a{color:var(--brand)}
 .eyebrow{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:600}
 .top{display:flex;justify-content:space-between;align-items:flex-end;margin:6px 0 16px;gap:12px}
-.icon{flex:none;border:1px solid var(--line);background:var(--card);border-radius:12px;width:44px;height:44px;font-size:18px;cursor:pointer;color:var(--ink);display:grid;place-items:center}
+.icons{display:flex;gap:8px}
+.icon{flex:none;border:1px solid var(--line);background:var(--card);border-radius:12px;min-width:44px;height:44px;padding:0 10px;font-size:16px;cursor:pointer;color:var(--ink);display:grid;place-items:center}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center;min-width:0}
-.stat b{display:block;font:700 20px/1.2 Fraunces,Georgia,serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat b{display:block;font:700 19px/1.2 Fraunces,Georgia,serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stat span{font-size:12px;color:var(--muted)}
 .stat.fire b{color:var(--saffron)}
 .note{font-size:14px;color:var(--muted);margin:8px 2px 14px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
+.card.rev{border-color:var(--saffron)}
+.kind{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand);margin-bottom:10px}
+.kind.rev{background:var(--saffron-soft);color:var(--saffron)}
 .seg{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
 .seg button{border:0;background:transparent;padding:10px;border-radius:9px;font-weight:600;font-size:15px;color:var(--muted);cursor:pointer}
 .seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
 .hint{font-size:13px;color:var(--muted);margin:10px 2px 0}
-.label{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:18px 0 8px;font-weight:600}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font-weight:500;font-size:13px;cursor:pointer}
+.label{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:16px 0 8px;font-weight:600}
+.subjrow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px;font-size:14px}
+.subjrow b{font-weight:600}
+.link{background:none;border:0;color:var(--brand);font-weight:600;font-size:14px;cursor:pointer;padding:8px 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 12px;font-weight:500;font-size:13px;cursor:pointer}
 .chip.on{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
 .primary{display:block;width:100%;border:0;border-radius:14px;padding:15px;background:var(--brand);color:var(--brand-ink);font-weight:600;font-size:16px;cursor:pointer;margin-top:16px}
 .primary:disabled{opacity:.45;cursor:default}
 .ghost{display:block;width:100%;border:1px solid var(--line);border-radius:14px;padding:13px;background:var(--card);color:var(--ink);font-weight:500;font-size:15px;cursor:pointer;margin-top:8px;text-align:center;text-decoration:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row2 .ghost{margin-top:0}
 .sub{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+.foot{text-align:center;margin-top:18px}
+.foot button{background:none;border:0;color:var(--muted);font-size:13px;text-decoration:underline;cursor:pointer;padding:8px}
+.install{display:flex;gap:12px;align-items:flex-start;background:var(--brand-soft);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:14px}
+.install div{flex:1}
+.install b{display:block;margin-bottom:2px}
+.install .x{background:none;border:0;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px;line-height:1}
+.install .mini{margin-top:8px;border:0;border-radius:10px;background:var(--brand);color:var(--brand-ink);font-weight:600;padding:8px 14px;cursor:pointer}
+/* welcome */
+.welcome{min-height:70vh;display:flex;flex-direction:column;justify-content:center}
+.tile{width:64px;height:64px;border-radius:18px;background:#0F5E5C;color:#F7F3EC;display:grid;place-items:center;font:700 34px Fraunces,Georgia,serif;position:relative;margin-bottom:22px}
+.tile::after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:#E58A2E;right:12px;bottom:16px}
+.welcome h1{font-size:32px}
+.welcome p{color:var(--muted);margin:8px 0 22px}
+.field{width:100%;font-size:18px;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);outline:none}
+.field:focus{border-color:var(--brand)}
 /* quiz */
 .qtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 14px}
-.dots{display:flex;gap:6px}
-.dots button{width:12px;height:12px;border-radius:50%;border:2px solid var(--line);background:transparent;padding:0;cursor:pointer}
-.dots button.cur{border-color:var(--brand)}
-.dots button.ok{background:var(--ok);border-color:var(--ok)}
-.dots button.bad{background:var(--bad);border-color:var(--bad)}
-.dots button.skip{background:var(--muted);border-color:var(--muted)}
+.dots{display:flex}
+.dots button{width:28px;height:32px;border:0;background:none;padding:0;cursor:pointer;display:grid;place-items:center}
+.dots i{display:block;width:11px;height:11px;border-radius:50%;border:2px solid var(--line)}
+.dots .cur i{border-color:var(--brand);transform:scale(1.2)}
+.dots .ok i{background:var(--ok);border-color:var(--ok)}
+.dots .bad i{background:var(--bad);border-color:var(--bad)}
+.dots .skip i{background:var(--muted);border-color:var(--muted)}
 .pill{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand)}
-.meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.meta{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.meta .tags{display:flex;flex-wrap:wrap;gap:6px;flex:1}
 .tag{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
 .tag.rev{color:var(--saffron);border-color:var(--saffron)}
+.tag.pyq{color:var(--brand);border-color:var(--brand)}
+.star{flex:none;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 10px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
+.star.on{color:var(--saffron);border-color:var(--saffron)}
+.topic{font-size:12px;color:var(--muted);margin:-4px 0 8px}
 .stem{font-size:17px;font-weight:500;line-height:1.5;margin:0 0 10px}
-ol.st{margin:0 0 10px;padding-left:22px}
-ol.st li{margin:4px 0}
+ol.st{margin:0 0 10px;padding-left:30px}
+ol.st.roman{list-style:upper-roman}
+ol.st li{margin:5px 0;padding-left:2px}
+.assert{margin:0 0 10px;display:grid;gap:8px}
+.assert div{background:var(--bg);border-radius:10px;padding:10px 12px;font-size:15px}
+.assert b{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 table.match{width:100%;border-collapse:collapse;font-size:15px;margin:4px 0 10px}
 table.match th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 table.match td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
-table.match td.n{width:28px;color:var(--muted)}
+table.match td.n{width:34px;color:var(--muted)}
 .tail{font-weight:500;margin:6px 0 12px}
 .opts{display:grid;gap:8px}
-.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px;font-size:15px;cursor:pointer;line-height:1.4}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px;font-size:15px;cursor:pointer;line-height:1.4;transition:border-color .15s,background .15s}
 .opt .l{flex:none;width:24px;height:24px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:13px;font-weight:600;color:var(--muted)}
+.opt.sel{border-color:var(--brand);background:var(--brand-soft)}
+.opt.sel .l{background:var(--brand);color:var(--brand-ink)}
 .opt.right{border-color:var(--ok);background:var(--ok-soft)}
 .opt.right .l{background:var(--ok);color:#fff}
 .opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
 .opt.wrong .l{background:var(--bad);color:#fff}
 .opt.dim{opacity:.55}
 .opt:disabled{cursor:default}
-.skipbtn{background:none;border:0;color:var(--muted);font-size:14px;text-decoration:underline;cursor:pointer;margin:10px auto 0;display:block}
 .fb{margin-top:14px;padding:10px 12px;border-radius:12px;font-weight:600;font-size:15px}
 .fb.ok{background:var(--ok-soft);color:var(--ok)}
 .fb.bad{background:var(--bad-soft);color:var(--bad)}
 .fb.skip{background:var(--bg);color:var(--muted)}
+.take{margin-top:10px;padding:10px 12px;border-left:3px solid var(--saffron);background:var(--saffron-soft);border-radius:0 10px 10px 0;font-size:15px}
 details.why{margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:0 12px}
 details.why summary{cursor:pointer;padding:12px 0;font-weight:600;list-style:none}
 details.why summary::-webkit-details-marker{display:none}
 details.why summary::after{content:"＋";float:right;color:var(--muted)}
 details.why[open] summary::after{content:"－"}
 details.why p{margin:0 0 10px;font-size:15px}
+.revise{font-size:14px;color:var(--muted);margin:0 0 10px}
 .links{display:grid;gap:6px;margin:0 0 12px}
 .links a{display:block;padding:9px 12px;border-radius:10px;background:var(--brand-soft);text-decoration:none;font-size:14px;font-weight:500}
 .links a::after{content:" ↗"}
-.flag{display:inline-block;margin-top:10px;font-size:13px;color:var(--muted)}
+.small{display:inline-block;margin-top:10px;font-size:13px;color:var(--muted)}
+.stop{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:13px;cursor:pointer;padding:10px 0 0}
+/* bottom bar */
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:5;background:linear-gradient(to top,var(--bg) 78%,transparent);padding:14px 16px calc(14px + env(safe-area-inset-bottom))}
+#bar:empty{display:none}
+#bar .in{max-width:520px;margin:0 auto}
+#bar .primary{margin-top:0}
+#bar .q{font-size:13px;color:var(--muted);text-align:center;margin-bottom:8px;font-weight:500}
+.conf{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.conf button{border:0;border-radius:14px;padding:14px 6px;font-weight:600;font-size:15px;cursor:pointer;background:var(--brand);color:var(--brand-ink)}
+.conf button.m{background:var(--card);color:var(--ink);border:1.5px solid var(--brand)}
+.barrow{display:flex;gap:8px;align-items:center}
+.barrow .ghost{margin:0;width:auto;padding:13px 16px}
+.barrow .primary{flex:1}
 /* summary + progress */
 .big{font:700 40px/1.1 Fraunces,Georgia,serif;margin:4px 0}
 .rows{display:grid;gap:8px;margin-top:12px}
-.row{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.row{display:flex;gap:10px;align-items:flex-start;font-size:14px;cursor:pointer}
 .row .r{flex:none;width:22px;text-align:center}
 .row small{display:block;color:var(--muted);font-size:12px}
 .bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:5px}
 .bar i{display:block;height:100%;background:var(--brand);border-radius:99px}
 .subj{margin:12px 0}
-.subj .h{display:flex;justify-content:space-between;font-size:14px}
-.subj .h span{color:var(--muted);font-size:13px}
-.kv{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.subj .h{display:flex;justify-content:space-between;font-size:14px;gap:8px}
+.subj .h span{color:var(--muted);font-size:13px;text-align:right}
+.cal{display:grid;grid-template-columns:auto 1fr auto;gap:6px 10px;font-size:14px;margin-top:10px;align-items:center}
+.cal .k{font-weight:600}
+.cal .v{color:var(--muted);text-align:right}
+.insight{font-size:14px;margin:10px 0 0;padding:10px 12px;border-radius:10px;background:var(--bg)}
 input[type=time]{font:600 22px Inter,system-ui,sans-serif;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+textarea{width:100%;min-height:110px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:10px;font-size:13px;font-family:ui-monospace,Menlo,monospace}
 .danger{background:none;border:0;color:var(--bad);font-size:13px;margin:20px auto 0;display:block;cursor:pointer}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500;max-width:min(92vw,480px);opacity:0;transition:.25s;pointer-events:none;z-index:9}
+.prose p{margin:0 0 12px}
+.prose ul{margin:0 0 12px;padding-left:20px}
+.empty{color:var(--muted);text-align:center;padding:24px 8px}
+.toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translateX(-50%) translateY(-20px);background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500;max-width:min(92vw,480px);opacity:0;transition:.25s;pointer-events:none;z-index:9;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <div id="app"></div>
+<div id="bar"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script src="questions.js"></script>
 <script>
@@ -132,30 +191,47 @@ input[type=time]{font:600 22px Inter,system-ui,sans-serif;padding:10px 12px;bord
 /* ====== SETTINGS YOU CAN EDIT ====== */
 const CONFIG = {
   appName: "Prelims Daily",
-  perDay: 5,
-  flagWhatsApp: "",   // e.g. "919876543210" (country code + number, no + or spaces). Leave "" to hide.
-  flagEmail: "pvskarthik99@gmail.com"       // used only if flagWhatsApp is empty
+  feedbackEmail: "",          // e.g. "you@example.com" — shows "Report / feedback" links. Leave "" to hide.
+  contentUpdated: "25 Oct 2026",
+  setSize: 5,                 // questions per day
+  newPerDay: 3,               // new questions per normal day (rest are reviews)
+  revisionEvery: 4            // every Nth active day is a Revision Round
 };
 /* =================================== */
 
 const SUBJECTS = [
-  ["ancient","Ancient & Medieval"],["modern","Modern History"],["culture","Art & Culture"],
-  ["polity","Polity"],["economy","Economy"],["geography","Geography"],
-  ["environment","Environment"],["science","Science & Tech"]
+  ["polity","Polity"],["economy","Economy"],["environment","Environment"],["geography","Geography"],
+  ["modern","Modern History"],["ancient","Ancient & Medieval"],["culture","Art & Culture"],["science","Science & Tech"]
 ];
 const SUBJ = Object.fromEntries(SUBJECTS);
+// Random-mode weighting: approximate share of static subjects in recent GS Paper I papers.
+const WEIGHTS = {polity:15, economy:15, environment:14, geography:14, modern:12, science:12, ancient:10, culture:8};
+const ASSERT_OPTS = [
+  "Both Statement-I and Statement-II are correct, and Statement-II explains Statement-I",
+  "Both Statement-I and Statement-II are correct, but Statement-II does not explain Statement-I",
+  "Statement-I is correct, but Statement-II is incorrect",
+  "Statement-I is incorrect, but Statement-II is correct"
+];
 const QS = Array.isArray(window.QUESTIONS) ? window.QUESTIONS : [];
 const QBY = Object.fromEntries(QS.map(q => [q.id, q]));
-const RANKS = [[0,"Aspirant"],[20,"Prelims Qualified"],[60,"Mains Warrior"],[120,"Interview Call"],[250,"Topper"]];
+const RANKS = [[0,"Aspirant"],[75,"Prelims Qualified"],[200,"Mains Warrior"],[400,"Interview Call"],[700,"Topper"]];
+const INTERVALS = [0,3,7,21,60];
 const LET = ["a","b","c","d","e"];
+const CONF = {sure:"Sure", "5050":"50-50", guess:"Guess"};
 
 /* ---------- storage ---------- */
 const KEY = "prelimsDaily.v1";
-const DEF = {mode:"easy",subject:"random",xp:0,marks:0,streak:0,best:0,lastDay:null,freezeWeek:null,hist:{},days:{},log:[],remTime:"08:00"};
+function freshState(){ return {v:2,uid:"",name:"",mode:"easy",subject:"random",xp:0,marks:0,streak:0,best:0,lastDay:null,freezeWeek:null,hist:{},days:{},dayType:{},log:[],active:[],saved:[],remTime:"08:00",installDismissed:false}; }
 let memCopy = null;
 function load(){ try{ const s = localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){} return memCopy; }
 function save(){ memCopy = S; try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
-let S = Object.assign({}, DEF, load() || {});
+let S = Object.assign(freshState(), load() || {});
+S.v = 2;
+if(!S.uid) S.uid = "u-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8);
+["hist","days","dayType"].forEach(k => { if(!S[k] || typeof S[k] !== "object") S[k] = {}; });
+["log","active","saved"].forEach(k => { if(!Array.isArray(S[k])) S[k] = []; });
+if(S.mode !== "easy" && S.mode !== "exam") S.mode = "easy";
+if(S.subject !== "random" && !SUBJ[S.subject]) S.subject = "random";
 
 /* ---------- dates ---------- */
 function ymd(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
@@ -164,17 +240,24 @@ function addDays(s,n){ const d = parseD(s); d.setDate(d.getDate()+n); return ymd
 function diffDays(a,b){ return Math.round((parseD(b)-parseD(a))/86400000); }
 function today(){ return ymd(new Date()); }
 function weekKey(s){ const d = parseD(s); d.setDate(d.getDate()-((d.getDay()+6)%7)); return ymd(d); }
-
-(function prune(){ const cut = addDays(today(), -21); Object.keys(S.days).forEach(k => { if(k < cut) delete S.days[k]; }); })();
+(function prune(){ const cut = addDays(today(), -21); ["days","dayType"].forEach(k => Object.keys(S[k]).forEach(d => { if(d < cut) delete S[k][d]; })); })();
+save();
 
 /* ---------- helpers ---------- */
-function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
-function fmt(n){ return Number.isInteger(n) ? String(n) : n.toFixed(2).replace(/0$/,""); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function fmt(n){ n = Math.round(n*100)/100; return Number.isInteger(n) ? String(n) : n.toFixed(2).replace(/0$/,""); }
 function hash(str){ let h = 1779033703 ^ str.length; for(let i=0;i<str.length;i++){ h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = h<<13 | h>>>19; } return h>>>0; }
 function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed>>>15, 1|seed); t = t + Math.imul(t ^ t>>>7, 61|t) ^ t; return ((t ^ t>>>14)>>>0)/4294967296; }; }
 function shuffle(arr, r){ const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(r()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+function uniq(list){ const seen = new Set(); return list.filter(q => q && !seen.has(q.id) && seen.add(q.id)); }
+function optsOf(q){ return q.opts || (q.type === "assertion" ? ASSERT_OPTS : []); }
 let toastTimer = null;
-function toast(msg){ const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 3200); }
+function toast(msg){ const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 3400); }
+function isStandalone(){ try{ return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }catch(e){ return false; } }
+const UA = (navigator.userAgent || "");
+const IS_IOS = /iPhone|iPad|iPod/.test(UA);
+const IS_ANDROID = /Android/.test(UA);
+function buzz(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
 
 /* ---------- streak ---------- */
 function liveStreak(){
@@ -194,51 +277,104 @@ function touchStreak(){
   else if(gap === 2 && S.freezeWeek !== weekKey(t)){ S.streak += 1; S.freezeWeek = weekKey(t); msg = "❄️ Streak freeze used — missed a day, streak survives. Day " + S.streak + "."; }
   else S.streak = 1;
   S.lastDay = t; S.best = Math.max(S.best, S.streak);
+  if(S.active.indexOf(t) === -1) S.active.push(t);
+  if(S.active.length > 400) S.active = S.active.slice(-400);
   return msg || (S.streak > 1 ? "🔥 Day " + S.streak + " — streak secured." : "🔥 Streak started.");
 }
 
 /* ---------- daily set ---------- */
+function dayType(t){
+  if(!S.dayType[t]){
+    const prior = S.active.filter(d => d < t).length;
+    S.dayType[t] = ((prior + 1) % CONFIG.revisionEvery === 0 && Object.keys(S.hist).length >= 10) ? "revision" : "normal";
+  }
+  return S.dayType[t];
+}
 function setKey(){ return S.mode + "|" + S.subject; }
 function pool(mode, subject){ return QS.filter(q => q.mode === mode && (subject === "random" || q.subj === subject)); }
-function getSet(){
-  const t = today(); S.days[t] = S.days[t] || {};
+function weightedOrder(list, r){
+  if(S.subject !== "random") return shuffle(list, r);
+  const groups = {};
+  shuffle(list, r).forEach(q => { (groups[q.subj] = groups[q.subj] || []).push(q); });
+  const out = [];
+  while(Object.keys(groups).length){
+    const keys = Object.keys(groups);
+    const total = keys.reduce((s,k) => s + (WEIGHTS[k] || 8), 0);
+    let x = r() * total, pick = keys[keys.length-1];
+    for(const k of keys){ x -= (WEIGHTS[k] || 8); if(x <= 0){ pick = k; break; } }
+    out.push(groups[pick].shift());
+    if(!groups[pick].length) delete groups[pick];
+  }
+  return out;
+}
+function getSet(t){
+  t = t || today();
+  S.days[t] = S.days[t] || {};
   const k = setKey();
   if(S.days[t][k]) return S.days[t][k];
+  const size = CONFIG.setSize;
   const p = pool(S.mode, S.subject);
   const r = rng(hash(t + k));
-  const isDue = q => S.hist[q.id] && S.hist[q.id].due && S.hist[q.id].due <= t;
-  const due = p.filter(isDue).sort((a,b) => S.hist[a.id].due < S.hist[b.id].due ? -1 : 1).slice(0, 2);
-  const unseen = shuffle(p.filter(q => !S.hist[q.id]), r);
-  let picks = due.concat(unseen).slice(0, CONFIG.perDay);
-  if(picks.length < CONFIG.perDay){
-    const used = new Set(picks.map(q => q.id));
-    const seen = p.filter(q => !used.has(q.id)).sort((a,b) => ((S.hist[a.id]||{}).last||"") < ((S.hist[b.id]||{}).last||"") ? -1 : 1);
-    picks = picks.concat(seen).slice(0, CONFIG.perDay);
+  const doneToday = new Set();
+  Object.values(S.days[t]).forEach(s => Object.keys(s.ans).forEach(id => doneToday.add(id)));
+  const H = id => S.hist[id];
+  const avail = p.filter(q => !doneToday.has(q.id));
+  const byLast = (a,b) => (H(a.id).last||"") < (H(b.id).last||"") ? -1 : 1;
+  const accOf = q => { const h = H(q.id); return h.n ? h.k/h.n : 0; };
+  const due = avail.filter(q => H(q.id) && H(q.id).due && H(q.id).due <= t).sort((a,b) => H(a.id).due < H(b.id).due ? -1 : 1);
+  const unseen = weightedOrder(avail.filter(q => !H(q.id)), r);
+  const seenOld = avail.filter(q => H(q.id) && (H(q.id).last||"") <= addDays(t,-2));
+  let picks = [], reviewIds = [], kind = "normal";
+  if(dayType(t) === "revision"){
+    const weak = seenOld.filter(q => H(q.id).box > 0 && H(q.id).box <= 2).sort(byLast);
+    const saved = seenOld.filter(q => S.saved.indexOf(q.id) > -1);
+    const oldest = seenOld.slice().sort(byLast);
+    const cand = uniq(due.concat(weak, saved, oldest)).slice(0, size);
+    if(cand.length >= 3){
+      kind = "revision";
+      picks = cand; reviewIds = cand.map(q => q.id);
+      if(picks.length < size) picks = uniq(picks.concat(unseen)).slice(0, size);
+    }
   }
-  const dueIds = new Set(due.map(q => q.id));
-  const set = {ids: picks.map(q => q.id), review: picks.filter(q => dueIds.has(q.id)).map(q => q.id), ans: {}};
+  if(kind === "normal"){
+    const rv = due.slice(0, 2);
+    const nw = unseen.slice(0, CONFIG.newPerDay);
+    const recap = seenOld.filter(q => rv.indexOf(q) === -1).sort((a,b) => accOf(a) - accOf(b) || byLast(a,b));
+    const recapPick = recap.slice(0, Math.max(0, size - rv.length - nw.length));
+    reviewIds = rv.concat(recapPick).map(q => q.id);
+    picks = uniq(rv.concat(nw, recapPick, unseen, avail.slice().sort((a,b) => H(a.id)&&H(b.id) ? byLast(a,b) : 0))).slice(0, size);
+    reviewIds = reviewIds.filter(id => picks.some(q => q.id === id));
+  }
+  const set = {ids: picks.map(q => q.id), review: reviewIds, kind: kind, ans: {}};
   S.days[t][k] = set; save();
   return set;
 }
 
-/* ---------- answering ---------- */
-function answer(qid, choice){
-  const set = getSet();
+/* ---------- answering + scheduling ---------- */
+function schedule(h, ok, conf, t){
+  let b;
+  if(!ok || conf === "guess") b = 1;
+  else if(conf === "5050") b = 2;
+  else b = (h.box || 0) === 0 ? 3 : h.box + 1;
+  if(b > 4){ h.box = 5; h.due = null; } else { h.box = b; h.due = addDays(t, INTERVALS[b]); }
+}
+function answer(qid, choice, conf, date){
+  const t = date || today();
+  const set = getSet(t);
   if(set.ans[qid]) return null;
-  const q = QBY[qid]; const t = today();
+  const q = QBY[qid];
   const skip = choice === -1;
   const ok = !skip && choice === q.ans;
   let pts = 0;
   if(q.mode === "easy"){ if(ok){ pts = 10; S.xp += 10; } }
   else { pts = ok ? 2 : (skip ? 0 : -0.66); S.marks = Math.round((S.marks + pts)*100)/100; }
-  set.ans[qid] = {c:choice, ok:ok, skip:skip, pts:pts};
+  set.ans[qid] = {c:choice, ok:ok, skip:skip, pts:pts, conf:conf || null};
   const h = S.hist[qid] || {n:0, k:0, box:0};
   h.n++; if(ok) h.k++; h.last = t;
-  if(ok){ if(h.box === 1){ h.box = 2; h.due = addDays(t,7); } else if(h.box === 2){ h.box = 3; h.due = null; } }
-  else { h.box = 1; h.due = addDays(t,3); }
+  schedule(h, ok, conf, t);
   S.hist[qid] = h;
-  S.log.push({d:t, s:q.subj, m:q.mode, ok:ok, skip:skip});
-  if(S.log.length > 3000) S.log = S.log.slice(-3000);
+  S.log.push({d:t, s:q.subj, m:q.mode, ok:ok, skip:skip, c:conf || null, p:pts});
+  if(S.log.length > 4000) S.log = S.log.slice(-4000);
   const streakMsg = touchStreak();
   save();
   return {ok:ok, skip:skip, pts:pts, streakMsg:streakMsg};
@@ -254,13 +390,41 @@ function rankInfo(){
 
 /* ---------- views ---------- */
 const $app = document.getElementById("app");
-let view = "home", qi = 0;
-function go(v){ view = v; render(); window.scrollTo(0,0); }
-function render(){ ({home:renderHome, quiz:renderQuiz, summary:renderSummary, progress:renderProgress, remind:renderRemind})[view](); }
+const $bar = document.getElementById("bar");
+let view = S.name ? "home" : "welcome";
+let qi = 0, sel = null, curDate = today(), showSubj = false, readId = null, deferredPrompt = null, nameEdit = false;
+function go(v){ view = v; sel = null; render(); try{ window.scrollTo(0,0); }catch(e){} }
+function render(){
+  $bar.innerHTML = "";
+  ({welcome:renderWelcome, home:renderHome, quiz:renderQuiz, summary:renderSummary, progress:renderProgress,
+    remind:renderRemind, saved:renderSaved, read:renderRead, about:renderAbout, backup:renderBackup})[view]();
+}
+function bar(html){ $bar.innerHTML = '<div class="in">' + html + '</div>'; }
+
+function renderWelcome(){
+  $app.innerHTML =
+    '<section class="welcome"><div class="tile">P</div>' +
+    '<h1>Hi, what\'s your name?</h1>' +
+    '<p>Five Prelims questions a day, about five minutes. Your progress stays on this phone — no sign-up.</p>' +
+    '<input id="nm" class="field" type="text" maxlength="24" autocomplete="given-name" placeholder="Your name" value="' + esc(nameEdit ? S.name : "") + '">' +
+    '</section>';
+  bar('<button class="primary" data-act="setname">Continue</button>');
+}
+
+function installCard(){
+  if(isStandalone() || S.installDismissed) return "";
+  let body, btn = "";
+  if(deferredPrompt){ body = "Opens like an app from your home screen, and keeps your progress safe."; btn = '<button class="mini" data-act="install">Install</button>'; }
+  else if(IS_IOS){ body = "Tap the Share button ⬆︎, then “Add to Home Screen”. It opens like an app and keeps your progress safe."; }
+  else { body = "In Chrome, tap the ⋮ menu, then “Add to Home screen” or “Install app”. It keeps your progress safe."; }
+  return '<div class="install"><div><b>Add Prelims Daily to your home screen</b>' + esc(body) + (btn ? "<br>" + btn : "") + '</div><button class="x" data-act="nodismiss" aria-label="Dismiss">×</button></div>';
+}
 
 function renderHome(){
-  const st = liveStreak(), r = rankInfo(), set = getSet();
+  curDate = today();
+  const st = liveStreak(), r = rankInfo(), set = getSet(curDate);
   const done = Object.keys(set.ans).length, total = set.ids.length;
+  const rev = set.kind === "revision";
   let note = "";
   if(st.state === "none") note = "One question a day keeps the streak alive. All five if you're feeling sharp.";
   else if(st.state === "pending") note = "Answer one question today to keep your " + st.n + "-day streak.";
@@ -268,160 +432,237 @@ function renderHome(){
   else if(st.state === "lost") note = "Fresh start today. Best streak so far: " + S.best + " days.";
   else note = done >= total && total ? "Today's set is done. See you tomorrow ✨" : "Streak secured for today 🔥";
   const scoreStat = S.mode === "easy" ? "<b>" + S.xp + "</b><span>XP</span>" : "<b>" + fmt(S.marks) + "</b><span>exam marks</span>";
-  const btn = !total ? "No questions in this subject yet" : done === 0 ? "Start today's " + total : done < total ? "Continue · " + done + "/" + total + " done" : "Review today's answers";
+  const btn = !total ? "No questions in this subject yet" : done === 0 ? (rev ? "Start Revision Round" : "Start today's " + total) : done < total ? "Continue · " + done + "/" + total + " done" : "Review today's answers";
   const desc = S.mode === "easy"
-    ? "Single-answer MCQs. +10 XP for each correct answer."
-    : "Prelims format: statements, match the pairs. +2 correct, −0.66 wrong, skip for 0.";
+    ? "Warm-up: NCERT-level single-answer questions. +10 XP each."
+    : "Prelims pattern: statements, pairs, Statement-I/II. +2 / −0.66, or skip for 0.";
+  const nSaved = S.saved.length;
+  const dateTxt = new Date().toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"});
   $app.innerHTML =
-    '<header class="top"><div><div class="eyebrow">' + esc(new Date().toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"short"})) + '</div><h1>' + esc(CONFIG.appName) + '</h1></div>' +
-    '<button class="icon" data-act="progress" aria-label="Progress">📊</button></header>' +
+    '<header class="top"><div><div class="eyebrow">' + esc(CONFIG.appName) + ' · ' + esc(dateTxt) + '</div><h1>Hi, ' + esc(S.name) + '</h1></div>' +
+    '<div class="icons"><button class="icon" data-act="progress" aria-label="Progress">📊</button></div></header>' +
+    installCard() +
     '<section class="stats">' +
       '<div class="stat fire"><b>🔥 ' + st.n + '</b><span>day streak</span></div>' +
       '<div class="stat"><b>' + esc(r.cur[1]) + '</b><span>rank</span></div>' +
       '<div class="stat">' + scoreStat + '</div>' +
     '</section>' +
     '<p class="note">' + esc(note) + '</p>' +
-    '<section class="card">' +
+    '<section class="card' + (rev ? " rev" : "") + '">' +
+      '<span class="kind' + (rev ? " rev" : "") + '">' + (rev ? "🔁 Revision Round · 5 you've seen before" : "Today's " + total + (set.review.length ? " · " + set.review.length + " review" : "")) + '</span>' +
       '<div class="seg" role="tablist">' +
-        '<button class="' + (S.mode==="easy"?"on":"") + '" data-act="mode:easy">Easy</button>' +
+        '<button class="' + (S.mode==="easy"?"on":"") + '" data-act="mode:easy">Warm-up</button>' +
         '<button class="' + (S.mode==="exam"?"on":"") + '" data-act="mode:exam">Exam Mode</button>' +
       '</div>' +
       '<p class="hint">' + esc(desc) + '</p>' +
-      '<div class="label">Subject</div>' +
-      '<div class="chips">' +
-        '<button class="chip ' + (S.subject==="random"?"on":"") + '" data-act="subj:random">🎲 Random</button>' +
-        SUBJECTS.map(s => '<button class="chip ' + (S.subject===s[0]?"on":"") + '" data-act="subj:' + s[0] + '">' + esc(s[1]) + '</button>').join("") +
-      '</div>' +
+      '<div class="subjrow"><span>Subject: <b>' + (S.subject === "random" ? "🎲 Random" : esc(SUBJ[S.subject])) + '</b></span><button class="link" data-act="togglesubj">' + (showSubj ? "Done" : "Change") + '</button></div>' +
+      (showSubj ? '<div class="chips"><button class="chip ' + (S.subject==="random"?"on":"") + '" data-act="subj:random">🎲 Random</button>' +
+        SUBJECTS.map(s => '<button class="chip ' + (S.subject===s[0]?"on":"") + '" data-act="subj:' + s[0] + '">' + esc(s[1]) + '</button>').join("") + '</div>' : '') +
       '<button class="primary" data-act="start"' + (total ? "" : " disabled") + '>' + esc(btn) + '</button>' +
       '<div class="sub">About 5 minutes · 1 question keeps your streak</div>' +
     '</section>' +
-    '<button class="ghost" data-act="remind">⏰ Set a daily reminder</button>';
+    '<div class="row2"><button class="ghost" data-act="saved">★ Revise later' + (nSaved ? " (" + nSaved + ")" : "") + '</button><button class="ghost" data-act="remind">⏰ Reminder</button></div>' +
+    '<div class="foot"><button data-act="about">How questions are checked</button></div>';
 }
 
 function qBody(q){
+  const roman = q.num !== "arabic";
   let h = '<p class="stem">' + esc(q.stem) + '</p>';
-  if(q.type === "statements" && q.items) h += '<ol class="st">' + q.items.map(s => '<li>' + esc(s) + '</li>').join("") + '</ol>';
+  if(q.type === "statements" && q.items) h += '<ol class="st' + (roman ? " roman" : "") + '">' + q.items.map(s => '<li>' + esc(s) + '</li>').join("") + '</ol>';
+  if(q.type === "assertion") h += '<div class="assert"><div><b>Statement-I</b>' + esc(q.s1) + '</div><div><b>Statement-II</b>' + esc(q.s2) + '</div></div>';
   if(q.type === "match" && q.pairs){
+    const R = ["I","II","III","IV","V","VI"];
     h += '<table class="match"><thead><tr><th></th><th>' + esc((q.heads||[])[0]||"") + '</th><th>' + esc((q.heads||[])[1]||"") + '</th></tr></thead><tbody>' +
-      q.pairs.map((p,i) => '<tr><td class="n">' + (i+1) + '.</td><td>' + esc(p[0]) + '</td><td>' + esc(p[1]) + '</td></tr>').join("") + '</tbody></table>';
+      q.pairs.map((p,i) => '<tr><td class="n">' + (roman ? R[i] : (i+1)) + '.</td><td>' + esc(p[0]) + '</td><td>' + esc(p[1]) + '</td></tr>').join("") + '</tbody></table>';
   }
-  if(q.tail) h += '<p class="tail">' + esc(q.tail) + '</p>';
+  const tail = q.tail || (q.type === "assertion" ? "Which one of the following is correct in respect of the above statements?" : "");
+  if(tail) h += '<p class="tail">' + esc(tail) + '</p>';
   return h;
 }
-function flagLink(q){
-  const msg = CONFIG.appName + " — question " + q.id + " looks wrong: ";
-  if(CONFIG.flagWhatsApp) return "https://wa.me/" + CONFIG.flagWhatsApp + "?text=" + encodeURIComponent(msg);
-  if(CONFIG.flagEmail) return "mailto:" + CONFIG.flagEmail + "?subject=" + encodeURIComponent("Question " + q.id) + "&body=" + encodeURIComponent(msg);
-  return null;
+function feedbackLink(q){
+  if(!CONFIG.feedbackEmail) return "";
+  const subj = CONFIG.appName + " — question " + q.id;
+  return '<a class="small" href="mailto:' + esc(CONFIG.feedbackEmail) + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent("This question looks wrong because: ") + '">⚑ Something wrong here? Report it</a>';
 }
+function explainBlock(q, open){
+  return (q.take ? '<div class="take">💡 ' + esc(q.take) + '</div>' : '') +
+    '<details class="why"' + (open ? " open" : "") + '><summary>Why? Read the explanation</summary><p>' + esc(q.why) + '</p>' +
+    (q.rev ? '<p class="revise">📘 Revise from: ' + esc(q.rev) + '</p>' : '') +
+    (q.links && q.links.length ? '<div class="links">' + q.links.map(l => '<a href="' + esc(l.u) + '" target="_blank" rel="noopener">' + esc(l.t) + '</a>').join("") + '</div>' : '') +
+    '</details>';
+}
+function starBtn(id){ const on = S.saved.indexOf(id) > -1; return '<button class="star' + (on ? " on" : "") + '" data-act="star:' + id + '" aria-label="Revise later">' + (on ? "★ Saved" : "☆ Save") + '</button>'; }
 
 function renderQuiz(){
-  const set = getSet(); const id = set.ids[qi]; const q = QBY[id];
+  const set = getSet(curDate); const id = set.ids[qi]; const q = QBY[id];
   if(!q){ go("home"); return; }
   const a = set.ans[id];
+  const opts = optsOf(q);
   const dots = set.ids.map((x,i) => {
     const ax = set.ans[x]; let c = ax ? (ax.skip ? "skip" : ax.ok ? "ok" : "bad") : "";
     if(i === qi) c += " cur";
-    return '<button class="' + c + '" data-act="dot:' + i + '" aria-label="Question ' + (i+1) + '"></button>';
+    return '<button class="' + c + '" data-act="dot:' + i + '" aria-label="Question ' + (i+1) + '"><i></i></button>';
   }).join("");
-  let h = '<header class="qtop"><button class="icon" data-act="home" aria-label="Home">←</button><div class="dots">' + dots + '</div><span class="pill">' + (q.mode==="easy"?"Easy":"Exam") + '</span></header>';
-  h += '<article class="card"><div class="meta"><span class="tag">' + esc(SUBJ[q.subj]||q.subj) + '</span>' +
+  let h = '<header class="qtop"><button class="icon" data-act="home" aria-label="Home">←</button><div class="dots">' + dots + '</div><span class="pill">' + (q.mode==="easy"?"Warm-up":"Exam") + '</span></header>';
+  h += '<article class="card"><div class="meta"><div class="tags"><span class="tag">' + esc(SUBJ[q.subj]||q.subj) + '</span>' +
        (set.review.indexOf(id) > -1 ? '<span class="tag rev">↻ Review</span>' : '') +
-       (q.tag ? '<span class="tag">' + esc(q.tag) + '</span>' : '') + '</div>';
+       (q.tag ? '<span class="tag pyq">' + esc(q.tag) + '</span>' : '') + '</div>' + starBtn(id) + '</div>' +
+       (q.topic ? '<div class="topic">' + esc(q.topic) + '</div>' : '');
   h += qBody(q);
-  h += '<div class="opts">' + q.opts.map((o,i) => {
+  h += '<div class="opts">' + opts.map((o,i) => {
     let c = "opt";
     if(a){ if(i === q.ans) c += " right"; else if(i === a.c) c += " wrong"; else c += " dim"; }
+    else if(sel === i) c += " sel";
     return '<button class="' + c + '" data-act="opt:' + i + '"' + (a ? " disabled" : "") + '><span class="l">' + LET[i] + '</span><span>' + esc(o) + '</span></button>';
   }).join("") + '</div>';
-  if(!a && q.mode === "exam") h += '<button class="skipbtn" data-act="skip">Skip this one (0 marks)</button>';
   if(a){
     let fb, cls;
     if(a.skip){ cls = "skip"; fb = "Skipped · 0 marks · Answer: (" + LET[q.ans] + ")"; }
     else if(a.ok){ cls = "ok"; fb = "Correct · " + (q.mode==="easy" ? "+10 XP" : "+2 marks"); }
     else { cls = "bad"; fb = "Not quite · " + (q.mode==="easy" ? "0 XP" : "−0.66 marks") + " · Answer: (" + LET[q.ans] + ")"; }
+    if(a.conf) fb += " · you said " + CONF[a.conf];
     h += '<div class="fb ' + cls + '">' + esc(fb) + '</div>';
-    h += '<details class="why"' + (a.ok ? "" : " open") + '><summary>Why? Read the explanation</summary><p>' + esc(q.why) + '</p>' +
-         (q.links && q.links.length ? '<div class="links">' + q.links.map(l => '<a href="' + esc(l.u) + '" target="_blank" rel="noopener">' + esc(l.t) + '</a>').join("") + '</div>' : '') +
-         '</details>';
-    const fl = flagLink(q);
-    if(fl) h += '<a class="flag" href="' + esc(fl) + '" target="_blank" rel="noopener">⚑ Think this is wrong? Flag it</a>';
+    h += explainBlock(q, !a.ok);
+    h += feedbackLink(q);
+    const remaining = set.ids.filter(x => !set.ans[x]).length;
+    if(Object.keys(set.ans).length === 1 && remaining) h += '<div><button class="stop" data-act="home">Stop here — today\'s streak is safe</button></div>';
   }
   h += '</article>';
-  if(a){
-    const last = qi >= set.ids.length - 1;
-    const remaining = set.ids.filter(x => !set.ans[x]).length;
-    h += '<button class="primary" data-act="next">' + (last ? (remaining ? "Next unanswered →" : "See today's summary") : "Next question →") + '</button>';
-    if(!last && Object.keys(set.ans).length === 1) h += '<button class="ghost" data-act="home">Stop here — streak is safe</button>';
-  }
   $app.innerHTML = h;
+  // bottom action bar
+  if(a){
+    const remaining = set.ids.filter(x => !set.ans[x]).length;
+    bar('<button class="primary" data-act="next">' + (remaining ? "Next question →" : "See today's summary") + '</button>');
+  } else if(q.mode === "exam"){
+    if(sel === null) bar('<div class="barrow"><button class="ghost" data-act="skip">Skip · 0</button><button class="primary" disabled>Pick an option</button></div>');
+    else bar('<div class="q">How sure are you?</div><div class="conf"><button data-act="conf:sure">Sure</button><button class="m" data-act="conf:5050">50-50</button><button class="m" data-act="conf:guess">Guess</button></div>');
+  } else {
+    bar('<button class="primary" data-act="check"' + (sel === null ? " disabled" : "") + '>' + (sel === null ? "Pick an option" : "Check") + '</button>');
+  }
 }
 
 function renderSummary(){
-  const set = getSet();
+  const set = getSet(curDate);
   const vals = set.ids.map(id => set.ans[id]).filter(Boolean);
   const correct = vals.filter(v => v.ok).length;
   const exam = S.mode === "exam";
   const score = vals.reduce((s,v) => s + (v.pts||0), 0);
-  const scoreTxt = exam ? fmt(Math.round(score*100)/100) + " marks" : score + " XP";
   const st = liveStreak();
-  let h = '<header class="top"><div><div class="eyebrow">Today\'s set</div><h1>Done for today</h1></div><button class="icon" data-act="home" aria-label="Home">←</button></header>';
+  let h = '<header class="top"><div><div class="eyebrow">' + (set.kind === "revision" ? "Revision Round" : "Today's set") + '</div><h1>Nicely done, ' + esc(S.name) + '</h1></div><button class="icon" data-act="home" aria-label="Home">←</button></header>';
   h += '<section class="card"><div class="eyebrow">Score</div><div class="big">' + correct + '/' + set.ids.length + '</div>' +
-       '<div class="hint" style="margin:0">' + esc(scoreTxt) + ' · 🔥 ' + st.n + '-day streak</div>' +
+       '<div class="hint" style="margin:0">' + esc(exam ? fmt(score) + " marks" : score + " XP") + ' · 🔥 ' + st.n + '-day streak</div>' +
        '<div class="rows">' + set.ids.map((id,i) => {
           const q = QBY[id], v = set.ans[id];
           const r = !v ? "·" : v.skip ? "–" : v.ok ? "✅" : "❌";
           const s = q.stem.length > 80 ? q.stem.slice(0,78) + "…" : q.stem;
-          return '<div class="row" data-act="dot:' + i + '" style="cursor:pointer"><span class="r">' + r + '</span><div>' + esc(s) + '<small>' + esc(SUBJ[q.subj]) + '</small></div></div>';
+          return '<div class="row" data-act="dot:' + i + '"><span class="r">' + r + '</span><div>' + esc(s) + '<small>' + esc(SUBJ[q.subj]) + (q.topic ? " · " + esc(q.topic) : "") + '</small></div></div>';
         }).join("") + '</div></section>';
-  h += '<button class="primary" data-act="switch">Try ' + (exam ? "Easy" : "Exam Mode") + ' too</button>';
-  h += '<button class="ghost" data-act="progress">📊 See progress</button>';
-  h += '<p class="sub">Missed questions come back for review in 3 days, then 7.</p>';
+  h += '<p class="sub">Missed and guessed questions come back after 3 days; the rest return after 1–3 weeks to lock them in.</p>';
   $app.innerHTML = h;
+  bar('<div class="row2"><button class="primary" style="margin:0" data-act="switch">Try ' + (exam ? "Warm-up" : "Exam Mode") + '</button><button class="ghost" data-act="progress">📊 Progress</button></div>');
 }
 
+function calibration(){
+  const out = {};
+  S.log.filter(l => l.m === "exam" && l.c && !l.skip).forEach(l => {
+    const o = out[l.c] = out[l.c] || {n:0, k:0, p:0};
+    o.n++; if(l.ok) o.k++; o.p += (l.p || 0);
+  });
+  return out;
+}
 function renderProgress(){
   const r = rankInfo(); const t = today(); const from = addDays(t, -6);
   const week = S.log.filter(l => l.d >= from);
   const wk = week.length, wkOk = week.filter(l => l.ok).length;
-  const per = {};
-  S.log.forEach(l => { per[l.s] = per[l.s] || {n:0,k:0}; per[l.s].n++; if(l.ok) per[l.s].k++; });
-  const wper = {};
-  week.forEach(l => { wper[l.s] = wper[l.s] || {n:0,k:0}; wper[l.s].n++; if(l.ok) wper[l.s].k++; });
+  const per = {}; S.log.forEach(l => { per[l.s] = per[l.s] || {n:0,k:0}; per[l.s].n++; if(l.ok) per[l.s].k++; });
+  const wper = {}; week.forEach(l => { wper[l.s] = wper[l.s] || {n:0,k:0}; wper[l.s].n++; if(l.ok) wper[l.s].k++; });
   const ranked = Object.keys(wper).filter(s => wper[s].n >= 2).sort((a,b) => wper[b].k/wper[b].n - wper[a].k/wper[a].n);
-  const dueCount = Object.values(S.hist).filter(h => h.due && h.due <= addDays(t, 3)).length;
-  const toNext = r.next ? (r.next[0] - r.c) : 0;
+  const dueSoon = Object.values(S.hist).filter(h => h.due && h.due <= addDays(t, 3)).length;
   const pct = r.next ? Math.round((r.c - r.cur[0]) / (r.next[0] - r.cur[0]) * 100) : 100;
+  const cal = calibration();
   let h = '<header class="top"><div><div class="eyebrow">Progress</div><h1>' + esc(r.cur[1]) + '</h1></div><button class="icon" data-act="home" aria-label="Home">←</button></header>';
-  h += '<section class="card"><div class="subj" style="margin:0"><div class="h"><b>' + r.c + ' correct answers</b><span>' + (r.next ? toNext + ' to ' + esc(r.next[1]) : 'Top rank reached') + '</span></div><div class="bar"><i style="width:' + pct + '%"></i></div></div></section>';
-  h += '<section class="stats">' +
-       '<div class="stat fire"><b>🔥 ' + liveStreak().n + '</b><span>streak</span></div>' +
-       '<div class="stat"><b>' + S.best + '</b><span>best streak</span></div>' +
-       '<div class="stat"><b>' + S.xp + '</b><span>XP · ' + fmt(S.marks) + ' marks</span></div></section>';
+  h += '<section class="card"><div class="subj" style="margin:0"><div class="h"><b>' + r.c + ' correct answers</b><span>' + (r.next ? (r.next[0] - r.c) + ' to ' + esc(r.next[1]) : 'Top rank reached') + '</span></div><div class="bar"><i style="width:' + pct + '%"></i></div></div></section>';
+  h += '<section class="stats"><div class="stat fire"><b>🔥 ' + liveStreak().n + '</b><span>streak</span></div><div class="stat"><b>' + S.best + '</b><span>best streak</span></div><div class="stat"><b>' + S.xp + '</b><span>XP · ' + fmt(S.marks) + ' marks</span></div></section>';
   h += '<section class="card"><div class="eyebrow">Last 7 days</div>' +
        (wk ? '<p style="margin:8px 0 0">' + wk + ' answered · ' + Math.round(wkOk/wk*100) + '% accuracy' +
           (ranked.length ? '<br>Strongest: <b>' + esc(SUBJ[ranked[0]]) + '</b>' + (ranked.length > 1 ? ' · Needs work: <b>' + esc(SUBJ[ranked[ranked.length-1]]) + '</b>' : '') : '') +
-          (dueCount ? '<br>' + dueCount + ' question' + (dueCount>1?'s':'') + ' lined up for review' : '') + '</p>'
+          (dueSoon ? '<br>' + dueSoon + ' question' + (dueSoon>1?'s':'') + ' coming back for review in the next 3 days' : '') + '</p>'
           : '<p class="hint">Nothing yet this week. Today is a good day to start.</p>') + '</section>';
+  // calibration
+  const lv = ["sure","5050","guess"].filter(k => cal[k]);
+  h += '<section class="card"><div class="eyebrow">Exam Mode · how good are your guesses?</div>';
+  if(!lv.length) h += '<p class="hint">After each Exam Mode answer you tap Sure, 50-50 or Guess. Answer a few and this shows whether your guesses earn or lose marks.</p>';
+  else {
+    h += '<div class="cal">' + lv.map(k => { const o = cal[k]; return '<span class="k">' + CONF[k] + '</span><span>' + Math.round(o.k/o.n*100) + '% right · ' + o.n + ' answered</span><span class="v">' + (o.p >= 0 ? "+" : "") + fmt(o.p/o.n) + '/q</span>'; }).join("") + '</div>';
+    const tips = [];
+    const f = cal["5050"], g = cal.guess, s = cal.sure;
+    if(f && f.n >= 5) tips.push(f.p > 0 ? "Your 50-50s earn marks on average — keep attempting them. Break-even is only 25%." : "Your 50-50s are losing marks right now — skip more of them until accuracy climbs.");
+    if(g && g.n >= 5) tips.push(g.p > 0 ? "Even your pure guesses are net positive — but keep them rare." : "Pure guesses are costing you marks — skip these in the exam.");
+    if(s && s.n >= 5 && s.k/s.n < 0.9) tips.push("Some 'Sure' answers were wrong. Re-read those explanations — confident mistakes, once corrected, are the ones you remember best.");
+    if(tips.length) h += '<div class="insight">' + tips.map(esc).join("<br><br>") + '</div>';
+    else h += '<p class="hint">A few more answers at each level and tips will appear here.</p>';
+  }
+  h += '</section>';
   h += '<section class="card"><div class="eyebrow">Subject mastery</div>' + SUBJECTS.map(s => {
     const p = per[s[0]];
     if(!p) return '<div class="subj"><div class="h">' + esc(s[1]) + '<span>Not started</span></div><div class="bar"><i style="width:0"></i></div></div>';
     const acc = Math.round(p.k/p.n*100);
     return '<div class="subj"><div class="h">' + esc(s[1]) + '<span>' + p.k + '/' + p.n + ' · ' + acc + '%</span></div><div class="bar"><i style="width:' + acc + '%"></i></div></div>';
   }).join("") + '</section>';
+  h += '<div class="row2"><button class="ghost" data-act="backup">💾 Backup / restore</button><button class="ghost" data-act="editname">✏️ Change name</button></div>';
   h += '<button class="danger" data-act="reset">Reset all progress</button>';
   $app.innerHTML = h;
 }
 
+function renderSaved(){
+  const items = S.saved.map(id => QBY[id]).filter(Boolean);
+  let h = '<header class="top"><div><div class="eyebrow">Revise later</div><h1>Saved questions</h1></div><button class="icon" data-act="home" aria-label="Home">←</button></header>';
+  if(!items.length) h += '<div class="card empty">Tap ☆ Save on any question to keep it here. Saved questions also show up in your Revision Rounds.</div>';
+  else h += '<section class="card"><div class="rows">' + items.map(q => '<div class="row" data-act="read:' + q.id + '"><span class="r">★</span><div>' + esc(q.stem.length > 90 ? q.stem.slice(0,88) + "…" : q.stem) + '<small>' + esc(SUBJ[q.subj]) + (q.topic ? " · " + esc(q.topic) : "") + '</small></div></div>').join("") + '</div></section>';
+  $app.innerHTML = h;
+}
+function renderRead(){
+  const q = QBY[readId]; if(!q){ go("saved"); return; }
+  const opts = optsOf(q);
+  let h = '<header class="top"><div><div class="eyebrow">' + esc(SUBJ[q.subj]) + '</div><h1>Revise</h1></div><button class="icon" data-act="saved" aria-label="Back">←</button></header>';
+  h += '<article class="card"><div class="meta"><div class="tags">' + (q.topic ? '<span class="tag">' + esc(q.topic) + '</span>' : '') + (q.tag ? '<span class="tag pyq">' + esc(q.tag) + '</span>' : '') + '</div>' + starBtn(q.id) + '</div>' + qBody(q) +
+       '<div class="opts">' + opts.map((o,i) => '<div class="opt ' + (i === q.ans ? "right" : "dim") + '"><span class="l">' + LET[i] + '</span><span>' + esc(o) + '</span></div>').join("") + '</div>' +
+       explainBlock(q, true) + feedbackLink(q) + '</article>';
+  $app.innerHTML = h;
+}
+
+function renderAbout(){
+  let h = '<header class="top"><div><div class="eyebrow">About</div><h1>How questions are checked</h1></div><button class="icon" data-act="home" aria-label="Home">←</button></header>';
+  h += '<section class="card prose">' +
+    '<p>Every question is written for the static Prelims syllabus and checked against standard sources before it goes in: NCERT, the Constitution, and official or well-established references. Each one links to further reading and says where to revise it from.</p>' +
+    '<ul><li><b>Warm-up</b> questions are NCERT-level, one correct answer.</li>' +
+    '<li><b>Exam Mode</b> follows the current Prelims pattern — statement-based, match-the-pairs and Statement-I/II questions, with +2 / −0.66 marking.</li>' +
+    '<li>Questions tagged <b>PYQ</b> are from past UPSC papers, answered as per UPSC\'s official key.</li>' +
+    '<li>Facts that can change carry an “as of” date.</li></ul>' +
+    '<p>Missed and guessed questions return after 3 days; correct ones come back after 1–3 weeks and again after 2 months. Every 4th day is a Revision Round.</p>' +
+    '<p>Not affiliated with UPSC. Questions last updated: ' + esc(CONFIG.contentUpdated) + ' · ' + QS.length + ' questions.</p>' +
+    (CONFIG.feedbackEmail ? '<p><a href="mailto:' + esc(CONFIG.feedbackEmail) + '?subject=' + encodeURIComponent(CONFIG.appName + " feedback") + '">✉️ Send feedback or report an error</a></p>' : '') +
+    '</section>';
+  $app.innerHTML = h;
+}
+
+function backupCode(){ try{ return "PD2:" + btoa(unescape(encodeURIComponent(JSON.stringify(S)))); }catch(e){ return ""; } }
+function renderBackup(){
+  let h = '<header class="top"><div><div class="eyebrow">Backup</div><h1>Keep your progress safe</h1></div><button class="icon" data-act="progress" aria-label="Back">←</button></header>';
+  h += '<section class="card"><p style="margin-top:0">Copy this code and keep it somewhere safe (a note or a message to yourself). Paste it on a new phone to bring everything back.</p>' +
+       '<textarea id="bk" readonly>' + esc(backupCode()) + '</textarea><button class="primary" data-act="copybk">Copy backup code</button></section>';
+  h += '<section class="card"><div class="eyebrow">Restore</div><p class="hint" style="margin-top:6px">This replaces the progress on this phone.</p><textarea id="rs" placeholder="Paste a backup code"></textarea><button class="ghost" data-act="restore">Restore from code</button></section>';
+  $app.innerHTML = h;
+}
+
 function renderRemind(){
-  const ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
   const g = '<button class="primary" data-act="gcal">Add to Google Calendar</button>';
-  const i = '<button class="' + (ios ? "primary" : "ghost") + '" data-act="ics">' + (ios ? "Add to iPhone Calendar" : "Download calendar file (.ics)") + '</button>';
+  const i = '<button class="' + (IS_IOS ? "primary" : "ghost") + '" data-act="ics">' + (IS_IOS ? "Add to iPhone Calendar" : "Download calendar file (.ics)") + '</button>';
   let h = '<header class="top"><div><div class="eyebrow">Reminder</div><h1>Daily nudge</h1></div><button class="icon" data-act="home" aria-label="Home">←</button></header>';
-  h += '<section class="card"><p style="margin:0 0 12px">Adds a 5-minute daily event to your calendar with a link back here, so your phone reminds you every day.</p>' +
+  h += '<section class="card"><p style="margin:0 0 12px">Adds a 5-minute daily event to your personal calendar with a link back here, so your phone reminds you every day.</p>' +
        '<div class="label" style="margin-top:0">Remind me at</div><input type="time" id="rt" value="' + esc(S.remTime) + '">' +
-       (ios ? i + '<button class="ghost" data-act="gcal">Use Google Calendar instead</button>' : g + i) + '</section>';
-  h += '<p class="sub">You can change or delete the event from your calendar any time.</p>';
+       (IS_IOS ? i + '<button class="ghost" data-act="gcal">Use Google Calendar instead</button>' : g + i) + '</section>';
+  h += '<p class="sub">If your phone has a work calendar too, pick your personal one. You can change or delete the event any time.</p>';
   $app.innerHTML = h;
 }
 
@@ -436,23 +677,16 @@ function openGcal(){
   const u = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
     "&text=" + encodeURIComponent(CONFIG.appName + " — today's 5") +
     "&details=" + encodeURIComponent("5 minutes. Open: " + appUrl()) +
-    "&dates=" + localStamp(s) + "/" + localStamp(e) +
-    "&ctz=" + encodeURIComponent(tz) +
+    "&dates=" + localStamp(s) + "/" + localStamp(e) + "&ctz=" + encodeURIComponent(tz) +
     "&recur=" + encodeURIComponent("RRULE:FREQ=DAILY");
   window.open(u, "_blank");
 }
 function downloadIcs(){
   const s = nextStart(), url = appUrl();
   const ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Prelims Daily//EN","CALSCALE:GREGORIAN","BEGIN:VEVENT",
-    "UID:prelims-daily-" + Date.now() + "@prelims-daily",
-    "DTSTAMP:" + utcStamp(new Date()),
-    "DTSTART:" + utcStamp(s),
-    "DURATION:PT5M","RRULE:FREQ=DAILY",
-    "SUMMARY:" + CONFIG.appName + " — today's 5",
-    "DESCRIPTION:5 minutes. Open: " + url,
-    "URL:" + url,
-    "BEGIN:VALARM","TRIGGER:PT0M","ACTION:DISPLAY","DESCRIPTION:" + CONFIG.appName,"END:VALARM",
-    "END:VEVENT","END:VCALENDAR"].join("\r\n");
+    "UID:prelims-daily-" + Date.now() + "@prelims-daily","DTSTAMP:" + utcStamp(new Date()),"DTSTART:" + utcStamp(s),
+    "DURATION:PT5M","RRULE:FREQ=DAILY","SUMMARY:" + CONFIG.appName + " — today's 5","DESCRIPTION:5 minutes. Open: " + url,"URL:" + url,
+    "BEGIN:VALARM","TRIGGER:PT0M","ACTION:DISPLAY","DESCRIPTION:" + CONFIG.appName,"END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
   const blob = new Blob([ics], {type:"text/calendar;charset=utf-8"});
   const href = URL.createObjectURL(blob);
   const a = document.createElement("a"); a.href = href; a.download = "prelims-daily-reminder.ics";
@@ -460,48 +694,96 @@ function downloadIcs(){
   setTimeout(() => { URL.revokeObjectURL(href); a.remove(); }, 1500);
 }
 
-/* ---------- events ---------- */
-function doAnswer(choice){
-  const set = getSet(); const id = set.ids[qi];
-  const res = answer(id, choice);
+/* ---------- actions ---------- */
+function doAnswer(choice, conf){
+  const set = getSet(curDate); const id = set.ids[qi];
+  const res = answer(id, choice, conf, curDate);
   if(!res) return;
+  sel = null;
+  buzz(res.ok ? 15 : [30,40,30]);
   render();
   const n = Object.keys(set.ans).length;
-  if(res.streakMsg) toast(res.streakMsg + (n === 1 && set.ids.length > 1 ? " " + (set.ids.length-1) + " bonus questions to go — or stop here." : ""));
+  if(res.streakMsg) toast(res.streakMsg + (n === 1 && set.ids.length > 1 ? " " + (set.ids.length-1) + " more to go — or stop here." : ""));
+  else if(n === set.ids.length) toast("🎉 Today's set done. See you tomorrow!");
+}
+function setName(){
+  const el = document.getElementById("nm");
+  const v = (el && el.value || "").trim().replace(/\s+/g," ").slice(0,24);
+  if(!v){ toast("Type your name to continue"); return; }
+  S.name = v; save(); nameEdit = false; go("home");
 }
 document.addEventListener("click", e => {
   const el = e.target.closest("[data-act]"); if(!el || el.disabled) return;
-  const parts = el.dataset.act.split(":"), act = parts[0], arg = parts[1];
+  const parts = el.dataset.act.split(":"), act = parts[0], arg = parts.slice(1).join(":");
   switch(act){
+    case "setname": setName(); break;
+    case "editname": nameEdit = true; go("welcome"); break;
     case "home": go("home"); break;
     case "mode": S.mode = arg; save(); render(); break;
-    case "subj": S.subject = arg; save(); render(); break;
+    case "subj": S.subject = arg; showSubj = false; save(); render(); break;
+    case "togglesubj": showSubj = !showSubj; render(); break;
     case "start": {
-      const set = getSet(); if(!set.ids.length) return;
+      curDate = today();
+      const set = getSet(curDate); if(!set.ids.length) return;
       const i = set.ids.findIndex(id => !set.ans[id]);
       if(i === -1) go("summary"); else { qi = i; go("quiz"); }
       break; }
-    case "opt": doAnswer(+arg); break;
-    case "skip": doAnswer(-1); break;
+    case "opt": { const set = getSet(curDate); if(set.ans[set.ids[qi]]) return; sel = +arg; render(); break; }
+    case "check": if(sel !== null) doAnswer(sel, null); break;
+    case "conf": if(sel !== null) doAnswer(sel, arg); break;
+    case "skip": doAnswer(-1, null); break;
     case "next": {
-      const set = getSet();
-      if(qi < set.ids.length - 1){ qi++; go("quiz"); }
-      else { const i = set.ids.findIndex(id => !set.ans[id]); if(i === -1) go("summary"); else { qi = i; go("quiz"); } }
+      const set = getSet(curDate);
+      const after = set.ids.findIndex((id,i) => i > qi && !set.ans[id]);
+      const any = set.ids.findIndex(id => !set.ans[id]);
+      if(after > -1){ qi = after; go("quiz"); } else if(any > -1){ qi = any; go("quiz"); } else go("summary");
       break; }
     case "dot": qi = +arg; go("quiz"); break;
+    case "star": {
+      const i = S.saved.indexOf(arg);
+      if(i > -1) S.saved.splice(i,1); else { S.saved.push(arg); toast("★ Saved to Revise later"); }
+      save(); render(); break; }
+    case "saved": go("saved"); break;
+    case "read": readId = arg; go("read"); break;
     case "progress": go("progress"); break;
     case "remind": go("remind"); break;
+    case "about": go("about"); break;
+    case "backup": go("backup"); break;
+    case "copybk": {
+      const code = backupCode(); const ta = document.getElementById("bk");
+      const fallback = () => { try{ ta.select(); document.execCommand("copy"); toast("Backup code copied"); }catch(err){ toast("Select the code and copy it"); } };
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(() => toast("Backup code copied"), fallback); else fallback();
+      break; }
+    case "restore": {
+      const ta = document.getElementById("rs"); const raw = (ta && ta.value || "").trim();
+      try{
+        if(raw.indexOf("PD2:") !== 0) throw 0;
+        const data = JSON.parse(decodeURIComponent(escape(atob(raw.slice(4)))));
+        if(!data || typeof data.hist !== "object") throw 0;
+        if(!confirm("Replace the progress on this phone with this backup?")) return;
+        S = Object.assign(freshState(), data); save(); toast("Progress restored"); go("home");
+      }catch(err){ toast("That code doesn't look right — copy it again in full"); }
+      break; }
     case "gcal": openGcal(); break;
     case "ics": downloadIcs(); break;
     case "switch": S.mode = S.mode === "easy" ? "exam" : "easy"; save(); go("home"); break;
-    case "reset": if(confirm("Reset all progress? This can't be undone.")){ S = Object.assign({}, DEF, {hist:{},days:{},log:[]}); save(); go("home"); } break;
+    case "install":
+      if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice && deferredPrompt.userChoice.then(() => { deferredPrompt = null; render(); }); }
+      break;
+    case "nodismiss": S.installDismissed = true; save(); render(); break;
+    case "reset":
+      if(confirm("Reset all progress? This can't be undone.")){ const keep = {name:S.name, uid:S.uid}; S = Object.assign(freshState(), keep); save(); go("home"); }
+      break;
   }
 });
+document.addEventListener("keydown", e => { if(e.key === "Enter" && view === "welcome"){ e.preventDefault(); setName(); } });
 document.addEventListener("change", e => { if(e.target && e.target.id === "rt" && e.target.value){ S.remTime = e.target.value; save(); } });
 document.addEventListener("visibilitychange", () => { if(document.visibilityState === "visible" && view === "home") render(); });
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredPrompt = e; if(view === "home") render(); });
+window.addEventListener("appinstalled", () => { deferredPrompt = null; S.installDismissed = true; save(); if(view === "home") render(); });
 
 render();
-window.__PD = {get state(){ return S; }, answer: answer, getSet: getSet, today: today};
+window.__PD = {get state(){ return S; }, answer: answer, getSet: getSet, today: today, dayType: dayType};
 })();
 </script>
 </body>
