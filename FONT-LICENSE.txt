@@ -1,0 +1,66 @@
+Font used for question and explanation text in Prelims Daily
+=============================================================
+
+File:     schola-regular.woff
+Font:     TeX Gyre Schola, Regular, version 2.005 (30 X 2009)
+Authors:  Boguslaw Jackowski and Janusz M. Nowacki (GUST e-foundry)
+
+  Copyright 2006, 2009 for TeX Gyre extensions by B. Jackowski
+  and J.M. Nowacki (on behalf of TeX Users Groups).
+  Vietnamese characters were added by Han The Thanh.
+
+  This work can be freely used and distributed under
+  the GUST Font License (GFL), which is an instance of the
+  LaTeX Project Public License (LPPL) version 1.3c or later.
+
+  This work has the maintenance status "maintained". The Current
+  Maintainers of this work are Boguslaw Jackowski and Janusz M. Nowacki.
+
+  TeX Gyre Schola is based on URW Century Schoolbook L, released
+  by URW++ Design and Development Inc. under the GFL.
+
+
+What was changed in this copy
+-----------------------------
+Only the Regular weight is included. It was repackaged from the
+OpenType file texgyreschola-regular.otf (version 2.005) into the WOFF
+web-font container so a browser can load it. The glyphs, metrics and
+font names inside the file were not changed.
+
+The font's authors and GUST do not provide support for this app.
+Please report problems with the app to the app's maker.
+
+
+Where to get the complete, unmodified font family
+-------------------------------------------------
+GUST e-foundry:  http://www.gust.org.pl/projects/e-foundry/tex-gyre/schola
+CTAN:            https://ctan.org/pkg/tex-gyre
+
+
+GUST Font License (as distributed with the TeX Gyre fonts)
+----------------------------------------------------------
+  For the most recent version of this license see
+  http://www.gust.org.pl/fonts/licenses/GUST-FONT-LICENSE.txt
+  or
+  http://tug.org/fonts/licenses/GUST-FONT-LICENSE.txt
+
+  This work may be distributed and/or modified under the conditions
+  of the LaTeX Project Public License, either version 1.3c of this
+  license or (at your option) any later version.
+
+  Please also observe the following clause:
+  1) it is requested, but not legally required, that derived works be
+     distributed only after changing the names of the fonts comprising this
+     work and given in an accompanying "manifest", and that the
+     files comprising the Work, as listed in the manifest, also be given
+     new names. Any exceptions to this request are also given in the
+     manifest.
+
+     We recommend the manifest be given in a separate file named
+     MANIFEST-<fontid>.txt, where <fontid> is some unique identification
+     of the font family. If a separate "readme" file accompanies the Work,
+     we recommend a name of the form README-<fontid>.txt.
+
+  The latest version of the LaTeX Project Public License is in
+  http://www.latex-project.org/lppl.txt and version 1.3c or later
+  is part of all distributions of LaTeX version 2006/05/20 or later.

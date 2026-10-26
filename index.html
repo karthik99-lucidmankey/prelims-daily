@@ -3,187 +3,252 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0F5E5C">
+<meta name="theme-color" content="#F7F3EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121619" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Prelims Daily">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="description" content="Five UPSC Prelims questions a day, with explanations, spaced revision and streaks.">
+<meta name="description" content="Five UPSC Prelims questions a day, with explanations, spaced revision and a Coffee Break round.">
 <title>Prelims Daily</title>
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json?v=3.0.0">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="schola-regular.woff?v=3.0.0" as="font" type="font/woff" crossorigin>
 <style>
+/* Reading face: TeX Gyre Schola (GUST e-foundry), GUST Font License — see FONT-LICENSE.txt */
+@font-face{font-family:"Schola";src:url("schola-regular.woff?v=3.0.0") format("woff");font-display:swap}
 :root{
-  --bg:#F7F3EC; --card:#FFFFFF; --ink:#1D2433; --muted:#6B7280; --line:#E7E1D6;
-  --brand:#0F5E5C; --brand-ink:#FFFFFF; --brand-soft:#E3F0EE;
-  --saffron:#D9731A; --saffron-soft:#FCEBD9; --ok:#1F7A4D; --ok-soft:#E3F4EA; --bad:#B4372B; --bad-soft:#FBE8E5;
-  --shadow:0 1px 2px rgba(20,20,30,.05),0 6px 20px rgba(20,20,30,.06);
+  color-scheme:light dark;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --read:"Schola","Century Schoolbook","Georgia",serif;
+  --paper:#F7F3EC; --sheet:#FFFDF9; --ink:#1D2433; --ink2:#454C5A; --muted:#5B616C; --line:#DDD5C6;
+  --teal:#0F5E5C; --teal-ink:#FFFFFF; --teal-tint:#E4EFEC;
+  --saffron:#D9731A; --saffron-text:#9A4A0B; --saffron-tint:#F8EADB;
+  --ok:#1D6E46; --ok-tint:#E6F2EA; --bad:#A8352A; --bad-tint:#F9E9E6;
+  --cb:#9A4A0B; --cb-ink:#FFFFFF;
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#12161C; --card:#1B2129; --ink:#E9ECF1; --muted:#9AA3AF; --line:#2A323C;
-  --brand:#4FB3A9; --brand-ink:#0D1B1A; --brand-soft:#1D3533;
-  --saffron:#F0A050; --saffron-soft:#3A2A18; --ok:#5BC48A; --ok-soft:#173326; --bad:#F07A6E; --bad-soft:#3A1F1C;
-  --shadow:none;
+  --paper:#121619; --sheet:#1A1F24; --ink:#E8EAED; --ink2:#C3C8CF; --muted:#9BA2AC; --line:#2C333A;
+  --teal:#5DBDB2; --teal-ink:#0B1A19; --teal-tint:#16302E;
+  --saffron:#F0A050; --saffron-text:#F0A050; --saffron-tint:#33261A;
+  --ok:#6CCB94; --ok-tint:#14281D; --bad:#F28B7F; --bad-tint:#33201D;
+  --cb:#F0A050; --cb-ink:#1A1209;
 }}
 *{box-sizing:border-box}
-html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
-#app{max-width:520px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) 16px calc(130px + env(safe-area-inset-bottom))}
-h1,h2,.serif{font-family:Fraunces,Georgia,serif;letter-spacing:-.01em}
-h1{font-size:28px;margin:2px 0 0;line-height:1.15}
-button,input,textarea{font-family:inherit}
-a{color:var(--brand)}
-.eyebrow{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:600}
-.top{display:flex;justify-content:space-between;align-items:flex-end;margin:6px 0 16px;gap:12px}
-.icons{display:flex;gap:8px}
-.icon{flex:none;border:1px solid var(--line);background:var(--card);border-radius:12px;min-width:44px;height:44px;padding:0 10px;font-size:16px;cursor:pointer;color:var(--ink);display:grid;place-items:center}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center;min-width:0}
-.stat b{display:block;font:700 19px/1.2 Fraunces,Georgia,serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stat span{font-size:12px;color:var(--muted)}
-.stat.fire b{color:var(--saffron)}
-.note{font-size:14px;color:var(--muted);margin:8px 2px 14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
-.card.rev{border-color:var(--saffron)}
-.kind{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand);margin-bottom:10px}
-.kind.rev{background:var(--saffron-soft);color:var(--saffron)}
-.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
-.seg button{border:0;background:transparent;padding:10px;border-radius:9px;font-weight:600;font-size:15px;color:var(--muted);cursor:pointer}
-.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
-.hint{font-size:13px;color:var(--muted);margin:10px 2px 0}
-.label{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:16px 0 8px;font-weight:600}
-.subjrow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px;font-size:14px}
-.subjrow b{font-weight:600}
-.link{background:none;border:0;color:var(--brand);font-weight:600;font-size:14px;cursor:pointer;padding:8px 0}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 12px;font-weight:500;font-size:13px;cursor:pointer}
-.chip.on{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
-.primary{display:block;width:100%;border:0;border-radius:14px;padding:15px;background:var(--brand);color:var(--brand-ink);font-weight:600;font-size:16px;cursor:pointer;margin-top:16px}
-.primary:disabled{opacity:.45;cursor:default}
-.ghost{display:block;width:100%;border:1px solid var(--line);border-radius:14px;padding:13px;background:var(--card);color:var(--ink);font-weight:500;font-size:15px;cursor:pointer;margin-top:8px;text-align:center;text-decoration:none}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.row2 .ghost{margin-top:0}
-.sub{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
-.foot{text-align:center;margin-top:18px}
-.foot button{background:none;border:0;color:var(--muted);font-size:13px;text-decoration:underline;cursor:pointer;padding:8px}
-.install{display:flex;gap:12px;align-items:flex-start;background:var(--brand-soft);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:14px}
-.install div{flex:1}
-.install b{display:block;margin-bottom:2px}
-.install .x{background:none;border:0;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px;line-height:1}
-.install .mini{margin-top:8px;border:0;border-radius:10px;background:var(--brand);color:var(--brand-ink);font-weight:600;padding:8px 14px;cursor:pointer}
-/* welcome */
-.welcome{min-height:70vh;display:flex;flex-direction:column;justify-content:center}
-.tile{width:64px;height:64px;border-radius:18px;background:#0F5E5C;color:#F7F3EC;display:grid;place-items:center;font:700 34px Fraunces,Georgia,serif;position:relative;margin-bottom:22px}
-.tile::after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:#E58A2E;right:12px;bottom:16px}
-.welcome h1{font-size:32px}
-.welcome p{color:var(--muted);margin:8px 0 22px}
-.field{width:100%;font-size:18px;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);outline:none}
-.field:focus{border-color:var(--brand)}
-/* quiz */
-.qtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 14px}
-.dots{display:flex}
-.dots button{width:28px;height:32px;border:0;background:none;padding:0;cursor:pointer;display:grid;place-items:center}
-.dots i{display:block;width:11px;height:11px;border-radius:50%;border:2px solid var(--line)}
-.dots .cur i{border-color:var(--brand);transform:scale(1.2)}
-.dots .ok i{background:var(--ok);border-color:var(--ok)}
-.dots .bad i{background:var(--bad);border-color:var(--bad)}
-.dots .skip i{background:var(--muted);border-color:var(--muted)}
-.pill{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand)}
-.meta{display:flex;align-items:center;gap:6px;margin-bottom:10px}
-.meta .tags{display:flex;flex-wrap:wrap;gap:6px;flex:1}
-.tag{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
-.tag.rev{color:var(--saffron);border-color:var(--saffron)}
-.tag.pyq{color:var(--brand);border-color:var(--brand)}
-.star{flex:none;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 10px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
-.star.on{color:var(--saffron);border-color:var(--saffron)}
-.topic{font-size:12px;color:var(--muted);margin:-4px 0 8px}
-.stem{font-size:17px;font-weight:500;line-height:1.5;margin:0 0 10px}
-ol.st{margin:0 0 10px;padding-left:30px}
-ol.st.roman{list-style:upper-roman}
-ol.st li{margin:5px 0;padding-left:2px}
-.assert{margin:0 0 10px;display:grid;gap:8px}
-.assert div{background:var(--bg);border-radius:10px;padding:10px 12px;font-size:15px}
-.assert b{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-table.match{width:100%;border-collapse:collapse;font-size:15px;margin:4px 0 10px}
-table.match th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
-table.match td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
-table.match td.n{width:34px;color:var(--muted)}
-.tail{font-weight:500;margin:6px 0 12px}
-.opts{display:grid;gap:8px}
-.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px;font-size:15px;cursor:pointer;line-height:1.4;transition:border-color .15s,background .15s}
-.opt .l{flex:none;width:24px;height:24px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:13px;font-weight:600;color:var(--muted)}
-.opt.sel{border-color:var(--brand);background:var(--brand-soft)}
-.opt.sel .l{background:var(--brand);color:var(--brand-ink)}
-.opt.right{border-color:var(--ok);background:var(--ok-soft)}
-.opt.right .l{background:var(--ok);color:#fff}
-.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
-.opt.wrong .l{background:var(--bad);color:#fff}
-.opt.dim{opacity:.55}
-.opt:disabled{cursor:default}
-.fb{margin-top:14px;padding:10px 12px;border-radius:12px;font-weight:600;font-size:15px}
-.fb.ok{background:var(--ok-soft);color:var(--ok)}
-.fb.bad{background:var(--bad-soft);color:var(--bad)}
-.fb.skip{background:var(--bg);color:var(--muted)}
-.take{margin-top:10px;padding:10px 12px;border-left:3px solid var(--saffron);background:var(--saffron-soft);border-radius:0 10px 10px 0;font-size:15px}
-details.why{margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:0 12px}
-details.why summary{cursor:pointer;padding:12px 0;font-weight:600;list-style:none}
-details.why summary::-webkit-details-marker{display:none}
-details.why summary::after{content:"＋";float:right;color:var(--muted)}
-details.why[open] summary::after{content:"－"}
-details.why p{margin:0 0 10px;font-size:15px}
-.revise{font-size:14px;color:var(--muted);margin:0 0 10px}
-.links{display:grid;gap:6px;margin:0 0 12px}
-.links a{display:block;padding:9px 12px;border-radius:10px;background:var(--brand-soft);text-decoration:none;font-size:14px;font-weight:500}
-.links a::after{content:" ↗"}
-.small{display:inline-block;margin-top:10px;font-size:13px;color:var(--muted)}
-.stop{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:13px;cursor:pointer;padding:10px 0 0}
-/* bottom bar */
-#bar{position:fixed;left:0;right:0;bottom:0;z-index:5;background:linear-gradient(to top,var(--bg) 78%,transparent);padding:14px 16px calc(14px + env(safe-area-inset-bottom))}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.5 var(--ui);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+#app{max-width:560px;margin:0 auto;padding:env(safe-area-inset-top) 20px 120px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--teal)}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+h1,h2,p{margin:0}
+h1{font-size:28px;line-height:34px;font-weight:600;letter-spacing:-.015em;overflow-wrap:anywhere}
+h2{font-size:22px;line-height:28px;font-weight:600;letter-spacing:-.01em}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ic{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.t13{font-size:13px;line-height:18px}.t15{font-size:15px;line-height:22px}.t17{font-size:17px;line-height:24px}
+.muted{color:var(--muted)}.ink2{color:var(--ink2)}.semi{font-weight:600}.saff{color:var(--saffron-text)}
+.sub{margin-top:4px}
+.section{margin-top:32px}
+/* app bar */
+.appbar{height:56px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.appbar .title{flex:1;text-align:center;font-size:15px;line-height:22px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;justify-content:center;gap:6px}
+.appbar .title .ic{width:20px;height:20px}
+.appbar .side{min-width:24px;display:flex;align-items:center}
+.appbar .side.r{justify-content:flex-end}
+.iconbtn{width:44px;height:44px;display:grid;place-items:center;border:0;background:none;color:var(--ink);border-radius:12px;margin:0 -10px;padding:0}
+.iconbtn.on{color:var(--saffron-text)}
+/* home */
+.weekhead{display:flex;justify-content:space-between;align-items:baseline;margin:22px 0 10px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+.day span{display:block;font-size:13px;line-height:18px;color:var(--muted);margin-bottom:6px}
+.day i{display:block;width:28px;height:28px;margin:0 auto;border-radius:50%;border:1.5px solid var(--line)}
+.day.done i{background:var(--teal);border-color:var(--teal)}
+.day.today i{border:2px solid var(--teal)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:3px;border:1px solid var(--line);border-radius:12px;background:var(--sheet);padding:3px;margin-top:16px}
+.seg button{min-height:44px;border:0;border-radius:9px;background:none;font-weight:600;font-size:15px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--teal-tint);color:var(--teal)}
+.hint{font-size:13px;line-height:18px;color:var(--muted);margin-top:8px}
+.rows{margin-top:16px}
+.row{display:flex;align-items:center;gap:14px;min-height:56px;width:100%;border:0;border-bottom:1px solid var(--line);background:none;padding:8px 0;text-align:left;color:var(--ink);font-size:17px;line-height:24px;position:relative;text-decoration:none}
+.rows>.row:first-child{border-top:1px solid var(--line)}
+.row .grow{flex:1;min-width:0}
+.row .rowsub{display:block;font-size:13px;line-height:18px;color:var(--muted)}
+.row .val{color:var(--muted);font-size:15px;line-height:22px;text-align:right;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .val.ink{color:var(--ink);font-weight:600}
+.row .lead{color:var(--ink2)}
+.row .lead.saff{color:var(--saffron-text)}
+.row .chev{color:var(--muted)}
+.row select{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:16px;cursor:pointer;border:0}
+.row.danger{color:var(--bad);justify-content:center;border:0;margin-top:12px;font-size:15px}
+.note{margin-top:18px;padding:12px 14px;border-radius:12px;background:var(--sheet);border:1px solid var(--line);font-size:15px;line-height:22px;display:flex;gap:10px;align-items:flex-start}
+.note .grow{flex:1;min-width:0}
+.note b{display:block;font-weight:600}
+.note.warn{border-color:var(--bad);background:var(--bad-tint)}
+.note.saff{border-color:var(--saffron);background:var(--saffron-tint)}
+.note .iconbtn{margin:-10px -10px -10px 0;flex:none;color:var(--muted)}
+.note .btn{margin-top:10px;min-height:44px;width:auto;padding:8px 18px}
+/* buttons */
+.btn{min-height:56px;width:100%;border:0;border-radius:12px;font:600 17px/1.2 var(--ui);display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 16px;text-align:center;text-decoration:none;position:relative}
+.btn.primary{background:var(--teal);color:var(--teal-ink)}
+.btn.outline{background:var(--sheet);color:var(--teal);border:1.5px solid var(--teal)}
+.btn.subtle{background:var(--sheet);color:var(--ink2);border:1px solid var(--line)}
+.btn.quiet{background:none;color:var(--ink2);min-height:44px;margin-top:4px}
+.btn.cb{background:var(--cb);color:var(--cb-ink)}
+.btn.ff{background:var(--sheet);color:var(--cb);border:1.5px solid var(--cb)}
+.btn:disabled{background:var(--line);color:var(--muted);border-color:transparent;cursor:default}
+.btn+.btn{margin-top:8px}
+.btn input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.three,.two,.split{display:grid;gap:10px}
+.three{grid-template-columns:repeat(3,1fr)}
+.two{grid-template-columns:1fr 1fr}
+.split{grid-template-columns:auto 1fr}
+.three .btn+.btn,.two .btn+.btn,.split .btn+.btn{margin-top:0}
+.split .btn.subtle{padding:8px 20px}
+/* bottom bar + messages */
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--paper);border-top:1px solid var(--line);padding:12px 20px calc(12px + env(safe-area-inset-bottom))}
 #bar:empty{display:none}
 #bar .in{max-width:520px;margin:0 auto}
-#bar .primary{margin-top:0}
-#bar .q{font-size:13px;color:var(--muted);text-align:center;margin-bottom:8px;font-weight:500}
-.conf{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.conf button{border:0;border-radius:14px;padding:14px 6px;font-weight:600;font-size:15px;cursor:pointer;background:var(--brand);color:var(--brand-ink)}
-.conf button.m{background:var(--card);color:var(--ink);border:1.5px solid var(--brand)}
-.barrow{display:flex;gap:8px;align-items:center}
-.barrow .ghost{margin:0;width:auto;padding:13px 16px}
-.barrow .primary{flex:1}
-/* summary + progress */
-.big{font:700 40px/1.1 Fraunces,Georgia,serif;margin:4px 0}
-.rows{display:grid;gap:8px;margin-top:12px}
-.row{display:flex;gap:10px;align-items:flex-start;font-size:14px;cursor:pointer}
-.row .r{flex:none;width:22px;text-align:center}
-.row small{display:block;color:var(--muted);font-size:12px}
-.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:5px}
-.bar i{display:block;height:100%;background:var(--brand);border-radius:99px}
-.subj{margin:12px 0}
-.subj .h{display:flex;justify-content:space-between;font-size:14px;gap:8px}
-.subj .h span{color:var(--muted);font-size:13px;text-align:right}
-.cal{display:grid;grid-template-columns:auto 1fr auto;gap:6px 10px;font-size:14px;margin-top:10px;align-items:center}
-.cal .k{font-weight:600}
-.cal .v{color:var(--muted);text-align:right}
-.insight{font-size:14px;margin:10px 0 0;padding:10px 12px;border-radius:10px;background:var(--bg)}
-input[type=time]{font:600 22px Inter,system-ui,sans-serif;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
-textarea{width:100%;min-height:110px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:10px;font-size:13px;font-family:ui-monospace,Menlo,monospace}
-.danger{background:none;border:0;color:var(--bad);font-size:13px;margin:20px auto 0;display:block;cursor:pointer}
-.prose p{margin:0 0 12px}
-.prose ul{margin:0 0 12px;padding-left:20px}
-.empty{color:var(--muted);text-align:center;padding:24px 8px}
-.toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translateX(-50%) translateY(-20px);background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500;max-width:min(92vw,480px);opacity:0;transition:.25s;pointer-events:none;z-index:9;text-align:center}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.barnote{font-size:13px;line-height:18px;color:var(--muted);text-align:center;margin-bottom:10px}
+#snack{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:6;background:var(--ink);color:var(--paper);padding:12px 16px;border-radius:12px;font-size:15px;line-height:22px;width:max-content;max-width:min(92vw,480px);text-align:center;opacity:0;transition:opacity .2s;pointer-events:none}
+#snack.show{opacity:1}
+/* question */
+.progress{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;margin:2px 0 18px}
+.progress i{height:4px;border-radius:2px;background:var(--line)}
+.progress i.done{background:var(--teal)}
+.progress i.cur{background:var(--ink2)}
+.progress.cb i.done{background:var(--cb)}
+.kicker{font-size:13px;line-height:18px;font-weight:600;color:var(--muted);margin-bottom:10px}
+.kicker em{font-style:normal;color:var(--saffron-text)}
+.stem{font:400 18px/27px var(--read);margin:0 0 10px;overflow-wrap:break-word}
+ol.st{margin:0 0 10px;padding-left:34px;font:400 17px/25px var(--read)}
+ol.st.roman{list-style:upper-roman}
+ol.st li{margin:2px 0;padding-left:4px}
+.assert{display:grid;gap:10px;margin:0 0 12px}
+.assert div{border-left:3px solid var(--line);padding:2px 0 2px 12px;font:400 17px/25px var(--read)}
+.assert b{display:block;font:600 13px/18px var(--ui);color:var(--muted);margin-bottom:2px}
+table.match{width:100%;border-collapse:collapse;margin:0 0 12px;font:400 16px/23px var(--read)}
+table.match th{font:600 13px/18px var(--ui);color:var(--muted);text-align:left;padding:6px 8px 6px 0;border-bottom:1px solid var(--line)}
+table.match td{padding:8px 8px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.match td.n{width:38px;color:var(--muted)}
+.tail{font:400 17px/25px var(--read);margin:0 0 14px}
+.opt{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;border:1px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:12px;padding:12px 16px;margin:0 0 8px;font:400 17px/24px var(--read);min-height:50px}
+.opt .l{font:600 15px/24px var(--ui);color:var(--muted);width:26px;flex:none}
+.opt .tx{flex:1;min-width:0;overflow-wrap:break-word}
+.opt[aria-pressed="true"]{border:2px solid var(--teal);background:var(--teal-tint);padding:11px 15px}
+.opt[aria-pressed="true"] .l{color:var(--teal)}
+.opt .tagr{margin-left:6px;font:600 13px/24px var(--ui);display:flex;align-items:center;gap:4px;white-space:nowrap}
+.opt .tagr .ic{width:18px;height:18px;stroke-width:2.25}
+.opt.right{border:2px solid var(--ok);background:var(--ok-tint);padding:11px 15px}
+.opt.right .tagr,.opt.right .l{color:var(--ok)}
+.opt.wrong{border:2px solid var(--bad);background:var(--bad-tint);padding:11px 15px}
+.opt.wrong .tagr,.opt.wrong .l{color:var(--bad)}
+.opt.dim{color:var(--ink2)}
+.opt:disabled{cursor:default}
+.result{margin:18px 0 0;display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 10px;scroll-margin-top:16px}
+.result b{font-size:17px;line-height:24px;font-weight:600}
+.result b.ok{color:var(--ok)}.result b.bad{color:var(--bad)}.result b.skip{color:var(--ink2)}
+.label{font-size:13px;line-height:18px;font-weight:600;color:var(--muted);margin:22px 0 6px}
+.label.saff{color:var(--saffron-text)}
+.label.bad{color:var(--bad)}
+.whynot{background:var(--bad-tint);border-radius:12px;padding:10px 14px}
+.whynot p{font:400 16px/25px var(--read)}
+.whynot p+p{margin-top:6px}
+.take{font-size:17px;line-height:25px;font-weight:600}
+.expl{font:400 16px/26px var(--read)}
+.srcs{margin-top:16px}
+.src{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;border-bottom:1px solid var(--line);color:var(--teal);font-size:15px;line-height:20px;font-weight:600;text-decoration:none;padding:6px 0}
+.srcs .src:first-child{border-top:1px solid var(--line)}
+.src span{display:flex;align-items:center;gap:2px;color:var(--muted);font-weight:400;font-size:13px;white-space:nowrap}
+.src span .ic{width:16px;height:16px}
+.report{display:inline-flex;align-items:center;min-height:44px;margin-top:8px;font-size:13px;color:var(--muted);border:0;background:none;padding:0;text-decoration:underline;text-underline-offset:3px}
+.reportbox{margin-top:12px}
+.reportbox textarea{font:400 16px/24px var(--ui);min-height:96px;margin:6px 0 10px}
+.sw{width:46px;height:28px;border-radius:14px;background:var(--line);position:relative;flex:none;transition:background .15s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--sheet);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:left .15s}
+[aria-checked="true"] .sw{background:var(--teal)}
+[aria-checked="true"] .sw::after{left:21px}
+/* summary + lists */
+.list{margin-top:20px}
+.res{display:flex;align-items:center;gap:14px;min-height:64px;width:100%;border:0;border-bottom:1px solid var(--line);background:none;padding:8px 0;text-align:left;color:var(--ink);font-size:17px;line-height:24px}
+.list>.res:first-child{border-top:1px solid var(--line)}
+.res .grow{flex:1;min-width:0}
+.res .chev{color:var(--muted)}
+.mark{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;flex:none}
+.mark .ic{width:16px;height:16px;stroke-width:2.5}
+.mark.ok{background:var(--ok-tint);color:var(--ok)}.mark.bad{background:var(--bad-tint);color:var(--bad)}.mark.skip{background:var(--line);color:var(--ink2)}
+.plan{margin-top:20px;font-size:15px;line-height:22px;color:var(--ink2)}
+/* progress */
+.subjrow{padding:12px 0;border-bottom:1px solid var(--line)}
+.subjrow:first-of-type{border-top:1px solid var(--line)}
+.subjrow .h{display:flex;justify-content:space-between;gap:8px;font-size:15px;line-height:22px}
+.meter{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:8px}
+.meter i{display:block;height:100%;background:var(--teal)}
+.calib{display:grid;grid-template-columns:auto 1fr auto;gap:8px 12px;font-size:15px;line-height:22px;margin-top:14px;align-items:baseline}
+.calib .v{text-align:right;color:var(--ink2)}
+.insight{margin-top:14px;font-size:15px;line-height:22px;color:var(--ink2)}
+.insight p+p{margin-top:8px}
+/* forms */
+.field{display:block;width:100%;min-height:56px;font-size:18px;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);background:var(--sheet);color:var(--ink);outline:none;margin-top:24px}
+.field:focus{border-color:var(--teal)}
+input[type=time]{display:block;width:100%;min-height:56px;font:600 22px/1.2 var(--ui);padding:10px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--sheet);color:var(--ink);margin-top:12px}
+textarea{display:block;width:100%;min-height:96px;border-radius:12px;border:1.5px solid var(--line);background:var(--sheet);color:var(--ink);padding:12px;font:13px/18px ui-monospace,Menlo,monospace;margin:12px 0 8px}
+.choice{display:flex;align-items:center;gap:14px;min-height:56px;width:100%;border:0;border-bottom:1px solid var(--line);background:none;padding:8px 0;text-align:left;font-size:17px;line-height:24px;color:var(--ink)}
+.rows>.choice:first-child{border-top:1px solid var(--line)}
+.choice .dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--muted);flex:none;display:grid;place-items:center}
+.choice[aria-checked="true"] .dot{border-color:var(--teal)}
+.choice[aria-checked="true"] .dot::after{content:"";width:12px;height:12px;border-radius:50%;background:var(--teal)}
+.choice input{flex:1;min-width:0;min-height:44px;border:0;border-bottom:1.5px solid var(--line);background:none;font-size:17px;padding:6px 0;outline:none}
+.choice input:focus{border-bottom-color:var(--teal)}
+.intent{margin-top:24px;padding:14px 16px;border-left:3px solid var(--teal);background:var(--sheet);border-radius:0 12px 12px 0;font:400 17px/26px var(--read)}
+.prose p{font-size:16px;line-height:25px;color:var(--ink2);margin-top:10px}
+.prose h2{font-size:17px;line-height:24px;margin-top:28px}
+/* welcome */
+.welcome{min-height:calc(100vh - 200px);min-height:calc(100dvh - 200px);display:flex;flex-direction:column;justify-content:center;padding-top:24px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:28px;font-weight:600;font-size:15px;color:var(--ink2)}
+.brand img{width:36px;height:36px;border-radius:9px}
+/* coffee break */
+.fctx{font-size:13px;line-height:18px;color:var(--muted);margin:0 0 8px}
+.fact{font:400 21px/31px var(--read);overflow-wrap:break-word}
+.fact .arrow{color:var(--muted);font-family:var(--ui)}
+.verdict{margin-top:24px;padding:14px 16px;border-radius:12px;scroll-margin-top:16px}
+.verdict.ok{background:var(--ok-tint)}.verdict.bad{background:var(--bad-tint)}
+.verdict b{display:block;font-size:17px;line-height:24px;font-weight:600}
+.verdict.ok b{color:var(--ok)}.verdict.bad b{color:var(--bad)}
+.verdict p{font:400 16px/26px var(--read);margin-top:6px}
+.combo{margin-top:12px;font-size:13px;line-height:18px;font-weight:600;color:var(--saffron-text)}
+.miss{padding:14px 0;border-bottom:1px solid var(--line)}
+.miss:first-child{border-top:1px solid var(--line)}
+.miss .s{font:400 16px/24px var(--read)}
+.miss .w{font-size:15px;line-height:22px;color:var(--ink2);margin-top:6px}
+.miss .w b{color:var(--ink);font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M5 20V11M12 20V5M19 20v-6"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M7 4h10v16l-5-4-5 4z"/></symbol>
+  <symbol id="i-bookmark-on" viewBox="0 0 24 24"><path d="M7 4h10v16l-5-4-5 4z" fill="currentColor"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6.5 16.5V11a5.5 5.5 0 1 1 11 0v5.5l1.5 1.5H5z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.75v.01"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9.5 6l6 6-6 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M8 16L16 8M9.5 8H16v6.5"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-cup" viewBox="0 0 24 24"><path d="M4.5 10h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M15.5 11.5h1.25a2.5 2.5 0 0 1 0 5H15"/><path d="M8.5 3.5c-1 1.1 1 2 0 3.5M12 3.5c-1 1.1 1 2 0 3.5"/></symbol>
+  <symbol id="i-safe" viewBox="0 0 24 24"><path d="M12 3.5l7 3v5c0 4.2-3 7.7-7 9-4-1.3-7-4.8-7-9v-5z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></symbol>
+</svg>
 <div id="app"></div>
 <div id="bar"></div>
-<div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script src="questions.js"></script>
+<div id="snack" role="status" aria-live="polite"></div>
+<script src="questions.js?v=3.0.0"></script>
 <script>
 (function(){
 "use strict";
@@ -191,11 +256,13 @@ textarea{width:100%;min-height:110px;border-radius:12px;border:1px solid var(--l
 /* ====== SETTINGS YOU CAN EDIT ====== */
 const CONFIG = {
   appName: "Prelims Daily",
-  feedbackEmail: "",          // e.g. "you@example.com" — shows "Report / feedback" links. Leave "" to hide.
-  contentUpdated: "25 Oct 2026",
-  setSize: 5,                 // questions per day
-  newPerDay: 3,               // new questions per normal day (rest are reviews)
-  revisionEvery: 4            // every Nth active day is a Revision Round
+  version: "3.0.0",
+  statsUrl: "",           // your usage sheet's web app address (ends in /exec) — see SETUP-USAGE-SHEET.md. "" = off.
+  feedbackEmail: "",      // optional; only used when statsUrl is empty. Shows "Report it" links that open email.
+  setSize: 5,             // questions per set
+  newPerDay: 3,           // new questions in a normal set (the rest are reviews)
+  revisionEvery: 4,       // every Nth active day is a Revision Round
+  coffeeSize: 5           // statements in a Coffee Break round
 };
 /* =================================== */
 
@@ -212,142 +279,391 @@ const ASSERT_OPTS = [
   "Statement-I is correct, but Statement-II is incorrect",
   "Statement-I is incorrect, but Statement-II is correct"
 ];
-const QS = Array.isArray(window.QUESTIONS) ? window.QUESTIONS : [];
-const QBY = Object.fromEntries(QS.map(q => [q.id, q]));
-const RANKS = [[0,"Aspirant"],[75,"Prelims Qualified"],[200,"Mains Warrior"],[400,"Interview Call"],[700,"Topper"]];
+const TYPE_LABEL = {mcq:"Single answer", statements:"Statements", match:"Match the pairs", assertion:"Statement-I/II"};
 const INTERVALS = [0,3,7,21,60];
-const LET = ["a","b","c","d","e"];
-const CONF = {sure:"Sure", "5050":"50-50", guess:"Guess"};
-
-/* ---------- storage ---------- */
+const LET = ["a","b","c","d"];
+const CONF = {sure:"Sure", "5050":"50–50", guess:"Guess"};
+const RN = ["I","II","III","IV","V","VI","VII","VIII"];
+const NUMW = {none:0, one:1, two:2, three:3, four:4, five:5, six:6};
+const WORD = ["no","one","two","three","four","five","six","seven","eight"];
+const CUES = [["coffee","With my morning coffee"],["commute","On my commute"],["lunch","After lunch"],["night","Before bed"]];
+const LOGMAX = 4000;
 const KEY = "prelimsDaily.v1";
-function freshState(){ return {v:2,uid:"",name:"",mode:"easy",subject:"random",xp:0,marks:0,streak:0,best:0,lastDay:null,freezeWeek:null,hist:{},days:{},dayType:{},log:[],active:[],saved:[],remTime:"08:00",installDismissed:false}; }
-let memCopy = null;
-function load(){ try{ const s = localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){} return memCopy; }
-function save(){ memCopy = S; try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
-let S = Object.assign(freshState(), load() || {});
-S.v = 2;
-if(!S.uid) S.uid = "u-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,8);
-["hist","days","dayType"].forEach(k => { if(!S[k] || typeof S[k] !== "object") S[k] = {}; });
-["log","active","saved"].forEach(k => { if(!Array.isArray(S[k])) S[k] = []; });
-if(S.mode !== "easy" && S.mode !== "exam") S.mode = "easy";
-if(S.subject !== "random" && !SUBJ[S.subject]) S.subject = "random";
+const YMD = /^\d{4}-\d{2}-\d{2}$/;
+const IDRX = /^[A-Za-z0-9][A-Za-z0-9._~-]{0,60}$/;
+const SETKEY = /^(easy|exam)\|[a-z]+(\|\d{1,3})?$/;
 
-/* ---------- dates ---------- */
+/* ---------- helpers ---------- */
+function optsOf(q){ return Array.isArray(q.opts) ? q.opts : (q.type === "assertion" ? ASSERT_OPTS : []); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function fmt(n){ n = Math.round(n*100)/100; return Number.isInteger(n) ? String(n) : n.toFixed(2).replace(/0$/,""); }
+function signed(n){ return (n > 0 ? "+" : n < 0 ? "−" : "") + fmt(Math.abs(n)); }
+function hash(str){ let h = 1779033703 ^ str.length; for(let i=0;i<str.length;i++){ h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = h<<13 | h>>>19; } return h>>>0; }
+function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed>>>15, 1|seed); t = t + Math.imul(t ^ t>>>7, 61|t) ^ t; return ((t ^ t>>>14)>>>0)/4294967296; }; }
+function shuffle(arr, r){ const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(r()*(i+1)); const x = a[i]; a[i] = a[j]; a[j] = x; } return a; }
+function uniqBy(list){ const seen = new Set(); return list.filter(x => x && !seen.has(x.id) && seen.add(x.id)); }
+function ic(name, cls){ return '<svg class="ic' + (cls ? " " + cls : "") + '" aria-hidden="true" focusable="false"><use href="#i-' + name + '"/></svg>'; }
+function host(u){ try{ return new URL(u).hostname.replace(/^(www|en|m)\./, ""); }catch(e){ return ""; } }
+function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+function plural(n, one, many){ return n + " " + (n === 1 ? one : (many || one + "s")); }
+function isObj(x){ return !!x && typeof x === "object" && !Array.isArray(x); }
+function intIn(x, lo, hi, d){ return Number.isInteger(x) && x >= lo && x <= hi ? x : d; }
+function numOr(x, d){ return typeof x === "number" && isFinite(x) ? x : d; }
+function r2(n){ return Math.round(n * 100) / 100; }
+const UA = navigator.userAgent || "";
+const IS_IOS = /iPhone|iPad|iPod/.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1);
+function isStandalone(){ try{ return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }catch(e){ return false; } }
+function buzz(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
+function reducedMotion(){ try{ return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){ return false; } }
+
+/* ---------- dates (local time) ---------- */
 function ymd(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function parseD(s){ const p = s.split("-").map(Number); return new Date(p[0], p[1]-1, p[2]); }
 function addDays(s,n){ const d = parseD(s); d.setDate(d.getDate()+n); return ymd(d); }
 function diffDays(a,b){ return Math.round((parseD(b)-parseD(a))/86400000); }
 function today(){ return ymd(new Date()); }
-function weekKey(s){ const d = parseD(s); d.setDate(d.getDate()-((d.getDay()+6)%7)); return ymd(d); }
-(function prune(){ const cut = addDays(today(), -21); ["days","dayType"].forEach(k => Object.keys(S[k]).forEach(d => { if(d < cut) delete S[k][d]; })); })();
-save();
+function isYMD(x){ if(typeof x !== "string" || !YMD.test(x)) return false; const d = parseD(x); return !isNaN(d) && ymd(d) === x; }
+function dayName(s){ return parseD(s).toLocaleDateString("en-IN", {weekday:"long"}); }
+function fmtDate(d){ return d.toLocaleDateString("en-IN", {weekday:"short", day:"numeric", month:"short"}); }
+function fmtTime(hm){ const p = hm.split(":").map(Number); const d = new Date(2026, 0, 1, p[0], p[1]); return d.toLocaleTimeString("en-IN", {hour:"numeric", minute:"2-digit"}); }
 
-/* ---------- helpers ---------- */
-function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
-function fmt(n){ n = Math.round(n*100)/100; return Number.isInteger(n) ? String(n) : n.toFixed(2).replace(/0$/,""); }
-function hash(str){ let h = 1779033703 ^ str.length; for(let i=0;i<str.length;i++){ h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = h<<13 | h>>>19; } return h>>>0; }
-function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed>>>15, 1|seed); t = t + Math.imul(t ^ t>>>7, 61|t) ^ t; return ((t ^ t>>>14)>>>0)/4294967296; }; }
-function shuffle(arr, r){ const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(r()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
-function uniq(list){ const seen = new Set(); return list.filter(q => q && !seen.has(q.id) && seen.add(q.id)); }
-function optsOf(q){ return q.opts || (q.type === "assertion" ? ASSERT_OPTS : []); }
-let toastTimer = null;
-function toast(msg){ const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 3400); }
-function isStandalone(){ try{ return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }catch(e){ return false; } }
-const UA = (navigator.userAgent || "");
-const IS_IOS = /iPhone|iPad|iPod/.test(UA);
-const IS_ANDROID = /Android/.test(UA);
-function buzz(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
+/* ---------- question bank ---------- */
+const QS = (Array.isArray(window.QUESTIONS) ? window.QUESTIONS : []).filter(q =>
+  q && typeof q.id === "string" && IDRX.test(q.id) && (q.mode === "easy" || q.mode === "exam") && SUBJ[q.subj] &&
+  typeof q.stem === "string" && optsOf(q).length === 4 && Number.isInteger(q.ans) && q.ans >= 0 && q.ans < 4);
+const QBY = Object.create(null); QS.forEach(q => { if(!QBY[q.id]) QBY[q.id] = q; });
+const LOADED = QS.length > 0;
+const CONTENT = isObj(window.CONTENT) ? window.CONTENT : {};
 
-/* ---------- streak ---------- */
-function liveStreak(){
+/* ---------- "why this option is wrong" ---------- */
+function parseOpt(t){
+  const s = String(t).trim(); let m;
+  if(/^none(\b|$)/i.test(s)) return {count:0, set:[]};
+  if((m = /^only (one|two|three|four|five|six)\b/i.exec(s))) return {count:NUMW[m[1].toLowerCase()]};
+  if((m = /^all (?:the )?(two|three|four|five|six)\b/i.exec(s))) return {count:NUMW[m[1].toLowerCase()]};
+  if(/^neither\b/i.test(s)) return {set:[]};
+  const r = s.match(/\b(VIII|VII|VI|IV|V|III|II|I)\b/g);
+  if(r) return {set:r.map(x => RN.indexOf(x)).sort((a,b) => a-b)};
+  const a = s.match(/\b[1-9]\b/g);
+  if(a) return {set:a.map(x => +x - 1).sort((a,b) => a-b)};
+  return null;
+}
+function negQ(q){ return q.neg === true || (q.neg !== false && /\b(not correct|incorrect|not correctly)\b/i.test((q.stem || "") + " " + (q.tail || ""))); }
+function numLabel(q, i){ return q.num === "arabic" ? String(i + 1) : RN[i]; }
+function whyNot(q, pick){
+  if(!q || !Number.isInteger(pick) || pick < 0 || pick === q.ans) return [];
+  if(Array.isArray(q.wn) && typeof q.wn[pick] === "string") return [q.wn[pick]];
+  const pair = q.type === "match";
+  if((q.type === "statements" && Array.isArray(q.sv)) || (pair && Array.isArray(q.pv))){
+    const truth = (pair ? q.pv : q.sv).map(Boolean), why = (pair ? q.pr : q.sr) || [];
+    const lab = i => (pair ? "Pair " : "Statement ") + numLabel(q, i);
+    const good = pair ? "is correctly matched" : "is correct", bad = pair ? "is not correctly matched" : "is incorrect";
+    const line = (i, t) => lab(i) + " " + (t ? good : bad) + (why[i] ? ": " + why[i] : ".");
+    const o = parseOpt(optsOf(q)[pick]); if(!o) return [];
+    if(o.count === undefined){
+      const neg = negQ(q), out = [];
+      truth.forEach((t, i) => { const claimed = neg ? o.set.indexOf(i) === -1 : o.set.indexOf(i) > -1; if(claimed !== t) out.push(line(i, t)); });
+      return out.slice(0, 2);
+    }
+    const k = truth.filter(Boolean).length, n = truth.length, out = [];
+    if(k === n) out.push("All " + WORD[n] + (pair ? " pairs are correctly matched." : " statements are correct."));
+    else if(k === 0) out.push(pair ? "None of the pairs is correctly matched." : "None of the statements is correct.");
+    else out.push("Only " + WORD[k] + (pair ? (k === 1 ? " pair is correctly matched." : " pairs are correctly matched.") : (k === 1 ? " is correct." : " are correct.")));
+    truth.forEach((t, i) => { if(!t && out.length < 3) out.push(line(i, false)); });
+    return out;
+  }
+  if(q.type === "assertion" && Array.isArray(q.av)){
+    const imp = [[1,1,1],[1,1,0],[1,0,-1],[0,1,-1]][pick], t = q.av.map(x => x ? 1 : 0), why = q.ar || [], out = [];
+    if(imp[0] !== t[0]) out.push("Statement-I is " + (t[0] ? "correct" : "incorrect") + (why[0] ? ": " + why[0] : "."));
+    if(imp[1] !== t[1]) out.push("Statement-II is " + (t[1] ? "correct" : "incorrect") + (why[1] ? ": " + why[1] : "."));
+    if(!out.length) out.push((t[2] ? "Statement-II does explain Statement-I" : "Statement-II does not explain Statement-I") + (why[2] ? ": " + why[2] : "."));
+    return out;
+  }
+  return [];
+}
+
+/* ---------- Coffee Break facts ---------- */
+function leadOf(stem){
+  const s = String(stem || ""); let m;
+  if((m = /^With reference to (.+?),\s*(consider|which)/i.exec(s))) return "With reference to " + m[1];
+  if((m = /^In the context of (.+?),\s*(consider|which)/i.exec(s))) return "In the context of " + m[1];
+  if((m = /^Consider the following statements (?:about|regarding|on|in respect of|with respect to|relating to) (.+?)[:.]?$/i.exec(s))) return "About " + m[1];
+  return "";
+}
+function derivedFacts(){
+  const out = [];
+  QS.forEach(q => {
+    if(q.mode !== "exam" || q.cf === false) return;
+    const skip = i => Array.isArray(q.cf) && q.cf.indexOf(i) > -1;
+    const link = Array.isArray(q.links) ? q.links[0] : null;
+    if(q.type === "statements" && Array.isArray(q.sv) && Array.isArray(q.sr) && Array.isArray(q.items)){
+      const ctx = typeof q.cx === "string" ? q.cx : leadOf(q.stem);
+      q.items.forEach((s, i) => { if(!skip(i) && typeof q.sr[i] === "string") out.push({id:q.id + "~s" + i, kind:"q", subj:q.subj, ctx:ctx, text:s, truth:!!q.sv[i], why:q.sr[i], link:link}); });
+    } else if(q.type === "match" && Array.isArray(q.pv) && Array.isArray(q.pr) && Array.isArray(q.pairs)){
+      const ctx = Array.isArray(q.heads) ? q.heads.join(" → ") : "";
+      q.pairs.forEach((p, i) => { if(!skip(i) && typeof q.pr[i] === "string") out.push({id:q.id + "~p" + i, kind:"q", subj:q.subj, ctx:ctx, pair:[p[0], p[1]], text:p[0] + " → " + p[1], truth:!!q.pv[i], why:q.pr[i], link:link}); });
+    } else if(q.type === "assertion" && Array.isArray(q.av) && Array.isArray(q.ar)){
+      [q.s1, q.s2].forEach((s, i) => { if(!skip(i) && typeof q.ar[i] === "string") out.push({id:q.id + "~a" + i, kind:"q", subj:q.subj, ctx:"", text:s, truth:!!q.av[i], why:q.ar[i], link:link}); });
+    }
+  });
+  return out;
+}
+const FACTS = (Array.isArray(window.FACTS) ? window.FACTS : []).filter(f =>
+  f && typeof f.id === "string" && IDRX.test(f.id) && typeof f.text === "string" && typeof f.truth === "boolean" && typeof f.why === "string" && SUBJ[f.subj]
+).map(f => ({id:f.id, kind:"fact", subj:f.subj, ctx:typeof f.ctx === "string" ? f.ctx : "", text:f.text, truth:f.truth, why:f.why, link:isObj(f.link) ? f.link : null})).concat(derivedFacts());
+const FBY = Object.create(null); FACTS.forEach(f => { if(!FBY[f.id]) FBY[f.id] = f; });
+
+/* ---------- state: load, validate, save ---------- */
+function fresh(){
+  return {v:3, uid:"", name:"", mode:"easy", subject:"random", marks:0, streak:0, best:0, lastDay:null, repair:null,
+    hist:{}, days:{}, dayType:{}, log:[], active:[], saved:[], remTime:"08:00", remCue:"", remSet:false,
+    installDismissed:false, setsDone:0, created:null, fun:{best:0, rounds:0, seen:{}, cur:null, last:null},
+    stats:{on:true, seen:false, day:null}};
+}
+// Every value read from storage or a backup goes through here, so bad data can't break the app.
+function normalize(d){
+  if(!isObj(d)) throw new Error("not a Prelims Daily state");
+  const s = fresh();
+  Object.keys(d).forEach(k => { if(!(k in s) && k !== "xp" && k !== "freezeWeek" && k !== "__proto__" && k !== "constructor" && k !== "prototype") s[k] = d[k]; });
+  s.v = 3;
+  s.uid = typeof d.uid === "string" && d.uid.length <= 64 ? d.uid : "";
+  s.name = typeof d.name === "string" ? d.name.replace(/\s+/g, " ").trim().slice(0, 24) : "";
+  s.mode = d.mode === "exam" ? "exam" : "easy";
+  s.subject = d.subject === "random" || SUBJ[d.subject] ? d.subject : "random";
+  s.marks = r2(numOr(d.marks, 0));
+  s.streak = intIn(d.streak, 0, 100000, 0);
+  s.best = Math.max(intIn(d.best, 0, 100000, 0), s.streak);
+  s.lastDay = isYMD(d.lastDay) ? d.lastDay : null;
+  if(isObj(d.repair) && isYMD(d.repair.day) && intIn(d.repair.prev, 1, 100000, 0)) s.repair = {day:d.repair.day, prev:d.repair.prev};
+  if(isObj(d.hist)) Object.keys(d.hist).forEach(id => {
+    const h = d.hist[id]; if(!IDRX.test(id) || !isObj(h)) return;
+    const n = intIn(h.n, 0, 1e6, 0);
+    s.hist[id] = {n:n, k:Math.min(intIn(h.k, 0, 1e6, 0), n), box:intIn(h.box, 0, 5, 0), due:isYMD(h.due) ? h.due : null, last:isYMD(h.last) ? h.last : null};
+  });
+  if(isObj(d.days)) Object.keys(d.days).forEach(t => {
+    if(!isYMD(t) || !isObj(d.days[t])) return;
+    const out = {};
+    Object.keys(d.days[t]).forEach(k => {
+      const st = d.days[t][k]; if(!SETKEY.test(k) || !isObj(st) || !Array.isArray(st.ids)) return;
+      const ids = []; st.ids.forEach(id => { if(typeof id === "string" && IDRX.test(id) && ids.indexOf(id) === -1 && ids.length < 20) ids.push(id); });
+      const ans = {};
+      if(isObj(st.ans)) Object.keys(st.ans).forEach(id => {
+        const a = st.ans[id]; if(ids.indexOf(id) === -1 || !isObj(a)) return;
+        const c = intIn(a.c, -1, 3, null); if(c === null) return;
+        const rec = {c:c, ok:a.ok === true && c >= 0, skip:c === -1, pts:r2(numOr(a.pts, 0)), conf:CONF[a.conf] ? a.conf : null};
+        if(isYMD(a.at)) rec.at = a.at;
+        if(a.dup === true) rec.dup = true;
+        ans[id] = rec;
+      });
+      out[k] = {ids:ids, review:Array.isArray(st.review) ? st.review.filter(x => ids.indexOf(x) > -1) : [], kind:st.kind === "revision" ? "revision" : "normal", ans:ans};
+    });
+    s.days[t] = out;
+  });
+  if(isObj(d.dayType)) Object.keys(d.dayType).forEach(t => { if(isYMD(t) && (d.dayType[t] === "revision" || d.dayType[t] === "normal")) s.dayType[t] = d.dayType[t]; });
+  if(Array.isArray(d.log)) d.log.slice(-LOGMAX).forEach(l => {
+    if(!isObj(l) || !isYMD(l.d) || !SUBJ[l.s]) return;
+    const e = {d:l.d};
+    if(typeof l.q === "string" && IDRX.test(l.q)) e.q = l.q;
+    e.s = l.s; e.m = l.m === "exam" ? "exam" : "easy"; e.ok = l.ok === true; e.skip = l.skip === true; e.c = CONF[l.c] ? l.c : null; e.p = r2(numOr(l.p, 0));
+    s.log.push(e);
+  });
+  if(Array.isArray(d.active)) s.active = Array.from(new Set(d.active.filter(isYMD))).sort().slice(-400);
+  if(Array.isArray(d.saved)) d.saved.forEach(id => { if(typeof id === "string" && IDRX.test(id) && s.saved.indexOf(id) === -1 && s.saved.length < 500) s.saved.push(id); });
+  s.remTime = typeof d.remTime === "string" && /^([01]\d|2[0-3]):[0-5]\d$/.test(d.remTime) ? d.remTime : "08:00";
+  s.remCue = typeof d.remCue === "string" ? d.remCue.replace(/\s+/g, " ").slice(0, 40) : "";
+  s.remSet = d.remSet === true;
+  s.installDismissed = d.installDismissed === true;
+  s.setsDone = intIn(d.setsDone, 0, 1e6, 0);
+  s.created = isYMD(d.created) ? d.created : null;
+  if(isObj(d.stats)){ s.stats.on = d.stats.on !== false; s.stats.seen = d.stats.seen === true; s.stats.day = isYMD(d.stats.day) ? d.stats.day : null; }
+  if(isObj(d.fun)){
+    const f = d.fun;
+    s.fun.best = intIn(f.best, 0, 100, 0);
+    s.fun.rounds = intIn(f.rounds, 0, 1e6, 0);
+    if(isObj(f.seen)) Object.keys(f.seen).forEach(id => {
+      const v = f.seen[id];
+      if(IDRX.test(id) && Array.isArray(v) && v.length === 3 && intIn(v[0], 1, 1e6, 0) && (v[1] === 0 || v[1] === 1) && intIn(v[2], 0, 1e6, -1) >= 0) s.fun.seen[id] = [v[0], v[1], v[2]];
+    });
+    if(isObj(f.cur) && Array.isArray(f.cur.ids) && Array.isArray(f.cur.a) && f.cur.ids.length === f.cur.a.length && f.cur.ids.length > 0 && f.cur.ids.length <= 30 && f.cur.ids.every(x => typeof x === "string" && IDRX.test(x)))
+      s.fun.cur = {ids:f.cur.ids.slice(), a:f.cur.a.map(x => x === 1 ? 1 : x === 0 ? 0 : null)};
+    if(isObj(f.last) && Array.isArray(f.last.ids) && Array.isArray(f.last.a) && f.last.ids.length === f.last.a.length && f.last.ids.length <= 30 && f.last.ids.every(x => typeof x === "string"))
+      s.fun.last = {ids:f.last.ids.slice(), a:f.last.a.map(x => x === 1 ? 1 : 0), score:intIn(f.last.score, 0, 30, 0), size:intIn(f.last.size, 0, 30, 0), pb:f.last.pb === true};
+  }
+  return s;
+}
+function probeStorage(){ try{ const k = KEY + ".probe"; localStorage.setItem(k, "1"); localStorage.removeItem(k); return true; }catch(e){ return false; } }
+function readRaw(){ try{ return localStorage.getItem(KEY); }catch(e){ return null; } }
+let storageOK = probeStorage(), bootNote = null, lastRaw = null;
+function loadState(){
+  const raw = readRaw(); lastRaw = raw;
+  if(raw === null) return fresh();
+  try{ return normalize(JSON.parse(raw)); }
+  catch(e){
+    // Unreadable data: keep a copy instead of overwriting it, and start fresh.
+    try{ localStorage.setItem(KEY + ".unreadable." + Date.now(), raw); }catch(e2){}
+    bootNote = "recovered";
+    return fresh();
+  }
+}
+function pruneOld(){
+  const cut = addDays(today(), -21);
+  Object.keys(S.days).forEach(t => { if(t < cut && t !== curDate) delete S.days[t]; });
+  Object.keys(S.dayType).forEach(t => { if(t < cut) delete S.dayType[t]; });
+  if(S.active.length > 400) S.active = S.active.slice(-400);
+}
+let warnedSave = false;
+function save(){
+  pruneOld();
+  let raw; try{ raw = JSON.stringify(S); }catch(e){ return false; }
+  try{ localStorage.setItem(KEY, raw); lastRaw = raw; storageOK = true; return true; }
+  catch(e){
+    storageOK = false;
+    if(!warnedSave && typeof notice === "function"){ warnedSave = true; setTimeout(() => notice("Your progress isn't being saved in this browser"), 0); }
+    return false;
+  }
+}
+// Another tab (or the installed app) may have saved since we last looked: pick up its copy first.
+function sync(){
+  const raw = readRaw();
+  if(raw === null || raw === lastRaw) return false;
+  try{ S = normalize(JSON.parse(raw)); lastRaw = raw; return true; }catch(e){ return false; }
+}
+let curDate = today();
+let S = loadState();
+if(!S.uid) S.uid = "u-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
+if(!S.created) S.created = today();
+
+/* ---------- streak (with a one-day repair) ---------- */
+function completedSetsOn(t){ const d = S.days[t] || {}; return Object.keys(d).filter(k => d[k].ids.length && d[k].ids.every(id => d[k].ans[id])).length; }
+function streakInfo(){
+  const t = today();
   if(!S.lastDay) return {n:0, state:"none"};
-  const gap = diffDays(S.lastDay, today());
-  if(gap <= 0) return {n:S.streak, state:"done"};
+  const gap = diffDays(S.lastDay, t);
+  if(gap <= 0){
+    if(S.repair && S.repair.day === t) return {n:S.streak, state:"repairing", prev:S.repair.prev, done:completedSetsOn(t)};
+    return {n:S.streak, state:"today"};
+  }
   if(gap === 1) return {n:S.streak, state:"pending"};
-  if(gap === 2 && S.freezeWeek !== weekKey(today())) return {n:S.streak, state:"freeze"};
+  if(gap === 2 && S.streak >= 2) return {n:S.streak, state:"repairable"};
   return {n:0, state:"lost"};
 }
-function touchStreak(){
-  const t = today();
-  if(S.lastDay === t) return null;
+function touchStreak(t){
+  if(S.lastDay && diffDays(S.lastDay, t) <= 0) return "";
   const gap = S.lastDay ? diffDays(S.lastDay, t) : 99;
-  let msg = null;
-  if(gap === 1) S.streak += 1;
-  else if(gap === 2 && S.freezeWeek !== weekKey(t)){ S.streak += 1; S.freezeWeek = weekKey(t); msg = "❄️ Streak freeze used — missed a day, streak survives. Day " + S.streak + "."; }
+  let msg = "";
+  if(gap === 1){ S.streak += 1; msg = S.streak + "-day streak."; }
+  else if(gap === 2 && S.streak >= 2){ S.repair = {day:t, prev:S.streak}; S.streak = 1; msg = "Missed a day — finish two sets today to keep your " + S.repair.prev + "-day streak."; }
   else S.streak = 1;
+  if(S.repair && S.repair.day !== t) S.repair = null;
   S.lastDay = t; S.best = Math.max(S.best, S.streak);
-  if(S.active.indexOf(t) === -1) S.active.push(t);
-  if(S.active.length > 400) S.active = S.active.slice(-400);
-  return msg || (S.streak > 1 ? "🔥 Day " + S.streak + " — streak secured." : "🔥 Streak started.");
+  if(S.active.indexOf(t) === -1){ S.active.push(t); S.active.sort(); }
+  return msg;
+}
+function checkRepair(t){
+  if(S.repair && S.repair.day === t && completedSetsOn(t) >= 2){
+    S.streak = S.repair.prev + 1; S.best = Math.max(S.best, S.streak); S.repair = null; return true;
+  }
+  return false;
 }
 
-/* ---------- daily set ---------- */
+/* ---------- daily sets ---------- */
+function baseKey(){ return S.mode + "|" + S.subject; }
+function extraN(k){ const m = /\|(\d+)$/.exec(k); return m ? +m[1] : 1; }
+function keysToday(t, base){ const d = S.days[t] || {}; return Object.keys(d).filter(k => k === base || k.indexOf(base + "|") === 0).sort((a,b) => extraN(a) - extraN(b)); }
 function dayType(t){
   if(!S.dayType[t]){
     const prior = S.active.filter(d => d < t).length;
-    S.dayType[t] = ((prior + 1) % CONFIG.revisionEvery === 0 && Object.keys(S.hist).length >= 10) ? "revision" : "normal";
+    S.dayType[t] = ((prior + 1) % CONFIG.revisionEvery === 0 && Object.keys(S.hist).filter(id => QBY[id]).length >= 10) ? "revision" : "normal";
   }
   return S.dayType[t];
 }
-function setKey(){ return S.mode + "|" + S.subject; }
-function pool(mode, subject){ return QS.filter(q => q.mode === mode && (subject === "random" || q.subj === subject)); }
-function weightedOrder(list, r){
-  if(S.subject !== "random") return shuffle(list, r);
+function answeredOn(t){
+  const out = new Set();
+  Object.keys(S.days).forEach(d => { const sets = S.days[d]; Object.keys(sets).forEach(k => Object.keys(sets[k].ans).forEach(id => { if(d === t || sets[k].ans[id].at === t) out.add(id); })); });
+  return out;
+}
+// An answer to the same question already given in another set of this set's day, or anywhere today.
+function findAns(t, id, exceptKey){
+  const same = S.days[t] || {};
+  for(const k of Object.keys(same)){ if(k === exceptKey) continue; const a = same[k].ans[id]; if(a && !a.dup) return a; }
+  const now = today(), h = S.hist[id];
+  if(h && h.last === now){
+    for(const d of Object.keys(S.days)){
+      const sets = S.days[d];
+      for(const k of Object.keys(sets)){ if(d === t && k === exceptKey) continue; const a = sets[k].ans[id]; if(a && !a.dup && a.at === now) return a; }
+    }
+  }
+  return null;
+}
+function weightedOrder(list, r, subject){
+  if(subject !== "random") return shuffle(list, r);
   const groups = {};
   shuffle(list, r).forEach(q => { (groups[q.subj] = groups[q.subj] || []).push(q); });
   const out = [];
   while(Object.keys(groups).length){
-    const keys = Object.keys(groups);
-    const total = keys.reduce((s,k) => s + (WEIGHTS[k] || 8), 0);
+    const keys = Object.keys(groups), total = keys.reduce((s,k) => s + (WEIGHTS[k] || 8), 0);
     let x = r() * total, pick = keys[keys.length-1];
     for(const k of keys){ x -= (WEIGHTS[k] || 8); if(x <= 0){ pick = k; break; } }
-    out.push(groups[pick].shift());
-    if(!groups[pick].length) delete groups[pick];
+    out.push(groups[pick].shift()); if(!groups[pick].length) delete groups[pick];
   }
   return out;
 }
-function getSet(t){
-  t = t || today();
-  S.days[t] = S.days[t] || {};
-  const k = setKey();
-  if(S.days[t][k]) return S.days[t][k];
+function buildSet(t, key){
+  const parts = key.split("|"), mode = parts[0], subject = parts[1], isBase = parts.length === 2;
   const size = CONFIG.setSize;
-  const p = pool(S.mode, S.subject);
-  const r = rng(hash(t + k));
-  const doneToday = new Set();
-  Object.values(S.days[t]).forEach(s => Object.keys(s.ans).forEach(id => doneToday.add(id)));
+  const r = rng(hash(S.uid + "|" + t + "|" + key));
+  const doneToday = answeredOn(t);
+  const avail = QS.filter(q => q.mode === mode && (subject === "random" || q.subj === subject) && !doneToday.has(q.id));
   const H = id => S.hist[id];
-  const avail = p.filter(q => !doneToday.has(q.id));
-  const byLast = (a,b) => (H(a.id).last||"") < (H(b.id).last||"") ? -1 : 1;
-  const accOf = q => { const h = H(q.id); return h.n ? h.k/h.n : 0; };
+  const byLast = (a,b) => (H(a.id).last || "") < (H(b.id).last || "") ? -1 : (H(a.id).last || "") > (H(b.id).last || "") ? 1 : 0;
+  const accOf = q => { const h = H(q.id); return h.n ? h.k / h.n : 0; };
   const due = avail.filter(q => H(q.id) && H(q.id).due && H(q.id).due <= t).sort((a,b) => H(a.id).due < H(b.id).due ? -1 : 1);
-  const unseen = weightedOrder(avail.filter(q => !H(q.id)), r);
-  const seenOld = avail.filter(q => H(q.id) && (H(q.id).last||"") <= addDays(t,-2));
+  const unseen = weightedOrder(avail.filter(q => !H(q.id)), r, subject);
+  const seenOld = avail.filter(q => H(q.id) && (H(q.id).last || "") <= addDays(t, -2));
   let picks = [], reviewIds = [], kind = "normal";
-  if(dayType(t) === "revision"){
+  if(isBase && dayType(t) === "revision"){
     const weak = seenOld.filter(q => H(q.id).box > 0 && H(q.id).box <= 2).sort(byLast);
     const saved = seenOld.filter(q => S.saved.indexOf(q.id) > -1);
     const oldest = seenOld.slice().sort(byLast);
-    const cand = uniq(due.concat(weak, saved, oldest)).slice(0, size);
+    const cand = uniqBy(due.concat(weak, saved, oldest)).slice(0, size);
     if(cand.length >= 3){
-      kind = "revision";
-      picks = cand; reviewIds = cand.map(q => q.id);
-      if(picks.length < size) picks = uniq(picks.concat(unseen)).slice(0, size);
+      kind = "revision"; picks = cand; reviewIds = cand.map(q => q.id);
+      if(picks.length < size) picks = uniqBy(picks.concat(unseen)).slice(0, size);
     }
   }
   if(kind === "normal"){
-    const rv = due.slice(0, 2);
-    const nw = unseen.slice(0, CONFIG.newPerDay);
+    const rv = due.slice(0, 2), nw = unseen.slice(0, CONFIG.newPerDay);
     const recap = seenOld.filter(q => rv.indexOf(q) === -1).sort((a,b) => accOf(a) - accOf(b) || byLast(a,b));
     const recapPick = recap.slice(0, Math.max(0, size - rv.length - nw.length));
     reviewIds = rv.concat(recapPick).map(q => q.id);
-    picks = uniq(rv.concat(nw, recapPick, unseen, avail.slice().sort((a,b) => H(a.id)&&H(b.id) ? byLast(a,b) : 0))).slice(0, size);
+    const rest = avail.filter(q => H(q.id)).sort(byLast);
+    picks = uniqBy(rv.concat(nw, recapPick, unseen, rest)).slice(0, size);
     reviewIds = reviewIds.filter(id => picks.some(q => q.id === id));
   }
-  const set = {ids: picks.map(q => q.id), review: reviewIds, kind: kind, ans: {}};
-  S.days[t][k] = set; save();
-  return set;
+  return {ids:picks.map(q => q.id), review:reviewIds, kind:kind, ans:{}};
+}
+// Returns the stored set, or builds one. An empty set is never stored, so a failed load can't lock the day.
+function getSet(t, key, noCreate){
+  t = t || today(); key = key || baseKey();
+  const day = S.days[t] || {};
+  let set = day[key] || null;
+  if(set && LOADED){
+    const ids = set.ids.filter(id => QBY[id]);
+    if(ids.length !== set.ids.length){
+      if(!ids.length && !Object.keys(set.ans).length){ delete day[key]; set = null; }
+      else {
+        set.ids = ids;
+        Object.keys(set.ans).forEach(id => { if(!QBY[id]) delete set.ans[id]; });
+        set.review = set.review.filter(id => ids.indexOf(id) > -1);
+        save();
+      }
+    }
+  }
+  if(set || noCreate || !LOADED) return set;
+  const built = buildSet(t, key);
+  if(!built.ids.length) return built;
+  S.days[t] = day; day[key] = built; save();
+  return built;
 }
 
 /* ---------- answering + scheduling ---------- */
@@ -358,325 +674,149 @@ function schedule(h, ok, conf, t){
   else b = (h.box || 0) === 0 ? 3 : h.box + 1;
   if(b > 4){ h.box = 5; h.due = null; } else { h.box = b; h.due = addDays(t, INTERVALS[b]); }
 }
-function answer(qid, choice, conf, date){
-  const t = date || today();
-  const set = getSet(t);
-  if(set.ans[qid]) return null;
-  const q = QBY[qid];
-  const skip = choice === -1;
-  const ok = !skip && choice === q.ans;
+function finishCheck(set, now){
+  if(!set.ids.every(id => set.ans[id])) return {completed:false, repaired:false};
+  S.setsDone += 1;
+  return {completed:true, repaired:checkRepair(now)};
+}
+function answer(qid, choice, conf, t, key){
+  t = t || curDate; key = key || curKey;
+  const set = getSet(t, key, true);
+  if(!set || set.ids.indexOf(qid) === -1 || set.ans[qid]) return null;
+  const q = QBY[qid]; if(!q) return null;
+  if(!(choice === -1 || (Number.isInteger(choice) && choice >= 0 && choice < 4))) return null;
+  const now = today();
+  const other = findAns(t, qid, key);
+  if(other){
+    set.ans[qid] = Object.assign({}, other, {dup:true});
+    const f = finishCheck(set, now); save();
+    return {dup:true, ok:other.ok, skip:other.skip, pts:other.pts, completed:f.completed, repaired:f.repaired, streakMsg:""};
+  }
+  const skip = choice === -1, ok = !skip && choice === q.ans;
   let pts = 0;
-  if(q.mode === "easy"){ if(ok){ pts = 10; S.xp += 10; } }
-  else { pts = ok ? 2 : (skip ? 0 : -0.66); S.marks = Math.round((S.marks + pts)*100)/100; }
-  set.ans[qid] = {c:choice, ok:ok, skip:skip, pts:pts, conf:conf || null};
-  const h = S.hist[qid] || {n:0, k:0, box:0};
-  h.n++; if(ok) h.k++; h.last = t;
-  schedule(h, ok, conf, t);
+  if(q.mode === "exam"){ pts = ok ? 2 : skip ? 0 : -0.66; S.marks = r2(S.marks + pts); }
+  set.ans[qid] = {c:choice, ok:ok, skip:skip, pts:pts, conf:CONF[conf] ? conf : null, at:now};
+  const h = S.hist[qid] || {n:0, k:0, box:0, due:null, last:null};
+  h.n++; if(ok) h.k++; h.last = now;
+  schedule(h, ok, conf, now);
   S.hist[qid] = h;
-  S.log.push({d:t, s:q.subj, m:q.mode, ok:ok, skip:skip, c:conf || null, p:pts});
-  if(S.log.length > 4000) S.log = S.log.slice(-4000);
-  const streakMsg = touchStreak();
+  S.log.push({d:now, q:qid, s:q.subj, m:q.mode, ok:ok, skip:skip, c:CONF[conf] ? conf : null, p:pts});
+  if(S.log.length > LOGMAX) S.log = S.log.slice(-LOGMAX);
+  const streakMsg = touchStreak(now);
+  const f = finishCheck(set, now);
   save();
-  return {ok:ok, skip:skip, pts:pts, streakMsg:streakMsg};
+  return {ok:ok, skip:skip, pts:pts, completed:f.completed, repaired:f.repaired, streakMsg:streakMsg};
 }
 
-/* ---------- rank ---------- */
-function totalCorrect(){ return Object.values(S.hist).reduce((s,h) => s + (h.k||0), 0); }
-function rankInfo(){
-  const c = totalCorrect(); let cur = RANKS[0], next = RANKS[1] || null;
-  RANKS.forEach((r,i) => { if(c >= r[0]){ cur = r; next = RANKS[i+1] || null; } });
-  return {c:c, cur:cur, next:next};
+/* ---------- Coffee Break engine ---------- */
+function cbFirstOpen(cur, from){ for(let i = from || 0; i < cur.ids.length; i++) if(cur.a[i] === null) return i; return -1; }
+function cbClean(){
+  const f = S.fun; if(!f.cur) return;
+  const ids = [], a = [];
+  f.cur.ids.forEach((id, i) => { if(FBY[id]){ ids.push(id); a.push(f.cur.a[i]); } });
+  if(!ids.length){ f.cur = null; return; }
+  if(ids.length !== f.cur.ids.length){ f.cur.ids = ids; f.cur.a = a; save(); }
 }
-
-/* ---------- views ---------- */
-const $app = document.getElementById("app");
-const $bar = document.getElementById("bar");
-let view = S.name ? "home" : "welcome";
-let qi = 0, sel = null, curDate = today(), showSubj = false, readId = null, deferredPrompt = null, nameEdit = false;
-function go(v){ view = v; sel = null; render(); try{ window.scrollTo(0,0); }catch(e){} }
-function render(){
-  $bar.innerHTML = "";
-  ({welcome:renderWelcome, home:renderHome, quiz:renderQuiz, summary:renderSummary, progress:renderProgress,
-    remind:renderRemind, saved:renderSaved, read:renderRead, about:renderAbout, backup:renderBackup})[view]();
+function cbNewRound(){
+  const f = S.fun, size = Math.min(CONFIG.coffeeSize, FACTS.length);
+  if(!size){ f.cur = null; return null; }
+  const r = rng(hash(S.uid + "|cb|" + f.rounds));
+  const seen = f.seen;
+  const missed = shuffle(FACTS.filter(x => seen[x.id] && seen[x.id][1] === 0 && f.rounds - seen[x.id][2] >= 2), r).slice(0, Math.max(1, Math.round(size * 0.2)));
+  const freshF = shuffle(FACTS.filter(x => !seen[x.id] && x.kind === "fact"), r);
+  const freshQ = shuffle(FACTS.filter(x => !seen[x.id] && x.kind !== "fact"), r);
+  const mix = [];
+  while(freshF.length || freshQ.length){ for(let i = 0; i < 7 && freshF.length; i++) mix.push(freshF.shift()); for(let i = 0; i < 3 && freshQ.length; i++) mix.push(freshQ.shift()); }
+  const old = shuffle(FACTS.filter(x => seen[x.id]), r).sort((a,b) => seen[a.id][2] - seen[b.id][2]);
+  const cand = uniqBy(missed.concat(mix, old));
+  const maxPer = size - Math.floor(size * 0.3), picks = [];
+  let nT = 0, nF = 0;
+  for(const x of cand){ if(picks.length >= size) break; if(x.truth ? nT >= maxPer : nF >= maxPer) continue; picks.push(x); if(x.truth) nT++; else nF++; }
+  for(const x of cand){ if(picks.length >= size) break; if(picks.indexOf(x) === -1) picks.push(x); }
+  const ids = shuffle(picks, r).map(x => x.id);
+  f.cur = {ids:ids, a:ids.map(() => null)};
+  save();
+  return f.cur;
 }
-function bar(html){ $bar.innerHTML = '<div class="in">' + html + '</div>'; }
-
-function renderWelcome(){
-  $app.innerHTML =
-    '<section class="welcome"><div class="tile">P</div>' +
-    '<h1>Hi, what\'s your name?</h1>' +
-    '<p>Five Prelims questions a day, about five minutes. Your progress stays on this phone — no sign-up.</p>' +
-    '<input id="nm" class="field" type="text" maxlength="24" autocomplete="given-name" placeholder="Your name" value="' + esc(nameEdit ? S.name : "") + '">' +
-    '</section>';
-  bar('<button class="primary" data-act="setname">Continue</button>');
+function cbAnswer(i, saysFact){
+  const f = S.fun, cur = f.cur;
+  if(!cur || !Number.isInteger(i) || i < 0 || i >= cur.ids.length || cur.a[i] !== null) return null;
+  const item = FBY[cur.ids[i]]; if(!item) return null;
+  const ok = saysFact === item.truth;
+  cur.a[i] = ok ? 1 : 0;
+  const prev = f.seen[item.id];
+  f.seen[item.id] = [(prev ? prev[0] : 0) + 1, ok ? 1 : 0, f.rounds];
+  save();
+  return {ok:ok};
 }
-
-function installCard(){
-  if(isStandalone() || S.installDismissed) return "";
-  let body, btn = "";
-  if(deferredPrompt){ body = "Opens like an app from your home screen, and keeps your progress safe."; btn = '<button class="mini" data-act="install">Install</button>'; }
-  else if(IS_IOS){ body = "Tap the Share button ⬆︎, then “Add to Home Screen”. It opens like an app and keeps your progress safe."; }
-  else { body = "In Chrome, tap the ⋮ menu, then “Add to Home screen” or “Install app”. It keeps your progress safe."; }
-  return '<div class="install"><div><b>Add Prelims Daily to your home screen</b>' + esc(body) + (btn ? "<br>" + btn : "") + '</div><button class="x" data-act="nodismiss" aria-label="Dismiss">×</button></div>';
+function cbFinish(){
+  const f = S.fun, cur = f.cur;
+  if(!cur || cbFirstOpen(cur) !== -1) return false;
+  const score = cur.a.filter(x => x === 1).length, full = cur.ids.length >= CONFIG.coffeeSize;
+  const pb = full && score > f.best && f.rounds > 0;
+  if(full) f.best = Math.max(f.best, score);
+  f.rounds += 1;
+  f.last = {ids:cur.ids.slice(), a:cur.a.slice(), score:score, size:cur.ids.length, pb:pb};
+  f.cur = null;
+  save();
+  return true;
 }
+function cbCombo(cur, i){ let n = 0; for(let j = i; j >= 0 && cur.a[j] === 1; j--) n++; return n; }
 
-function renderHome(){
-  curDate = today();
-  const st = liveStreak(), r = rankInfo(), set = getSet(curDate);
-  const done = Object.keys(set.ans).length, total = set.ids.length;
-  const rev = set.kind === "revision";
-  let note = "";
-  if(st.state === "none") note = "One question a day keeps the streak alive. All five if you're feeling sharp.";
-  else if(st.state === "pending") note = "Answer one question today to keep your " + st.n + "-day streak.";
-  else if(st.state === "freeze") note = "You missed yesterday. Today's first answer uses your weekly streak freeze ❄️";
-  else if(st.state === "lost") note = "Fresh start today. Best streak so far: " + S.best + " days.";
-  else note = done >= total && total ? "Today's set is done. See you tomorrow ✨" : "Streak secured for today 🔥";
-  const scoreStat = S.mode === "easy" ? "<b>" + S.xp + "</b><span>XP</span>" : "<b>" + fmt(S.marks) + "</b><span>exam marks</span>";
-  const btn = !total ? "No questions in this subject yet" : done === 0 ? (rev ? "Start Revision Round" : "Start today's " + total) : done < total ? "Continue · " + done + "/" + total + " done" : "Review today's answers";
-  const desc = S.mode === "easy"
-    ? "Warm-up: NCERT-level single-answer questions. +10 XP each."
-    : "Prelims pattern: statements, pairs, Statement-I/II. +2 / −0.66, or skip for 0.";
-  const nSaved = S.saved.length;
-  const dateTxt = new Date().toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"});
-  $app.innerHTML =
-    '<header class="top"><div><div class="eyebrow">' + esc(CONFIG.appName) + ' · ' + esc(dateTxt) + '</div><h1>Hi, ' + esc(S.name) + '</h1></div>' +
-    '<div class="icons"><button class="icon" data-act="progress" aria-label="Progress">📊</button></div></header>' +
-    installCard() +
-    '<section class="stats">' +
-      '<div class="stat fire"><b>🔥 ' + st.n + '</b><span>day streak</span></div>' +
-      '<div class="stat"><b>' + esc(r.cur[1]) + '</b><span>rank</span></div>' +
-      '<div class="stat">' + scoreStat + '</div>' +
-    '</section>' +
-    '<p class="note">' + esc(note) + '</p>' +
-    '<section class="card' + (rev ? " rev" : "") + '">' +
-      '<span class="kind' + (rev ? " rev" : "") + '">' + (rev ? "🔁 Revision Round · 5 you've seen before" : "Today's " + total + (set.review.length ? " · " + set.review.length + " review" : "")) + '</span>' +
-      '<div class="seg" role="tablist">' +
-        '<button class="' + (S.mode==="easy"?"on":"") + '" data-act="mode:easy">Warm-up</button>' +
-        '<button class="' + (S.mode==="exam"?"on":"") + '" data-act="mode:exam">Exam Mode</button>' +
-      '</div>' +
-      '<p class="hint">' + esc(desc) + '</p>' +
-      '<div class="subjrow"><span>Subject: <b>' + (S.subject === "random" ? "🎲 Random" : esc(SUBJ[S.subject])) + '</b></span><button class="link" data-act="togglesubj">' + (showSubj ? "Done" : "Change") + '</button></div>' +
-      (showSubj ? '<div class="chips"><button class="chip ' + (S.subject==="random"?"on":"") + '" data-act="subj:random">🎲 Random</button>' +
-        SUBJECTS.map(s => '<button class="chip ' + (S.subject===s[0]?"on":"") + '" data-act="subj:' + s[0] + '">' + esc(s[1]) + '</button>').join("") + '</div>' : '') +
-      '<button class="primary" data-act="start"' + (total ? "" : " disabled") + '>' + esc(btn) + '</button>' +
-      '<div class="sub">About 5 minutes · 1 question keeps your streak</div>' +
-    '</section>' +
-    '<div class="row2"><button class="ghost" data-act="saved">★ Revise later' + (nSaved ? " (" + nSaved + ")" : "") + '</button><button class="ghost" data-act="remind">⏰ Reminder</button></div>' +
-    '<div class="foot"><button data-act="about">How questions are checked</button></div>';
-}
-
-function qBody(q){
-  const roman = q.num !== "arabic";
-  let h = '<p class="stem">' + esc(q.stem) + '</p>';
-  if(q.type === "statements" && q.items) h += '<ol class="st' + (roman ? " roman" : "") + '">' + q.items.map(s => '<li>' + esc(s) + '</li>').join("") + '</ol>';
-  if(q.type === "assertion") h += '<div class="assert"><div><b>Statement-I</b>' + esc(q.s1) + '</div><div><b>Statement-II</b>' + esc(q.s2) + '</div></div>';
-  if(q.type === "match" && q.pairs){
-    const R = ["I","II","III","IV","V","VI"];
-    h += '<table class="match"><thead><tr><th></th><th>' + esc((q.heads||[])[0]||"") + '</th><th>' + esc((q.heads||[])[1]||"") + '</th></tr></thead><tbody>' +
-      q.pairs.map((p,i) => '<tr><td class="n">' + (roman ? R[i] : (i+1)) + '.</td><td>' + esc(p[0]) + '</td><td>' + esc(p[1]) + '</td></tr>').join("") + '</tbody></table>';
+/* ---------- backup ---------- */
+function b64(bytes){ let s = ""; for(let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000)); return btoa(s); }
+function unb64(str){ const s = atob(str); const out = new Uint8Array(s.length); for(let i = 0; i < s.length; i++) out[i] = s.charCodeAt(i); return out; }
+async function makeCode(){
+  const json = JSON.stringify(S);
+  if(window.CompressionStream){
+    try{ const buf = await new Response(new Blob([json]).stream().pipeThrough(new CompressionStream("gzip"))).arrayBuffer(); return "PD3:" + b64(new Uint8Array(buf)); }catch(e){}
   }
-  const tail = q.tail || (q.type === "assertion" ? "Which one of the following is correct in respect of the above statements?" : "");
-  if(tail) h += '<p class="tail">' + esc(tail) + '</p>';
-  return h;
+  return "PD3J:" + b64(new TextEncoder().encode(json));
 }
-function feedbackLink(q){
-  if(!CONFIG.feedbackEmail) return "";
-  const subj = CONFIG.appName + " — question " + q.id;
-  return '<a class="small" href="mailto:' + esc(CONFIG.feedbackEmail) + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent("This question looks wrong because: ") + '">⚑ Something wrong here? Report it</a>';
-}
-function explainBlock(q, open){
-  return (q.take ? '<div class="take">💡 ' + esc(q.take) + '</div>' : '') +
-    '<details class="why"' + (open ? " open" : "") + '><summary>Why? Read the explanation</summary><p>' + esc(q.why) + '</p>' +
-    (q.rev ? '<p class="revise">📘 Revise from: ' + esc(q.rev) + '</p>' : '') +
-    (q.links && q.links.length ? '<div class="links">' + q.links.map(l => '<a href="' + esc(l.u) + '" target="_blank" rel="noopener">' + esc(l.t) + '</a>').join("") + '</div>' : '') +
-    '</details>';
-}
-function starBtn(id){ const on = S.saved.indexOf(id) > -1; return '<button class="star' + (on ? " on" : "") + '" data-act="star:' + id + '" aria-label="Revise later">' + (on ? "★ Saved" : "☆ Save") + '</button>'; }
-
-function renderQuiz(){
-  const set = getSet(curDate); const id = set.ids[qi]; const q = QBY[id];
-  if(!q){ go("home"); return; }
-  const a = set.ans[id];
-  const opts = optsOf(q);
-  const dots = set.ids.map((x,i) => {
-    const ax = set.ans[x]; let c = ax ? (ax.skip ? "skip" : ax.ok ? "ok" : "bad") : "";
-    if(i === qi) c += " cur";
-    return '<button class="' + c + '" data-act="dot:' + i + '" aria-label="Question ' + (i+1) + '"><i></i></button>';
-  }).join("");
-  let h = '<header class="qtop"><button class="icon" data-act="home" aria-label="Home">←</button><div class="dots">' + dots + '</div><span class="pill">' + (q.mode==="easy"?"Warm-up":"Exam") + '</span></header>';
-  h += '<article class="card"><div class="meta"><div class="tags"><span class="tag">' + esc(SUBJ[q.subj]||q.subj) + '</span>' +
-       (set.review.indexOf(id) > -1 ? '<span class="tag rev">↻ Review</span>' : '') +
-       (q.tag ? '<span class="tag pyq">' + esc(q.tag) + '</span>' : '') + '</div>' + starBtn(id) + '</div>' +
-       (q.topic ? '<div class="topic">' + esc(q.topic) + '</div>' : '');
-  h += qBody(q);
-  h += '<div class="opts">' + opts.map((o,i) => {
-    let c = "opt";
-    if(a){ if(i === q.ans) c += " right"; else if(i === a.c) c += " wrong"; else c += " dim"; }
-    else if(sel === i) c += " sel";
-    return '<button class="' + c + '" data-act="opt:' + i + '"' + (a ? " disabled" : "") + '><span class="l">' + LET[i] + '</span><span>' + esc(o) + '</span></button>';
-  }).join("") + '</div>';
-  if(a){
-    let fb, cls;
-    if(a.skip){ cls = "skip"; fb = "Skipped · 0 marks · Answer: (" + LET[q.ans] + ")"; }
-    else if(a.ok){ cls = "ok"; fb = "Correct · " + (q.mode==="easy" ? "+10 XP" : "+2 marks"); }
-    else { cls = "bad"; fb = "Not quite · " + (q.mode==="easy" ? "0 XP" : "−0.66 marks") + " · Answer: (" + LET[q.ans] + ")"; }
-    if(a.conf) fb += " · you said " + CONF[a.conf];
-    h += '<div class="fb ' + cls + '">' + esc(fb) + '</div>';
-    h += explainBlock(q, !a.ok);
-    h += feedbackLink(q);
-    const remaining = set.ids.filter(x => !set.ans[x]).length;
-    if(Object.keys(set.ans).length === 1 && remaining) h += '<div><button class="stop" data-act="home">Stop here — today\'s streak is safe</button></div>';
+async function readBackup(text){
+  const t = String(text || "").trim();
+  if(t[0] === "{"){ const o = JSON.parse(t); return isObj(o) && isObj(o.state) ? o.state : o; }
+  const c = t.replace(/\s+/g, "");
+  if(c.indexOf("PD3:") === 0){
+    if(!window.DecompressionStream) throw new Error("This browser can't open compressed codes — use a backup file instead.");
+    const txt = await new Response(new Blob([unb64(c.slice(4))]).stream().pipeThrough(new DecompressionStream("gzip"))).text();
+    return JSON.parse(txt);
   }
-  h += '</article>';
-  $app.innerHTML = h;
-  // bottom action bar
-  if(a){
-    const remaining = set.ids.filter(x => !set.ans[x]).length;
-    bar('<button class="primary" data-act="next">' + (remaining ? "Next question →" : "See today's summary") + '</button>');
-  } else if(q.mode === "exam"){
-    if(sel === null) bar('<div class="barrow"><button class="ghost" data-act="skip">Skip · 0</button><button class="primary" disabled>Pick an option</button></div>');
-    else bar('<div class="q">How sure are you?</div><div class="conf"><button data-act="conf:sure">Sure</button><button class="m" data-act="conf:5050">50-50</button><button class="m" data-act="conf:guess">Guess</button></div>');
-  } else {
-    bar('<button class="primary" data-act="check"' + (sel === null ? " disabled" : "") + '>' + (sel === null ? "Pick an option" : "Check") + '</button>');
-  }
+  if(c.indexOf("PD3J:") === 0) return JSON.parse(new TextDecoder().decode(unb64(c.slice(5))));
+  if(c.indexOf("PD2:") === 0) return JSON.parse(decodeURIComponent(escape(atob(c.slice(4)))));
+  throw new Error("format");
 }
-
-function renderSummary(){
-  const set = getSet(curDate);
-  const vals = set.ids.map(id => set.ans[id]).filter(Boolean);
-  const correct = vals.filter(v => v.ok).length;
-  const exam = S.mode === "exam";
-  const score = vals.reduce((s,v) => s + (v.pts||0), 0);
-  const st = liveStreak();
-  let h = '<header class="top"><div><div class="eyebrow">' + (set.kind === "revision" ? "Revision Round" : "Today's set") + '</div><h1>Nicely done, ' + esc(S.name) + '</h1></div><button class="icon" data-act="home" aria-label="Home">←</button></header>';
-  h += '<section class="card"><div class="eyebrow">Score</div><div class="big">' + correct + '/' + set.ids.length + '</div>' +
-       '<div class="hint" style="margin:0">' + esc(exam ? fmt(score) + " marks" : score + " XP") + ' · 🔥 ' + st.n + '-day streak</div>' +
-       '<div class="rows">' + set.ids.map((id,i) => {
-          const q = QBY[id], v = set.ans[id];
-          const r = !v ? "·" : v.skip ? "–" : v.ok ? "✅" : "❌";
-          const s = q.stem.length > 80 ? q.stem.slice(0,78) + "…" : q.stem;
-          return '<div class="row" data-act="dot:' + i + '"><span class="r">' + r + '</span><div>' + esc(s) + '<small>' + esc(SUBJ[q.subj]) + (q.topic ? " · " + esc(q.topic) : "") + '</small></div></div>';
-        }).join("") + '</div></section>';
-  h += '<p class="sub">Missed and guessed questions come back after 3 days; the rest return after 1–3 weeks to lock them in.</p>';
-  $app.innerHTML = h;
-  bar('<div class="row2"><button class="primary" style="margin:0" data-act="switch">Try ' + (exam ? "Warm-up" : "Exam Mode") + '</button><button class="ghost" data-act="progress">📊 Progress</button></div>');
+function backupFile(){
+  const payload = JSON.stringify({app:"Prelims Daily", type:"backup", version:CONFIG.version, saved:new Date().toISOString(), state:S});
+  const blob = new Blob([payload], {type:"application/json"});
+  const href = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = href; a.download = "prelims-daily-backup-" + today() + ".json";
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(href); a.remove(); }, 1500);
 }
-
-function calibration(){
-  const out = {};
-  S.log.filter(l => l.m === "exam" && l.c && !l.skip).forEach(l => {
-    const o = out[l.c] = out[l.c] || {n:0, k:0, p:0};
-    o.n++; if(l.ok) o.k++; o.p += (l.p || 0);
-  });
-  return out;
-}
-function renderProgress(){
-  const r = rankInfo(); const t = today(); const from = addDays(t, -6);
-  const week = S.log.filter(l => l.d >= from);
-  const wk = week.length, wkOk = week.filter(l => l.ok).length;
-  const per = {}; S.log.forEach(l => { per[l.s] = per[l.s] || {n:0,k:0}; per[l.s].n++; if(l.ok) per[l.s].k++; });
-  const wper = {}; week.forEach(l => { wper[l.s] = wper[l.s] || {n:0,k:0}; wper[l.s].n++; if(l.ok) wper[l.s].k++; });
-  const ranked = Object.keys(wper).filter(s => wper[s].n >= 2).sort((a,b) => wper[b].k/wper[b].n - wper[a].k/wper[a].n);
-  const dueSoon = Object.values(S.hist).filter(h => h.due && h.due <= addDays(t, 3)).length;
-  const pct = r.next ? Math.round((r.c - r.cur[0]) / (r.next[0] - r.cur[0]) * 100) : 100;
-  const cal = calibration();
-  let h = '<header class="top"><div><div class="eyebrow">Progress</div><h1>' + esc(r.cur[1]) + '</h1></div><button class="icon" data-act="home" aria-label="Home">←</button></header>';
-  h += '<section class="card"><div class="subj" style="margin:0"><div class="h"><b>' + r.c + ' correct answers</b><span>' + (r.next ? (r.next[0] - r.c) + ' to ' + esc(r.next[1]) : 'Top rank reached') + '</span></div><div class="bar"><i style="width:' + pct + '%"></i></div></div></section>';
-  h += '<section class="stats"><div class="stat fire"><b>🔥 ' + liveStreak().n + '</b><span>streak</span></div><div class="stat"><b>' + S.best + '</b><span>best streak</span></div><div class="stat"><b>' + S.xp + '</b><span>XP · ' + fmt(S.marks) + ' marks</span></div></section>';
-  h += '<section class="card"><div class="eyebrow">Last 7 days</div>' +
-       (wk ? '<p style="margin:8px 0 0">' + wk + ' answered · ' + Math.round(wkOk/wk*100) + '% accuracy' +
-          (ranked.length ? '<br>Strongest: <b>' + esc(SUBJ[ranked[0]]) + '</b>' + (ranked.length > 1 ? ' · Needs work: <b>' + esc(SUBJ[ranked[ranked.length-1]]) + '</b>' : '') : '') +
-          (dueSoon ? '<br>' + dueSoon + ' question' + (dueSoon>1?'s':'') + ' coming back for review in the next 3 days' : '') + '</p>'
-          : '<p class="hint">Nothing yet this week. Today is a good day to start.</p>') + '</section>';
-  // calibration
-  const lv = ["sure","5050","guess"].filter(k => cal[k]);
-  h += '<section class="card"><div class="eyebrow">Exam Mode · how good are your guesses?</div>';
-  if(!lv.length) h += '<p class="hint">After each Exam Mode answer you tap Sure, 50-50 or Guess. Answer a few and this shows whether your guesses earn or lose marks.</p>';
-  else {
-    h += '<div class="cal">' + lv.map(k => { const o = cal[k]; return '<span class="k">' + CONF[k] + '</span><span>' + Math.round(o.k/o.n*100) + '% right · ' + o.n + ' answered</span><span class="v">' + (o.p >= 0 ? "+" : "") + fmt(o.p/o.n) + '/q</span>'; }).join("") + '</div>';
-    const tips = [];
-    const f = cal["5050"], g = cal.guess, s = cal.sure;
-    if(f && f.n >= 5) tips.push(f.p > 0 ? "Your 50-50s earn marks on average — keep attempting them. Break-even is only 25%." : "Your 50-50s are losing marks right now — skip more of them until accuracy climbs.");
-    if(g && g.n >= 5) tips.push(g.p > 0 ? "Even your pure guesses are net positive — but keep them rare." : "Pure guesses are costing you marks — skip these in the exam.");
-    if(s && s.n >= 5 && s.k/s.n < 0.9) tips.push("Some 'Sure' answers were wrong. Re-read those explanations — confident mistakes, once corrected, are the ones you remember best.");
-    if(tips.length) h += '<div class="insight">' + tips.map(esc).join("<br><br>") + '</div>';
-    else h += '<p class="hint">A few more answers at each level and tips will appear here.</p>';
-  }
-  h += '</section>';
-  h += '<section class="card"><div class="eyebrow">Subject mastery</div>' + SUBJECTS.map(s => {
-    const p = per[s[0]];
-    if(!p) return '<div class="subj"><div class="h">' + esc(s[1]) + '<span>Not started</span></div><div class="bar"><i style="width:0"></i></div></div>';
-    const acc = Math.round(p.k/p.n*100);
-    return '<div class="subj"><div class="h">' + esc(s[1]) + '<span>' + p.k + '/' + p.n + ' · ' + acc + '%</span></div><div class="bar"><i style="width:' + acc + '%"></i></div></div>';
-  }).join("") + '</section>';
-  h += '<div class="row2"><button class="ghost" data-act="backup">💾 Backup / restore</button><button class="ghost" data-act="editname">✏️ Change name</button></div>';
-  h += '<button class="danger" data-act="reset">Reset all progress</button>';
-  $app.innerHTML = h;
-}
-
-function renderSaved(){
-  const items = S.saved.map(id => QBY[id]).filter(Boolean);
-  let h = '<header class="top"><div><div class="eyebrow">Revise later</div><h1>Saved questions</h1></div><button class="icon" data-act="home" aria-label="Home">←</button></header>';
-  if(!items.length) h += '<div class="card empty">Tap ☆ Save on any question to keep it here. Saved questions also show up in your Revision Rounds.</div>';
-  else h += '<section class="card"><div class="rows">' + items.map(q => '<div class="row" data-act="read:' + q.id + '"><span class="r">★</span><div>' + esc(q.stem.length > 90 ? q.stem.slice(0,88) + "…" : q.stem) + '<small>' + esc(SUBJ[q.subj]) + (q.topic ? " · " + esc(q.topic) : "") + '</small></div></div>').join("") + '</div></section>';
-  $app.innerHTML = h;
-}
-function renderRead(){
-  const q = QBY[readId]; if(!q){ go("saved"); return; }
-  const opts = optsOf(q);
-  let h = '<header class="top"><div><div class="eyebrow">' + esc(SUBJ[q.subj]) + '</div><h1>Revise</h1></div><button class="icon" data-act="saved" aria-label="Back">←</button></header>';
-  h += '<article class="card"><div class="meta"><div class="tags">' + (q.topic ? '<span class="tag">' + esc(q.topic) + '</span>' : '') + (q.tag ? '<span class="tag pyq">' + esc(q.tag) + '</span>' : '') + '</div>' + starBtn(q.id) + '</div>' + qBody(q) +
-       '<div class="opts">' + opts.map((o,i) => '<div class="opt ' + (i === q.ans ? "right" : "dim") + '"><span class="l">' + LET[i] + '</span><span>' + esc(o) + '</span></div>').join("") + '</div>' +
-       explainBlock(q, true) + feedbackLink(q) + '</article>';
-  $app.innerHTML = h;
-}
-
-function renderAbout(){
-  let h = '<header class="top"><div><div class="eyebrow">About</div><h1>How questions are checked</h1></div><button class="icon" data-act="home" aria-label="Home">←</button></header>';
-  h += '<section class="card prose">' +
-    '<p>Every question is written for the static Prelims syllabus and checked against standard sources before it goes in: NCERT, the Constitution, and official or well-established references. Each one links to further reading and says where to revise it from.</p>' +
-    '<ul><li><b>Warm-up</b> questions are NCERT-level, one correct answer.</li>' +
-    '<li><b>Exam Mode</b> follows the current Prelims pattern — statement-based, match-the-pairs and Statement-I/II questions, with +2 / −0.66 marking.</li>' +
-    '<li>Questions tagged <b>PYQ</b> are from past UPSC papers, answered as per UPSC\'s official key.</li>' +
-    '<li>Facts that can change carry an “as of” date.</li></ul>' +
-    '<p>Missed and guessed questions return after 3 days; correct ones come back after 1–3 weeks and again after 2 months. Every 4th day is a Revision Round.</p>' +
-    '<p>Not affiliated with UPSC. Questions last updated: ' + esc(CONFIG.contentUpdated) + ' · ' + QS.length + ' questions.</p>' +
-    (CONFIG.feedbackEmail ? '<p><a href="mailto:' + esc(CONFIG.feedbackEmail) + '?subject=' + encodeURIComponent(CONFIG.appName + " feedback") + '">✉️ Send feedback or report an error</a></p>' : '') +
-    '</section>';
-  $app.innerHTML = h;
-}
-
-function backupCode(){ try{ return "PD2:" + btoa(unescape(encodeURIComponent(JSON.stringify(S)))); }catch(e){ return ""; } }
-function renderBackup(){
-  let h = '<header class="top"><div><div class="eyebrow">Backup</div><h1>Keep your progress safe</h1></div><button class="icon" data-act="progress" aria-label="Back">←</button></header>';
-  h += '<section class="card"><p style="margin-top:0">Copy this code and keep it somewhere safe (a note or a message to yourself). Paste it on a new phone to bring everything back.</p>' +
-       '<textarea id="bk" readonly>' + esc(backupCode()) + '</textarea><button class="primary" data-act="copybk">Copy backup code</button></section>';
-  h += '<section class="card"><div class="eyebrow">Restore</div><p class="hint" style="margin-top:6px">This replaces the progress on this phone.</p><textarea id="rs" placeholder="Paste a backup code"></textarea><button class="ghost" data-act="restore">Restore from code</button></section>';
-  $app.innerHTML = h;
-}
-
-function renderRemind(){
-  const g = '<button class="primary" data-act="gcal">Add to Google Calendar</button>';
-  const i = '<button class="' + (IS_IOS ? "primary" : "ghost") + '" data-act="ics">' + (IS_IOS ? "Add to iPhone Calendar" : "Download calendar file (.ics)") + '</button>';
-  let h = '<header class="top"><div><div class="eyebrow">Reminder</div><h1>Daily nudge</h1></div><button class="icon" data-act="home" aria-label="Home">←</button></header>';
-  h += '<section class="card"><p style="margin:0 0 12px">Adds a 5-minute daily event to your personal calendar with a link back here, so your phone reminds you every day.</p>' +
-       '<div class="label" style="margin-top:0">Remind me at</div><input type="time" id="rt" value="' + esc(S.remTime) + '">' +
-       (IS_IOS ? i + '<button class="ghost" data-act="gcal">Use Google Calendar instead</button>' : g + i) + '</section>';
-  h += '<p class="sub">If your phone has a work calendar too, pick your personal one. You can change or delete the event any time.</p>';
-  $app.innerHTML = h;
+function restoreFrom(data){
+  const n = normalize(data);
+  const answered = Object.keys(n.hist).length;
+  if(!answered && !n.name) throw new Error("empty");
+  const msg = "Replace the progress on this phone with this backup?\n\n" + (n.name ? n.name + " · " : "") + plural(answered, "question") + " answered · best streak " + n.best + " days.";
+  if(!confirm(msg)) return false;
+  S = n; curDate = today(); save(); return true;
 }
 
 /* ---------- reminders ---------- */
 function appUrl(){ return location.href.split("#")[0].split("?")[0]; }
+function cueText(){ const c = CUES.find(x => x[0] === S.remCue); return c ? c[1] : (S.remCue ? S.remCue : CUES[0][1]); }
+function intention(){ const c = cueText(); return c.charAt(0).toUpperCase() + c.slice(1) + ", around " + fmtTime(S.remTime) + ", I'll do today's five questions."; }
 function nextStart(){ const p = S.remTime.split(":").map(Number); const d = new Date(); d.setHours(p[0], p[1], 0, 0); if(d <= new Date()) d.setDate(d.getDate()+1); return d; }
 function localStamp(d){ return ymd(d).replace(/-/g,"") + "T" + String(d.getHours()).padStart(2,"0") + String(d.getMinutes()).padStart(2,"0") + "00"; }
 function utcStamp(d){ return d.toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,""); }
+function icsText(s){ return String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n"); }
 function openGcal(){
   const s = nextStart(), e = new Date(s.getTime() + 5*60000);
   let tz = "Asia/Kolkata"; try{ tz = Intl.DateTimeFormat().resolvedOptions().timeZone || tz; }catch(err){}
   const u = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-    "&text=" + encodeURIComponent(CONFIG.appName + " — today's 5") +
-    "&details=" + encodeURIComponent("5 minutes. Open: " + appUrl()) +
+    "&text=" + encodeURIComponent(CONFIG.appName + " — " + cueText().toLowerCase()) +
+    "&details=" + encodeURIComponent(intention() + "\n\nOpen: " + appUrl()) +
     "&dates=" + localStamp(s) + "/" + localStamp(e) + "&ctz=" + encodeURIComponent(tz) +
     "&recur=" + encodeURIComponent("RRULE:FREQ=DAILY");
   window.open(u, "_blank");
@@ -685,8 +825,9 @@ function downloadIcs(){
   const s = nextStart(), url = appUrl();
   const ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Prelims Daily//EN","CALSCALE:GREGORIAN","BEGIN:VEVENT",
     "UID:prelims-daily-" + Date.now() + "@prelims-daily","DTSTAMP:" + utcStamp(new Date()),"DTSTART:" + utcStamp(s),
-    "DURATION:PT5M","RRULE:FREQ=DAILY","SUMMARY:" + CONFIG.appName + " — today's 5","DESCRIPTION:5 minutes. Open: " + url,"URL:" + url,
-    "BEGIN:VALARM","TRIGGER:PT0M","ACTION:DISPLAY","DESCRIPTION:" + CONFIG.appName,"END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
+    "DURATION:PT5M","RRULE:FREQ=DAILY","SUMMARY:" + icsText(CONFIG.appName + " — " + cueText().toLowerCase()),
+    "DESCRIPTION:" + icsText(intention() + " Open: " + url),"URL:" + url,
+    "BEGIN:VALARM","TRIGGER:PT0M","ACTION:DISPLAY","DESCRIPTION:" + icsText(CONFIG.appName),"END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
   const blob = new Blob([ics], {type:"text/calendar;charset=utf-8"});
   const href = URL.createObjectURL(blob);
   const a = document.createElement("a"); a.href = href; a.download = "prelims-daily-reminder.ics";
@@ -694,96 +835,693 @@ function downloadIcs(){
   setTimeout(() => { URL.revokeObjectURL(href); a.remove(); }, 1500);
 }
 
+/* ---------- usage numbers + notes to the maker (optional; off unless CONFIG.statsUrl is set) ---------- */
+const STATS_ON = /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]{10,}\/exec$/.test(CONFIG.statsUrl);
+function platform(){ return /Android/i.test(UA) ? "android" : IS_IOS ? "ios" : "other"; }
+// Fire-and-forget: the sheet can't answer a cross-site request, so success only means "it left the phone".
+function post(payload){
+  if(!STATS_ON) return Promise.resolve(false);
+  try{
+    const body = JSON.stringify(payload);
+    if(window.fetch) return fetch(CONFIG.statsUrl, {method:"POST", mode:"no-cors", keepalive:true, headers:{"Content-Type":"text/plain;charset=utf-8"}, body:body}).then(() => true, () => false);
+    if(navigator.sendBeacon) return Promise.resolve(navigator.sendBeacon(CONFIG.statsUrl, body));
+  }catch(e){}
+  return Promise.resolve(false);
+}
+// Every message carries the full numbers, so a lost one is corrected by the next.
+let openTry = 0;
+function sendUsage(ev){
+  if(!STATS_ON || !S.stats.on || !S.stats.seen || !S.name) return;
+  const t = today();
+  if(ev === "open"){ if(S.stats.day === t || Date.now() - openTry < 60000) return; openTry = Date.now(); }
+  const st = streakInfo();
+  post({t:"usage", ev:ev, id:S.uid, v:CONFIG.version, day:t, first:S.created, last:S.lastDay, streak:st.n, best:S.best,
+    days:S.active.length, sets:S.setsDone, today:completedSetsOn(t), cb:S.fun.rounds, mode:S.mode, plat:platform(), inst:isStandalone() ? 1 : 0})
+    .then(ok => { if(ok && ev === "open"){ sync(); S.stats.day = t; save(); } });
+}
+function setSharing(on){
+  sync();
+  const was = S.stats.on && S.stats.seen;
+  S.stats.on = on; S.stats.seen = true; save();
+  if(on && !was){ openTry = 0; sendUsage("open"); }
+  if(!on && was) post({t:"usage", ev:"off", id:S.uid, v:CONFIG.version});
+}
+
+/* ---------- view state ---------- */
+const $app = document.getElementById("app"), $bar = document.getElementById("bar");
+let view = S.name ? "home" : "welcome";
+let curKey = baseKey(), qi = 0, sel = null, reviewMode = false, reviewList = [], readId = null, deferredPrompt = null, nameEdit = false, cbIdx = -1, scrollTarget = null, noteDismissed = false;
+let reportFor = null, reportDraft = "";
+const reportSent = Object.create(null);
+
+function go(v, opts){
+  opts = opts || {};
+  if(v !== view || opts.fromPop){ reportFor = null; reportDraft = ""; }
+  view = v; sel = null;
+  if(v !== "quiz") reviewMode = false;
+  render();
+  if(!opts.keepScroll){ try{ window.scrollTo(0, 0); }catch(e){} }
+  // Android Back: one history entry above the home screen, so Back returns home instead of leaving the app.
+  try{
+    const inner = v !== "home" && v !== "welcome";
+    if(inner && !(history.state && history.state.pd)) history.pushState({pd:1}, "");
+    else if(!inner && history.state && history.state.pd && !opts.fromPop) history.back();
+  }catch(e){}
+}
+function render(){
+  if(!S.name && view !== "welcome") view = "welcome";
+  $bar.innerHTML = "";
+  (VIEWS[view] || renderHome)();
+  const hgt = $bar.innerHTML ? ($bar.offsetHeight || 0) : 0;
+  $app.style.paddingBottom = (hgt + 32) + "px";
+  if(scrollTarget){
+    const el = document.getElementById(scrollTarget); scrollTarget = null;
+    if(el && el.getBoundingClientRect){ try{ const y = el.getBoundingClientRect().top + window.pageYOffset - 16; window.scrollTo({top:Math.max(0, y), behavior:reducedMotion() ? "auto" : "smooth"}); }catch(e){} }
+  }
+}
+function bar(html){ $bar.innerHTML = '<div class="in">' + html + '</div>'; }
+let snackTimer = null;
+function notice(msg){
+  const el = document.getElementById("snack"); if(!el || !msg) return;
+  el.textContent = msg;
+  const hgt = $bar.innerHTML ? ($bar.offsetHeight || 0) : 0;
+  el.style.bottom = (hgt + 12) + "px";
+  el.classList.add("show");
+  clearTimeout(snackTimer); snackTimer = setTimeout(() => el.classList.remove("show"), 3400);
+}
+function appbar(left, title, right){ return '<header class="appbar"><div class="side">' + (left || "") + '</div><div class="title">' + (title || "") + '</div><div class="side r">' + (right || "") + '</div></header>'; }
+function backBtn(act, label){ return '<button class="iconbtn" data-act="' + act + '" aria-label="' + esc(label || "Back") + '">' + ic("back") + '</button>'; }
+function persist(){ try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){} }
+
+function topNotes(){
+  let h = "";
+  if(!storageOK) h += '<div class="note warn" role="alert"><div class="grow"><b>Progress isn\'t being saved</b>This browser is blocking storage (private mode, or storage is full). Open the app in a normal Chrome tab to keep your progress.</div></div>';
+  if(bootNote === "recovered" && !noteDismissed) h += '<div class="note warn" role="alert"><div class="grow"><b>Saved progress couldn\'t be read</b>The app started fresh and kept a copy of the old data on this phone. If you have a backup, restore it from Progress → Backup.</div><button class="iconbtn" data-act="dismissnote" aria-label="Dismiss">' + ic("close") + '</button></div>';
+  return h;
+}
+function installCard(){
+  if(isStandalone() || S.installDismissed || S.setsDone < 1) return "";
+  let body, btn = "";
+  if(deferredPrompt){ body = "It opens like an app and keeps your progress safer."; btn = '<button class="btn outline" data-act="install">Install</button>'; }
+  else if(IS_IOS) body = "Tap Share, then “Add to Home Screen”. It opens like an app and keeps your progress safer.";
+  else body = "In Chrome, tap ⋮, then “Add to Home screen”. It opens like an app and keeps your progress safer.";
+  return '<div class="note"><div class="grow"><b>Add Prelims Daily to your home screen</b>' + esc(body) + btn + '</div><button class="iconbtn" data-act="nodismiss" aria-label="Dismiss">' + ic("close") + '</button></div>';
+}
+
+function sharingNote(){
+  if(!STATS_ON || S.stats.seen) return "";
+  return '<div class="note"><div class="grow"><b>New: anonymous usage numbers</b>The app now sends its maker a few numbers, like your streak and days practised, to see how it\'s used. Never your name or answers.' +
+    '<div class="two" style="margin-top:10px"><button class="btn subtle" data-act="share:off">Turn off</button><button class="btn outline" data-act="share:on">OK</button></div></div></div>';
+}
+function reportBox(qid){
+  if(!STATS_ON){
+    if(!CONFIG.feedbackEmail) return "";
+    const q = QBY[qid];
+    return '<a class="report" href="mailto:' + esc(CONFIG.feedbackEmail) + '?subject=' + encodeURIComponent(CONFIG.appName + (q ? " — question " + q.id : " feedback")) + '&body=' + encodeURIComponent(q ? "This question looks wrong because: " : "") + '">' + (q ? "Something wrong here? Report it" : "Send feedback or report an error") + '</a>';
+  }
+  if(reportSent[qid]) return '<p class="t15 muted" style="margin-top:12px">Thanks — your note was sent.</p>';
+  const general = qid === "general";
+  if(reportFor !== qid) return '<button class="report" data-act="report:' + esc(qid) + '">' + (general ? "Send feedback or report an error" : "Something wrong here? Tell us") + '</button>';
+  return '<div class="reportbox"><label class="t13 semi muted" for="rpt">' + (general ? "Your note" : "What looks wrong?") + '</label>' +
+    '<textarea id="rpt" maxlength="600" placeholder="' + (general ? "Ideas, problems, anything" : "For example: statement II changed in 2025") + '">' + esc(reportDraft) + '</textarea>' +
+    '<div class="two"><button class="btn subtle" data-act="reportcancel">Cancel</button><button class="btn primary" data-act="reportsend">Send</button></div>' +
+    '<p class="t13 muted" style="margin-top:8px">Goes to the app\'s maker' + (general ? "" : " with the question number") + '. No name attached.</p></div>';
+}
+
+/* ---------- views ---------- */
+function renderWelcome(){
+  $app.innerHTML = (nameEdit ? appbar(backBtn("progress"), "", "") : "") +
+    '<section class="welcome"><div class="brand"><img src="icon-192.png" alt="" width="36" height="36">' + esc(CONFIG.appName) + '</div>' +
+    '<h1>' + (nameEdit ? "What should we call you?" : "Hi, what's your name?") + '</h1>' +
+    '<p class="t17 ink2 sub">Five Prelims questions a day, about five minutes. Your progress stays on this phone — no sign-up.</p>' +
+    '<label class="vh" for="nm">Your name</label><input id="nm" class="field" type="text" maxlength="24" autocomplete="given-name" enterkeyhint="go" placeholder="Your name" value="' + esc(nameEdit ? S.name : "") + '">' +
+    (STATS_ON && !nameEdit ? '<p class="t13 muted" style="margin-top:14px">The app sends its maker a few anonymous numbers, like your streak, to see how it\'s used. Never your name or answers. You can switch this off in About.</p>' : '') +
+    topNotes() + '</section>';
+  bar('<button class="btn primary" data-act="setname">' + (nameEdit ? "Save" : "Continue") + '</button>');
+}
+function renderNoContent(){
+  $app.innerHTML = appbar(view === "home" ? "" : backBtn("home"), "", "") +
+    '<section class="welcome"><h1>Couldn\'t load the questions</h1><p class="t17 ink2 sub">Check your internet connection and try again. Your progress is safe.</p></section>';
+  bar('<button class="btn primary" data-act="reload">Try again</button>');
+}
+function weekStrip(st){
+  const t = today(), dow = (parseD(t).getDay() + 6) % 7, mon = addDays(t, -dow), L = ["M","T","W","T","F","S","S"];
+  let label = "";
+  if(st.state === "today" || st.state === "pending") label = st.n >= 1 ? st.n + "-day streak" : "";
+  else if(st.state === "repairable" || st.state === "repairing") label = "Streak on hold";
+  let doneCount = 0;
+  const cells = L.map((l, i) => { const d = addDays(mon, i), done = S.active.indexOf(d) > -1; if(done) doneCount++; return '<div class="day' + (done ? " done" : "") + (d === t ? " today" : "") + '"><span>' + l + '</span><i></i></div>'; }).join("");
+  return '<div class="weekhead"><span class="t13 semi muted">This week</span><span class="t13 semi saff">' + esc(label) + '</span></div>' +
+    '<div class="days" role="img" aria-label="This week: ' + plural(doneCount, "day") + ' practised">' + cells + '</div>';
+}
+function freshLine(st){
+  const t = today(), d = parseD(t);
+  if(S.lastDay === t) return "";
+  if(st.state === "lost" && S.best > 0) return "Welcome back. Every streak starts with day one.";
+  if(d.getDate() === 1) return "New month, fresh start.";
+  if(d.getDay() === 1) return "New week, fresh start.";
+  if(st.state === "pending" && st.n > 0) return "Today's first answer makes it " + (st.n + 1) + " days.";
+  return "";
+}
+function repairNote(st){
+  if(st.state === "repairable") return '<div class="note saff"><div class="grow"><b>You missed yesterday</b>Finish two sets today and your ' + st.n + '-day streak carries on.</div></div>';
+  if(st.state === "repairing" && st.done < 2) return '<div class="note saff"><div class="grow"><b>Streak on hold</b>' + (st.done === 0 ? "Finish two sets today and your " + st.prev + "-day streak carries on." : "One more set and your " + st.prev + "-day streak carries on.") + '</div></div>';
+  return "";
+}
+function setDesc(set, done, total, rev, isExtra){
+  if(!total) return "Nothing left here for today. Try another subject or mode.";
+  if(done >= total){ const ok = set.ids.filter(id => set.ans[id].ok).length; return ok + " of " + total + " correct · done" + (isExtra ? "" : " for today"); }
+  if(done > 0) return done + " of " + total + " done";
+  if(rev) return total + " questions you've seen before · about 5 min";
+  return total + " questions" + (set.review.length ? " · " + set.review.length + " to review" : "") + " · about 5 min";
+}
+function renderHome(){
+  curDate = today();
+  if(!LOADED){ renderNoContent(); return; }
+  const base = baseKey(), keys = keysToday(curDate, base);
+  const key = keys.length ? keys[keys.length-1] : base;
+  const set = getSet(curDate, key);
+  curKey = key;
+  const st = streakInfo();
+  const total = set ? set.ids.length : 0, done = set ? set.ids.filter(id => set.ans[id]).length : 0;
+  const isExtra = key !== base, rev = !!set && set.kind === "revision";
+  const fs = freshLine(st);
+  let h = appbar('<span class="t15 muted">' + esc(fmtDate(new Date())) + '</span>', "", '<button class="iconbtn" data-act="progress" aria-label="Progress">' + ic("chart") + '</button>');
+  h += topNotes();
+  h += '<h1 style="margin-top:4px">Hi, ' + esc(S.name) + '</h1>';
+  if(fs) h += '<p class="t15 ink2 sub">' + esc(fs) + '</p>';
+  h += weekStrip(st) + repairNote(st) + sharingNote() + installCard();
+  h += '<section class="section"><h2>' + (isExtra ? "Extra set" : rev ? "Revision Round" : "Today's set") + '</h2>' +
+    '<p class="t15 muted sub">' + esc(setDesc(set, done, total, rev, isExtra)) + '</p>' +
+    '<div class="seg" role="group" aria-label="Mode"><button data-act="mode:easy" aria-pressed="' + (S.mode === "easy") + '">Warm-up</button><button data-act="mode:exam" aria-pressed="' + (S.mode === "exam") + '">Exam Mode</button></div>' +
+    '<p class="hint">' + (S.mode === "easy" ? "Single-answer questions. No negative marking." : "Prelims pattern: statements, pairs, Statement-I/II. +2 / −0.66, or skip for 0.") + '</p>' +
+    '<div class="rows" style="margin-top:12px"><label class="row"><span class="grow">Subject</span><span class="val">' + esc(S.subject === "random" ? "Random" : SUBJ[S.subject]) + '</span>' + ic("chev", "chev") +
+      '<select data-change="subject" aria-label="Subject"><option value="random"' + (S.subject === "random" ? " selected" : "") + '>Random</option>' +
+      SUBJECTS.map(s => '<option value="' + s[0] + '"' + (S.subject === s[0] ? " selected" : "") + '>' + esc(s[1]) + '</option>').join("") + '</select></label></div>' +
+    '</section>';
+  const f = S.fun;
+  h += '<div class="rows" style="margin-top:28px">' +
+    '<button class="row" data-act="coffee">' + ic("cup", "lead saff") + '<span class="grow">Coffee Break<span class="rowsub">Fact or Fiction · ' + CONFIG.coffeeSize + ' quick calls</span></span>' + (f.rounds ? '<span class="val">Best ' + f.best + '/' + CONFIG.coffeeSize + '</span>' : (f.cur ? '<span class="val">In progress</span>' : '')) + ic("chev", "chev") + '</button>' +
+    '<button class="row" data-act="saved">' + ic("bookmark", "lead") + '<span class="grow">Revise later</span>' + (S.saved.length ? '<span class="val">' + S.saved.length + '</span>' : '') + ic("chev", "chev") + '</button>' +
+    '<button class="row" data-act="remind">' + ic("bell", "lead") + '<span class="grow">Daily reminder</span><span class="val">' + esc(S.remSet ? cueText() + ", " + fmtTime(S.remTime) : "Off") + '</span>' + ic("chev", "chev") + '</button>' +
+    '<button class="row" data-act="about">' + ic("info", "lead") + '<span class="grow">About<span class="rowsub">How questions are checked · your data · feedback</span></span>' + ic("chev", "chev") + '</button>' +
+    '</div>';
+  $app.innerHTML = h;
+  if(!total) bar('<button class="btn primary" disabled>Nothing left here today</button>');
+  else if(done === 0) bar('<button class="btn primary" data-act="start">' + (isExtra ? "Start extra set" : rev ? "Start Revision Round" : "Start today's set") + '</button>');
+  else if(done < total) bar('<button class="btn primary" data-act="start">Continue · ' + (done + 1) + ' of ' + total + '</button>');
+  else if(st.state === "repairing" && st.done < 2) bar('<div class="barnote">One more set keeps your ' + st.prev + '-day streak.</div><button class="btn primary" data-act="extra">Start another set</button>');
+  else bar('<div class="barnote">Done for today. New questions tomorrow.</div><div class="two"><button class="btn subtle" data-act="start">Review answers</button><button class="btn outline" data-act="extra">Another set</button></div>');
+}
+
+function kicker(q, isReview){
+  const parts = [esc(SUBJ[q.subj])];
+  if(q.topic) parts.push(esc(q.topic));
+  if(q.tag) parts.push(esc(q.tag));
+  if(isReview) parts.push("<em>Review</em>");
+  return '<div class="kicker">' + parts.join(" · ") + '</div>';
+}
+function qBody(q){
+  const roman = q.num !== "arabic";
+  let h = '<p class="stem">' + esc(q.stem) + '</p>';
+  if((q.type === "statements" || q.type === "mcq") && Array.isArray(q.items)) h += '<ol class="st' + (roman ? " roman" : "") + '">' + q.items.map(s => '<li>' + esc(s) + '</li>').join("") + '</ol>';
+  if(q.type === "assertion") h += '<div class="assert"><div><b>Statement-I</b>' + esc(q.s1) + '</div><div><b>Statement-II</b>' + esc(q.s2) + '</div></div>';
+  if(q.type === "match" && Array.isArray(q.pairs)){
+    h += '<table class="match"><thead><tr><th></th><th>' + esc((q.heads || [])[0] || "") + '</th><th>' + esc((q.heads || [])[1] || "") + '</th></tr></thead><tbody>' +
+      q.pairs.map((p, i) => '<tr><td class="n">' + (roman ? RN[i] : (i + 1)) + '.</td><td>' + esc(p[0]) + '</td><td>' + esc(p[1]) + '</td></tr>').join("") + '</tbody></table>';
+  }
+  const tail = q.tail || (q.type === "assertion" ? "Which one of the following is correct in respect of the above statements?" : "");
+  if(tail) h += '<p class="tail">' + esc(tail) + '</p>';
+  return h;
+}
+function srcLinks(links){
+  if(!Array.isArray(links) || !links.length) return "";
+  return '<div class="srcs">' + links.filter(l => l && /^https:\/\//.test(l.u)).map(l => '<a class="src" href="' + esc(l.u) + '" target="_blank" rel="noopener">' + esc(l.t) + '<span>' + esc(host(l.u)) + ic("ext") + '</span></a>').join("") + '</div>';
+}
+function explainParts(q){
+  return '<div class="label saff">Remember</div><p class="take">' + esc(q.take) + '</p>' +
+    '<div class="label">Explanation</div><p class="expl">' + esc(q.why) + '</p>' +
+    (q.rev ? '<div class="label">Revise from</div><p class="t15 ink2">' + esc(q.rev) + '</p>' : '') +
+    srcLinks(q.links) + reportBox(q.id);
+}
+function confLine(q, a){
+  if(a.dup) return "Answered earlier today in another set.";
+  if(a.skip) return "";
+  if(q.mode === "easy") return a.ok ? "" : "Getting it wrong now helps it stick later.";
+  if(!a.ok) return a.conf === "sure" ? "You were sure — mistakes you were sure about are the ones you remember best once corrected." : a.conf === "guess" ? "A guess — and now you know." : "A 50–50 call. Worth a second look.";
+  return a.conf === "guess" ? "Right, but a guess — it comes back soon." : a.conf === "5050" ? "Right, though unsure — it comes back for another look." : "";
+}
+function backIn(id){
+  const h = S.hist[id]; if(!h) return "";
+  if(!h.due) return "Mastered — this one won't come back.";
+  const d = diffDays(today(), h.due);
+  const w = d <= 1 ? "tomorrow" : d < 14 ? "in " + d + " days" : d < 45 ? "in " + Math.round(d / 7) + " weeks" : "in " + Math.round(d / 30) + " months";
+  return "Back " + w + (h.box <= 1 ? " for another try." : ".");
+}
+function renderQuiz(){
+  const set = getSet(curDate, curKey, true);
+  if(!set || !set.ids.length){ go("home"); return; }
+  if(qi < 0 || qi >= set.ids.length) qi = 0;
+  const id = set.ids[qi], q = QBY[id];
+  if(!q){ go("home"); return; }
+  if(!set.ans[id]){ const o = findAns(curDate, id, curKey); if(o){ set.ans[id] = Object.assign({}, o, {dup:true}); finishCheck(set, today()); save(); } }
+  const a = set.ans[id], saved = S.saved.indexOf(id) > -1, total = set.ids.length;
+  const title = reviewMode ? "Mistake " + (reviewList.indexOf(qi) + 1) + " of " + reviewList.length : (qi + 1) + " of " + total;
+  let h = appbar(backBtn("home", "Back to home"), esc(title), '<button class="iconbtn' + (saved ? " on" : "") + '" data-act="star:' + id + '" aria-pressed="' + saved + '" aria-label="' + (saved ? "Saved for revision" : "Save for revision") + '">' + ic(saved ? "bookmark-on" : "bookmark") + '</button>');
+  h += '<div class="progress" aria-hidden="true">' + set.ids.map((x, i) => '<i class="' + (i === qi ? "cur" : set.ans[x] ? "done" : "") + '"></i>').join("") + '</div>';
+  h += kicker(q, set.review.indexOf(id) > -1) + qBody(q);
+  h += '<div class="opts" role="group" aria-label="Options">' + optsOf(q).map((o, i) => {
+    let cls = "opt", tag = "", attr = "";
+    if(a){
+      attr = " disabled";
+      if(i === q.ans){ cls += " right"; tag = '<span class="tagr">' + ic("check") + 'Correct</span>'; }
+      else if(i === a.c){ cls += " wrong"; tag = '<span class="tagr">' + ic("x") + 'Your answer</span>'; }
+      else cls += " dim";
+    } else attr = ' aria-pressed="' + (sel === i) + '"';
+    return '<button class="' + cls + '" data-act="opt:' + i + '"' + attr + '><span class="l">(' + LET[i] + ')</span><span class="tx">' + esc(o) + '</span>' + tag + '</button>';
+  }).join("") + '</div>';
+  if(a){
+    const exam = q.mode === "exam";
+    const head = a.skip ? ["skip", "Skipped · 0"] : a.ok ? ["ok", exam ? "Correct · +2" : "Correct"] : ["bad", exam ? "Incorrect · −0.66" : "Incorrect"];
+    const line = confLine(q, a);
+    h += '<div class="result" id="result"><b class="' + head[0] + '">' + head[1] + '</b>' + (line ? '<span class="t15 muted">' + esc(line) + '</span>' : '') + '</div>';
+    if(a.skip) h += '<p class="t15 ink2" style="margin-top:4px">Answer: (' + LET[q.ans] + ')</p>';
+    const wn = !a.skip && !a.ok ? whyNot(q, a.c) : [];
+    if(wn.length) h += '<div class="label bad">Why (' + LET[a.c] + ') is wrong</div><div class="whynot">' + wn.map(x => '<p>' + esc(x) + '</p>').join("") + '</div>';
+    h += explainParts(q);
+  }
+  $app.innerHTML = h;
+  if(a){
+    let label, act = "next";
+    if(reviewMode){ const k = reviewList.indexOf(qi); label = k > -1 && k < reviewList.length - 1 ? "Next mistake" : "Back to summary"; }
+    else label = set.ids.some(x => !set.ans[x]) ? "Next question" : "See summary";
+    const note = a.dup ? "" : backIn(id);
+    bar((note ? '<div class="barnote">' + esc(note) + '</div>' : '') + '<button class="btn primary" data-act="' + act + '">' + label + '</button>');
+  } else if(q.mode === "exam"){
+    if(sel === null) bar('<div class="split"><button class="btn subtle" data-act="skip">Skip</button><button class="btn primary" disabled>Pick an option</button></div>');
+    else bar('<div class="barnote">How sure are you?</div><div class="three"><button class="btn outline" data-act="conf:sure">Sure</button><button class="btn outline" data-act="conf:5050">50–50</button><button class="btn outline" data-act="conf:guess">Guess</button></div>');
+  } else bar('<button class="btn primary" data-act="check"' + (sel === null ? " disabled" : "") + '>' + (sel === null ? "Pick an option" : "Check") + '</button>');
+}
+function renderSummary(){
+  const set = getSet(curDate, curKey, true);
+  if(!set || !set.ids.length){ go("home"); return; }
+  const ids = set.ids, vals = ids.map(id => set.ans[id]);
+  const correct = vals.filter(v => v && v.ok).length;
+  const exam = ids.some(id => QBY[id] && QBY[id].mode === "exam");
+  const marks = vals.reduce((s, v) => s + (v ? v.pts : 0), 0);
+  const st = streakInfo();
+  const mistakes = []; ids.forEach((id, i) => { const v = set.ans[id]; if(v && !v.ok) mistakes.push(i); });
+  let h = appbar('<button class="iconbtn" data-act="home" aria-label="Close">' + ic("close") + '</button>', set.kind === "revision" ? "Revision Round" : extraN(curKey) > 1 ? "Extra set" : "Today's set", "");
+  h += '<h1 style="margin-top:12px">' + correct + ' of ' + ids.length + ' correct</h1>';
+  const subl = []; if(exam) subl.push(signed(r2(marks)) + " marks"); if(st.n > 0 && st.state !== "repairing") subl.push(st.n + "-day streak");
+  if(subl.length) h += '<p class="t15 muted sub">' + subl.join(" · ") + '</p>';
+  h += topNotes();
+  if(st.state === "repairing" && st.done < 2) h += '<div class="note saff"><div class="grow"><b>One more set</b>Finish another set today and your ' + st.prev + '-day streak carries on.</div></div>';
+  h += '<div class="list" style="margin-top:24px">' + ids.map((id, i) => {
+    const q = QBY[id], v = set.ans[id];
+    const mk = !v ? '<span class="mark skip"></span>' : v.skip ? '<span class="mark skip">' + ic("x") + '</span>' : v.ok ? '<span class="mark ok">' + ic("check") + '</span>' : '<span class="mark bad">' + ic("x") + '</span>';
+    const stat = !v ? "Not answered" : v.skip ? "Skipped" : v.ok ? "Correct" : "Incorrect";
+    return '<button class="res" data-act="dot:' + i + '">' + mk + '<span class="vh">' + stat + ': </span><div class="grow"><div class="semi">' + esc(q.topic || SUBJ[q.subj]) + '</div><div class="t13 muted">' + esc(SUBJ[q.subj]) + ' · ' + TYPE_LABEL[q.type] + (q.tag ? " · " + esc(q.tag) : "") + '</div></div>' + ic("chev", "chev") + '</button>';
+  }).join("") + '</div>';
+  let plan;
+  const missDue = mistakes.map(i => S.hist[ids[i]] && S.hist[ids[i]].due).filter(Boolean).sort();
+  if(mistakes.length && missDue.length){ const d = missDue[0], n = diffDays(today(), d); const when = n <= 1 ? "tomorrow" : n < 7 ? "on " + dayName(d) : "in " + n + " days"; plan = (mistakes.length === 1 ? "The one you missed comes back " : "The " + WORD[mistakes.length] + " you missed come back ") + when + ". The rest return in 1–3 weeks."; }
+  else plan = "All of these return in 1–3 weeks to lock them in.";
+  h += '<p class="plan">' + esc(plan) + '</p>';
+  h += installCard();
+  $app.innerHTML = h;
+  const more = st.state === "repairing" && st.done < 2;
+  if(more) bar('<button class="btn primary" data-act="extra">Start another set</button>' + (mistakes.length ? '<button class="btn quiet" data-act="review">Review the ' + plural(mistakes.length, "mistake") + ' first</button>' : '<button class="btn quiet" data-act="home">Later</button>'));
+  else if(mistakes.length) bar('<button class="btn primary" data-act="review">Review the ' + (mistakes.length === 1 ? "mistake" : WORD[mistakes.length] + " mistakes") + '</button><button class="btn quiet" data-act="home">Done for today</button>');
+  else bar('<button class="btn primary" data-act="home">Done for today</button>');
+}
+function calibration(){
+  const out = {};
+  S.log.filter(l => l.m === "exam" && l.c && !l.skip).forEach(l => { const o = out[l.c] = out[l.c] || {n:0, k:0, p:0}; o.n++; if(l.ok) o.k++; o.p += (l.p || 0); });
+  return out;
+}
+function statRow(label, value){ return '<div class="row"><span class="grow">' + esc(label) + '</span><span class="val ink">' + esc(value) + '</span></div>'; }
+function renderProgress(){
+  const st = streakInfo(), t = today();
+  let mastered = 0, strong = 0, learning = 0;
+  Object.keys(S.hist).forEach(id => { if(!QBY[id]) return; const b = S.hist[id].box; if(b >= 4) mastered++; else if(b === 3) strong++; else learning++; });
+  const unseen = Math.max(0, QS.length - mastered - strong - learning);
+  const examLog = S.log.filter(l => l.m === "exam");
+  let h = appbar(backBtn("home"), "Progress", "");
+  h += '<h1 style="margin-top:4px">Your progress</h1>';
+  h += '<div class="rows">' + statRow("Day streak", st.n + (S.best > st.n ? " · best " + S.best : "")) +
+    statRow("Mastered", mastered) + statRow("Strong", strong) + statRow("Learning", learning) + statRow("Not seen yet", unseen) +
+    (examLog.length ? statRow("Exam marks", signed(S.marks) + " · " + plural(examLog.length, "question")) : "") + '</div>';
+  h += '<p class="t13 muted" style="margin-top:8px">Strong: right and sure once. Mastered: right and sure again, weeks later.</p>';
+  const recent = addDays(t, -29), prevStart = addDays(t, -59);
+  h += '<section class="section"><h2>Accuracy by subject</h2><div style="margin-top:12px">' + SUBJECTS.map(s => {
+    const all = S.log.filter(l => l.s === s[0]);
+    if(!all.length) return '<div class="subjrow"><div class="h"><span>' + esc(s[1]) + '</span><span class="muted">Not started</span></div><div class="meter"><i style="width:0"></i></div></div>';
+    const acc = Math.round(all.filter(l => l.ok).length / all.length * 100);
+    const cur = all.filter(l => l.d >= recent), prev = all.filter(l => l.d >= prevStart && l.d < recent);
+    let trend = "";
+    if(cur.length >= 5 && prev.length >= 5){
+      const dl = Math.round(cur.filter(l => l.ok).length / cur.length * 100 - prev.filter(l => l.ok).length / prev.length * 100);
+      trend = dl === 0 ? "Same as the 30 days before" : (dl > 0 ? "Up " : "Down ") + Math.abs(dl) + " points on the 30 days before";
+    }
+    return '<div class="subjrow"><div class="h"><span>' + esc(s[1]) + '</span><span class="muted">' + acc + '% · ' + all.length + ' answered</span></div><div class="meter"><i style="width:' + acc + '%"></i></div>' + (trend ? '<p class="t13 muted" style="margin-top:6px">' + trend + '</p>' : '') + '</div>';
+  }).join("") + '</div></section>';
+  const cal = calibration(), lv = ["sure","5050","guess"].filter(k => cal[k]);
+  h += '<section class="section"><h2>Exam Mode: your confidence</h2>';
+  if(!lv.length) h += '<p class="t15 ink2 sub">After each Exam Mode answer you tap Sure, 50–50 or Guess. Answer a few and this shows whether your guesses earn or lose marks.</p>';
+  else {
+    h += '<div class="calib">' + lv.map(k => { const o = cal[k]; return '<span class="semi">' + CONF[k] + '</span><span class="ink2">' + Math.round(o.k / o.n * 100) + '% right · ' + o.n + '</span><span class="v">' + signed(r2(o.p / o.n)) + ' per question</span>'; }).join("") + '</div>';
+    const tips = [], f = cal["5050"], g = cal.guess, s = cal.sure;
+    if(f && f.n >= 5) tips.push(f.p > 0 ? "Your 50–50s earn marks on average, so keep attempting them. Break-even is only 25% right." : "Your 50–50s are losing marks right now. Skip more of them until accuracy climbs.");
+    if(g && g.n >= 5) tips.push(g.p > 0 ? "Even your pure guesses come out ahead, but keep them rare." : "Pure guesses are costing you marks. Skip these in the exam.");
+    if(s && s.n >= 5 && s.k / s.n < 0.9) tips.push("Some answers you were sure about were wrong. Re-read those explanations — corrected confident mistakes are the ones you remember best.");
+    h += tips.length ? '<div class="insight">' + tips.map(x => '<p>' + esc(x) + '</p>').join("") + '</div>' : '<p class="t15 muted sub">A few more answers at each level and tips will appear here.</p>';
+  }
+  h += '</section>';
+  const fu = S.fun, uncovered = FACTS.filter(x => fu.seen[x.id]).length;
+  h += '<section class="section"><h2>Coffee Break</h2><div class="rows">' + statRow("Best round", fu.rounds ? fu.best + " / " + CONFIG.coffeeSize : "—") + statRow("Rounds played", fu.rounds) + statRow("Facts uncovered", uncovered + " of " + FACTS.length) + '</div></section>';
+  h += '<section class="section"><div class="rows">' +
+    '<button class="row" data-act="backup">' + ic("safe", "lead") + '<span class="grow">Backup and restore</span>' + ic("chev", "chev") + '</button>' +
+    '<button class="row" data-act="editname">' + ic("user", "lead") + '<span class="grow">Change name</span><span class="val">' + esc(S.name) + '</span>' + ic("chev", "chev") + '</button>' +
+    '</div><button class="row danger" data-act="reset">Reset all progress</button></section>';
+  h += '<p class="t13 muted" style="margin-top:16px;text-align:center">Version ' + esc(CONFIG.version) + (CONTENT.updated ? " · questions updated " + esc(CONTENT.updated) : "") + '</p>';
+  $app.innerHTML = h;
+}
+function renderSaved(){
+  const items = S.saved.map(id => QBY[id]).filter(Boolean);
+  let h = appbar(backBtn("home"), "Revise later", "") + '<h1 style="margin-top:4px">Saved questions</h1>';
+  if(!items.length) h += '<p class="t15 ink2 sub">Tap the bookmark on any question to keep it here. Saved questions also come back in Revision Rounds.</p>';
+  else h += '<div class="list">' + items.map(q => '<button class="res" data-act="read:' + q.id + '"><div class="grow"><div class="semi">' + esc(q.topic || SUBJ[q.subj]) + '</div><div class="t13 muted">' + esc(SUBJ[q.subj]) + ' · ' + TYPE_LABEL[q.type] + (q.tag ? " · " + esc(q.tag) : "") + '</div></div>' + ic("chev", "chev") + '</button>').join("") + '</div>';
+  $app.innerHTML = h;
+}
+function renderRead(){
+  const q = QBY[readId]; if(!q){ go("saved"); return; }
+  const saved = S.saved.indexOf(q.id) > -1;
+  let h = appbar(backBtn("saved"), "Revise", '<button class="iconbtn' + (saved ? " on" : "") + '" data-act="star:' + q.id + '" aria-pressed="' + saved + '" aria-label="' + (saved ? "Saved for revision" : "Save for revision") + '">' + ic(saved ? "bookmark-on" : "bookmark") + '</button>');
+  h += kicker(q, false) + qBody(q);
+  h += '<div class="opts">' + optsOf(q).map((o, i) => '<div class="opt ' + (i === q.ans ? "right" : "dim") + '"><span class="l">(' + LET[i] + ')</span><span class="tx">' + esc(o) + '</span>' + (i === q.ans ? '<span class="tagr">' + ic("check") + 'Answer</span>' : '') + '</div>').join("") + '</div>';
+  h += explainParts(q);
+  $app.innerHTML = h;
+}
+function renderAbout(){
+  let h = appbar(backBtn("home"), "About", "") + '<h1 style="margin-top:4px">How questions are checked</h1><div class="prose">';
+  h += '<p>Every question covers the static Prelims syllabus and is checked against standard sources before it goes in: NCERT, Laxmikanth, the Constitution, and official references. Each one says where to revise it from and links to further reading. Facts that can change carry an “as of” date.</p>';
+  h += '<h2>Past papers (PYQ)</h2><p>Questions tagged PYQ are from UPSC\'s own Prelims papers. One goes in only if our own working reaches the same answer as UPSC\'s official key and every fact in it still holds today. Questions UPSC dropped, or whose key was disputed, are left out. Explanations are ours.</p>';
+  h += '<h2>How your daily set works</h2><p>A normal set has 3 new questions and 2 reviews. Questions you miss, skip or guess come back after 3 days; ones you get right return after 1–3 weeks and again after two months. Every fourth day you practise is a Revision Round of questions you\'ve seen before.</p>';
+  h += '<h2>Coffee Break</h2><p>' + cap(WORD[CONFIG.coffeeSize] || String(CONFIG.coffeeSize)) + ' quick statements: fact or fiction? Every answer shows the true fact, and you can play one more round whenever you like. It doesn\'t affect your streak, marks or revision.</p>';
+  h += '<h2>Your data</h2><p>Your progress stays on this phone. Save a backup file from Progress before you change phones.</p>';
+  if(STATS_ON){
+    const on = S.stats.on;
+    h += '<p>The app also sends its maker a few anonymous numbers: streak, days practised, sets done, Coffee Break rounds, mode, phone type and app version. Never your name, your answers, or anything you type except notes you choose to send. Switching this off deletes the numbers already sent.</p>';
+    h += '<div class="rows"><button class="row" role="switch" aria-checked="' + on + '" data-act="share:toggle"><span class="grow">Share usage numbers</span><span class="sw" aria-hidden="true"></span></button></div>';
+  }
+  const fb = reportBox("general");
+  if(fb) h += '<h2>Feedback</h2>' + fb;
+  h += '<p style="margin-top:28px">Not affiliated with UPSC. Version ' + esc(CONFIG.version) + ' · ' + QS.length + ' questions' + (CONTENT.updated ? ' · updated ' + esc(CONTENT.updated) : '') + '. Questions are set in TeX Gyre Schola.</p>';
+  h += '</div>';
+  $app.innerHTML = h;
+}
+function renderBackup(){
+  let h = appbar(backBtn("progress"), "Backup", "") + '<h1 style="margin-top:4px">Keep your progress safe</h1>' +
+    '<p class="t15 ink2 sub">Your progress lives only on this phone. Save a backup now and then, and before you change phones.</p>';
+  h += '<section class="section"><h2>Save</h2><p class="t15 muted sub">A small file you can keep in Drive, email or WhatsApp.</p><div style="margin-top:16px"><button class="btn primary" data-act="bkfile">Save backup file</button><button class="btn subtle" data-act="copybk">Copy backup code</button></div></section>';
+  h += '<section class="section"><h2>Restore</h2><p class="t15 muted sub">Replaces the progress on this phone.</p><div style="margin-top:16px"><label class="btn outline">Open a backup file<input type="file" id="bkin" data-change="bkopen" accept=".json,.txt,application/json,text/plain"></label></div>' +
+    '<label class="vh" for="rs">Backup code</label><textarea id="rs" placeholder="…or paste a backup code here" spellcheck="false"></textarea><button class="btn subtle" data-act="restore">Restore from code</button></section>';
+  $app.innerHTML = h;
+}
+function renderRemind(){
+  const custom = S.remCue && !CUES.some(c => c[0] === S.remCue);
+  const cur = S.remCue || "coffee";
+  let h = appbar(backBtn("home"), "Daily reminder", "") + '<h1 style="margin-top:4px">When will you do it?</h1>' +
+    '<p class="t15 ink2 sub">Tie it to something you already do every day. Deciding when and where makes you much more likely to follow through.</p>';
+  h += '<div class="rows" role="radiogroup" aria-label="When">' + CUES.map(c => '<button class="choice" role="radio" data-act="cue:' + c[0] + '" aria-checked="' + (cur === c[0]) + '"><span class="dot"></span>' + esc(c[1]) + '</button>').join("") +
+    '<div class="choice" role="radio" aria-checked="' + custom + '"><span class="dot"></span><label class="vh" for="cuein">Your own cue</label><input id="cuein" data-change="cue" maxlength="40" placeholder="Something else…" value="' + esc(custom ? S.remCue : "") + '"></div></div>';
+  h += '<section class="section"><h2>Around what time?</h2><label class="vh" for="rt">Time</label><input type="time" id="rt" value="' + esc(S.remTime) + '"></section>';
+  h += '<p class="intent" id="intent">' + esc(intention()) + '</p>';
+  h += '<p class="t13 muted" style="margin-top:12px">Adds a 5-minute daily event to your calendar with a link back here. If your phone has a work calendar too, pick your personal one.</p>';
+  $app.innerHTML = h;
+  bar(IS_IOS ? '<button class="btn primary" data-act="ics">Add to iPhone Calendar</button><button class="btn quiet" data-act="gcal">Use Google Calendar instead</button>'
+             : '<button class="btn primary" data-act="gcal">Add to Google Calendar</button><button class="btn quiet" data-act="ics">Download a calendar file instead</button>');
+}
+function factHtml(item){
+  if(item.pair) return esc(item.pair[0]) + ' <span class="arrow">→</span> ' + esc(item.pair[1]);
+  return esc(item.text);
+}
+function renderCoffee(){
+  if(!FACTS.length){ renderNoContent(); return; }
+  cbClean();
+  if(!S.fun.cur) cbNewRound();
+  const cur = S.fun.cur;
+  if(!cur){ renderNoContent(); return; }
+  if(cbIdx < 0 || cbIdx >= cur.ids.length) cbIdx = cbFirstOpen(cur);
+  if(cbIdx === -1){ cbFinish(); view = "coffeeEnd"; renderCoffeeEnd(); return; }
+  const item = FBY[cur.ids[cbIdx]], ans = cur.a[cbIdx], n = cur.ids.length;
+  let h = appbar(backBtn("home", "Back to home"), ic("cup", "saff") + 'Coffee Break', '<span class="t15 muted">' + (cbIdx + 1) + '/' + n + '</span>');
+  h += '<div class="progress cb" aria-hidden="true">' + cur.ids.map((x, i) => '<i class="' + (i === cbIdx && ans === null ? "cur" : cur.a[i] !== null ? "done" : "") + '"></i>').join("") + '</div>';
+  h += '<div class="kicker">' + esc(SUBJ[item.subj]) + (item.kind === "q" ? " · from Exam Mode" : "") + '</div>';
+  if(item.pair) h += '<p class="fctx">Correctly matched?' + (item.ctx ? " (" + esc(item.ctx) + ")" : "") + '</p>';
+  else if(item.ctx) h += '<p class="fctx">' + esc(item.ctx) + '</p>';
+  h += '<p class="fact">' + factHtml(item) + '</p>';
+  if(ans !== null){
+    const ok = ans === 1, kind = item.truth ? "a fact." : "fiction.";
+    h += '<div class="verdict ' + (ok ? "ok" : "bad") + '" id="result"><b>' + (ok ? "Right — it's " : "Not quite — it's ") + kind + '</b><p>' + esc(item.why) + '</p></div>';
+    const combo = cbCombo(cur, cbIdx);
+    if(ok && combo >= 3) h += '<p class="combo">' + combo + ' in a row</p>';
+    if(item.link && /^https:\/\//.test(item.link.u)) h += srcLinks([item.link]);
+  }
+  $app.innerHTML = h;
+  if(ans === null) bar('<div class="barnote">Fact or fiction?</div><div class="two"><button class="btn ff" data-act="cb:fact">Fact</button><button class="btn ff" data-act="cb:fiction">Fiction</button></div>');
+  else bar('<button class="btn cb" data-act="cbnext">' + (cbFirstOpen(cur) === -1 ? "See your score" : "Next") + '</button>');
+}
+function renderCoffeeEnd(){
+  const L = S.fun.last;
+  if(!L){ go("home"); return; }
+  const uncovered = FACTS.filter(x => S.fun.seen[x.id]).length;
+  let h = appbar('<button class="iconbtn" data-act="home" aria-label="Close">' + ic("close") + '</button>', ic("cup", "saff") + 'Coffee Break', "");
+  h += '<h1 style="margin-top:12px">' + L.score + ' out of ' + L.size + '</h1>';
+  const bestTxt = L.pb ? "New personal best · " : (S.fun.rounds > 1 && S.fun.best ? "Best " + S.fun.best + "/" + CONFIG.coffeeSize + " · " : "");
+  h += '<p class="t15 muted sub">' + bestTxt + uncovered + ' of ' + FACTS.length + ' facts uncovered</p>';
+  const misses = L.ids.map((id, i) => [FBY[id], L.a[i]]).filter(x => x[0] && x[1] === 0);
+  if(misses.length){
+    h += '<h2 class="section" style="font-size:17px;line-height:24px">The ones that got away</h2><div class="list" style="margin-top:12px">' + misses.map(x => '<div class="miss"><p class="s">' + factHtml(x[0]) + '</p><p class="w"><b>' + (x[0].truth ? "It's a fact." : "It's fiction.") + '</b> ' + esc(x[0].why) + '</p></div>').join("") + '</div>';
+    h += '<p class="plan">These come back in a later round.</p>';
+  } else h += '<p class="plan">A clean sweep.</p>';
+  $app.innerHTML = h;
+  bar('<button class="btn cb" data-act="cbagain">One more round</button><button class="btn quiet" data-act="home">Back to home</button>');
+}
+const VIEWS = {welcome:renderWelcome, home:renderHome, quiz:renderQuiz, summary:renderSummary, progress:renderProgress, saved:renderSaved, read:renderRead,
+  about:renderAbout, backup:renderBackup, remind:renderRemind, coffee:renderCoffee, coffeeEnd:renderCoffeeEnd};
+
 /* ---------- actions ---------- */
 function doAnswer(choice, conf){
-  const set = getSet(curDate); const id = set.ids[qi];
-  const res = answer(id, choice, conf, curDate);
-  if(!res) return;
+  const set = getSet(curDate, curKey, true); if(!set) return;
+  const id = set.ids[qi], q = QBY[id]; if(!q) return;
+  if(choice === null || choice === undefined) return;
+  if(q.mode === "exam" && choice >= 0 && !CONF[conf]) return;
+  if(q.mode === "easy" && choice === -1) return;
+  const res = answer(id, choice, conf, curDate, curKey);
   sel = null;
-  buzz(res.ok ? 15 : [30,40,30]);
+  if(!res){ render(); return; }
+  if(res.ok) buzz(12);
+  scrollTarget = "result";
   render();
-  const n = Object.keys(set.ans).length;
-  if(res.streakMsg) toast(res.streakMsg + (n === 1 && set.ids.length > 1 ? " " + (set.ids.length-1) + " more to go — or stop here." : ""));
-  else if(n === set.ids.length) toast("🎉 Today's set done. See you tomorrow!");
+  if(res.repaired) notice("Streak kept: " + S.streak + " days.");
+  else if(res.streakMsg) notice(res.streakMsg);
+  if(res.completed && S.setsDone === 1) persist();
+  if(res.completed) sendUsage("set");
 }
 function setName(){
   const el = document.getElementById("nm");
-  const v = (el && el.value || "").trim().replace(/\s+/g," ").slice(0,24);
-  if(!v){ toast("Type your name to continue"); return; }
-  S.name = v; save(); nameEdit = false; go("home");
+  const v = (el && el.value || "").replace(/\s+/g, " ").trim().slice(0, 24);
+  if(!v){ notice("Type your name to continue"); return; }
+  S.name = v;
+  const back = nameEdit; nameEdit = false;
+  if(!back && STATS_ON) S.stats.seen = true;
+  save();
+  go(back ? "progress" : "home");
+  if(!back) sendUsage("open");
 }
-document.addEventListener("click", e => {
-  const el = e.target.closest("[data-act]"); if(!el || el.disabled) return;
-  const parts = el.dataset.act.split(":"), act = parts[0], arg = parts.slice(1).join(":");
+function startSet(key){
+  curDate = today(); curKey = key;
+  const set = getSet(curDate, key);
+  if(!set || !set.ids.length){ notice("No more questions here today. Try another subject or mode."); render(); return; }
+  const i = set.ids.findIndex(id => !set.ans[id]);
+  reviewMode = false;
+  if(i === -1) go("summary"); else { qi = i; go("quiz"); }
+}
+function handle(act, arg){
   switch(act){
     case "setname": setName(); break;
     case "editname": nameEdit = true; go("welcome"); break;
     case "home": go("home"); break;
-    case "mode": S.mode = arg; save(); render(); break;
-    case "subj": S.subject = arg; showSubj = false; save(); render(); break;
-    case "togglesubj": showSubj = !showSubj; render(); break;
-    case "start": {
-      curDate = today();
-      const set = getSet(curDate); if(!set.ids.length) return;
-      const i = set.ids.findIndex(id => !set.ans[id]);
-      if(i === -1) go("summary"); else { qi = i; go("quiz"); }
-      break; }
-    case "opt": { const set = getSet(curDate); if(set.ans[set.ids[qi]]) return; sel = +arg; render(); break; }
+    case "mode": if(arg === "easy" || arg === "exam"){ S.mode = arg; save(); render(); } break;
+    case "subj": if(arg === "random" || SUBJ[arg]){ S.subject = arg; save(); render(); } break;
+    case "start": { const base = baseKey(), keys = keysToday(today(), base); startSet(keys.length ? keys[keys.length-1] : base); break; }
+    case "extra": {
+      const t = today(), base = baseKey(), keys = keysToday(t, base);
+      const last = keys.length ? S.days[t][keys[keys.length-1]] : null;
+      if(last && last.ids.some(id => !last.ans[id])){ startSet(keys[keys.length-1]); break; }
+      const n = keys.length ? Math.max.apply(null, keys.map(extraN)) + 1 : 1;
+      startSet(n === 1 ? base : base + "|" + n); break; }
+    case "opt": { const set = getSet(curDate, curKey, true); if(!set || set.ans[set.ids[qi]]) break; const i = +arg; if(!(i >= 0 && i < 4)) break; sel = sel === i ? null : i; render(); break; }
     case "check": if(sel !== null) doAnswer(sel, null); break;
-    case "conf": if(sel !== null) doAnswer(sel, arg); break;
+    case "conf": if(sel !== null && CONF[arg]) doAnswer(sel, arg); break;
     case "skip": doAnswer(-1, null); break;
     case "next": {
-      const set = getSet(curDate);
-      const after = set.ids.findIndex((id,i) => i > qi && !set.ans[id]);
-      const any = set.ids.findIndex(id => !set.ans[id]);
+      const set = getSet(curDate, curKey, true); if(!set){ go("home"); break; }
+      if(reviewMode){ const k = reviewList.indexOf(qi); if(k > -1 && k < reviewList.length - 1){ qi = reviewList[k + 1]; go("quiz"); } else go("summary"); break; }
+      const after = set.ids.findIndex((id, i) => i > qi && !set.ans[id]), any = set.ids.findIndex(id => !set.ans[id]);
       if(after > -1){ qi = after; go("quiz"); } else if(any > -1){ qi = any; go("quiz"); } else go("summary");
       break; }
-    case "dot": qi = +arg; go("quiz"); break;
+    case "dot": { const i = +arg; const set = getSet(curDate, curKey, true); if(!set || !(i >= 0 && i < set.ids.length)) break; qi = i; reviewMode = false; go("quiz"); break; }
+    case "review": {
+      const set = getSet(curDate, curKey, true); if(!set) break;
+      reviewList = []; set.ids.forEach((id, i) => { const v = set.ans[id]; if(v && !v.ok) reviewList.push(i); });
+      if(!reviewList.length) break;
+      reviewMode = true; qi = reviewList[0]; go("quiz"); break; }
     case "star": {
+      if(!IDRX.test(arg)) break;
       const i = S.saved.indexOf(arg);
-      if(i > -1) S.saved.splice(i,1); else { S.saved.push(arg); toast("★ Saved to Revise later"); }
-      save(); render(); break; }
+      if(i > -1){ S.saved.splice(i, 1); save(); render(); notice("Removed from Revise later"); }
+      else { S.saved.push(arg); save(); render(); notice("Saved to Revise later"); }
+      break; }
     case "saved": go("saved"); break;
-    case "read": readId = arg; go("read"); break;
+    case "read": if(QBY[arg]){ readId = arg; go("read"); } break;
     case "progress": go("progress"); break;
     case "remind": go("remind"); break;
     case "about": go("about"); break;
     case "backup": go("backup"); break;
+    case "bkfile": backupFile(); notice("Backup file saved to your downloads"); break;
     case "copybk": {
-      const code = backupCode(); const ta = document.getElementById("bk");
-      const fallback = () => { try{ ta.select(); document.execCommand("copy"); toast("Backup code copied"); }catch(err){ toast("Select the code and copy it"); } };
-      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(() => toast("Backup code copied"), fallback); else fallback();
+      makeCode().then(code => {
+        const fallback = () => { const ta = document.getElementById("rs"); if(ta){ ta.value = code; ta.select(); try{ document.execCommand("copy"); notice("Backup code copied"); }catch(err){ notice("Select the code and copy it"); } } };
+        if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(() => notice("Backup code copied — paste it somewhere safe"), fallback); else fallback();
+      });
       break; }
     case "restore": {
-      const ta = document.getElementById("rs"); const raw = (ta && ta.value || "").trim();
-      try{
-        if(raw.indexOf("PD2:") !== 0) throw 0;
-        const data = JSON.parse(decodeURIComponent(escape(atob(raw.slice(4)))));
-        if(!data || typeof data.hist !== "object") throw 0;
-        if(!confirm("Replace the progress on this phone with this backup?")) return;
-        S = Object.assign(freshState(), data); save(); toast("Progress restored"); go("home");
-      }catch(err){ toast("That code doesn't look right — copy it again in full"); }
+      const ta = document.getElementById("rs"), raw = (ta && ta.value || "").trim();
+      if(!raw){ notice("Paste a backup code first"); break; }
+      readBackup(raw).then(data => { if(restoreFrom(data)){ go("home"); notice("Progress restored"); } })
+        .catch(() => notice("That code doesn't look right — copy it again in full"));
       break; }
-    case "gcal": openGcal(); break;
-    case "ics": downloadIcs(); break;
-    case "switch": S.mode = S.mode === "easy" ? "exam" : "easy"; save(); go("home"); break;
+    case "cue": if(CUES.some(c => c[0] === arg)){ S.remCue = arg; save(); render(); } break;
+    case "gcal": S.remSet = true; save(); openGcal(); break;
+    case "ics": S.remSet = true; save(); downloadIcs(); break;
     case "install":
-      if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice && deferredPrompt.userChoice.then(() => { deferredPrompt = null; render(); }); }
+      if(deferredPrompt){ const p = deferredPrompt; p.prompt(); if(p.userChoice) p.userChoice.then(() => { deferredPrompt = null; render(); }, () => {}); }
       break;
     case "nodismiss": S.installDismissed = true; save(); render(); break;
+    case "dismissnote": noteDismissed = true; render(); break;
     case "reset":
-      if(confirm("Reset all progress? This can't be undone.")){ const keep = {name:S.name, uid:S.uid}; S = Object.assign(freshState(), keep); save(); go("home"); }
+      if(confirm("Reset all progress? This can't be undone. Save a backup first if you might want it back.")){ const keep = {name:S.name, uid:S.uid, created:today(), stats:S.stats}; S = Object.assign(fresh(), keep); save(); go("home"); }
       break;
+    case "reload": try{ location.reload(); }catch(e){} break;
+    case "coffee": cbIdx = -1; go("coffee"); break;
+    case "cb": {
+      const cur = S.fun.cur; if(!cur || cbIdx < 0) break;
+      const res = cbAnswer(cbIdx, arg === "fact");
+      if(res && res.ok) buzz(12);
+      scrollTarget = "result"; render(); break; }
+    case "cbnext": {
+      const cur = S.fun.cur; if(!cur){ go("coffee"); break; }
+      const nxt = cbFirstOpen(cur, cbIdx + 1), any = cbFirstOpen(cur);
+      if(nxt > -1){ cbIdx = nxt; go("coffee"); } else if(any > -1){ cbIdx = any; go("coffee"); } else { cbFinish(); go("coffeeEnd"); }
+      break; }
+    case "cbagain": cbNewRound(); cbIdx = 0; go("coffee"); break;
+    case "share":
+      if(arg === "on"){ setSharing(true); render(); }
+      else if(arg === "off"){ setSharing(false); render(); notice("Usage numbers switched off"); }
+      else if(arg === "toggle"){ const on = !(S.stats.on && S.stats.seen); setSharing(on); render(); notice(on ? "Sharing usage numbers" : "Switched off — numbers already sent will be deleted"); }
+      break;
+    case "report": if(STATS_ON && (arg === "general" || QBY[arg])){ if(reportFor !== arg) reportDraft = ""; reportFor = arg; render(); const t = document.getElementById("rpt"); if(t){ try{ t.focus({preventScroll:true}); }catch(e){ t.focus(); } t.scrollIntoView && t.scrollIntoView({block:"center"}); } } break;
+    case "reportcancel": reportFor = null; reportDraft = ""; render(); break;
+    case "reportsend": {
+      const ta = document.getElementById("rpt"), msg = (ta ? ta.value : reportDraft).replace(/\s+/g, " ").trim(), qid = reportFor;
+      if(!qid) break;
+      if(msg.length < 3){ notice("Type a few words first"); break; }
+      const btn = document.querySelector('[data-act="reportsend"]'); if(btn) btn.disabled = true;
+      post({t:"report", q:qid === "general" ? "" : qid, msg:msg.slice(0, 600), v:CONFIG.version}).then(ok => {
+        if(ok){ reportSent[qid] = true; if(reportFor === qid){ reportFor = null; reportDraft = ""; } render(); notice("Sent — thank you"); }
+        else { if(btn) btn.disabled = false; notice("Couldn't send — check your connection and try again"); }
+      });
+      break; }
+  }
+}
+document.addEventListener("click", e => {
+  const el = e.target && e.target.closest ? e.target.closest("[data-act]") : null;
+  if(!el || el.disabled) return;
+  if(sync()) sel = null;
+  const act = el.getAttribute("data-act"), i = act.indexOf(":");
+  handle(i < 0 ? act : act.slice(0, i), i < 0 ? "" : act.slice(i + 1));
+});
+document.addEventListener("change", e => {
+  const t = e.target; if(!t) return;
+  const k = t.getAttribute ? t.getAttribute("data-change") : null;
+  if(t.id === "rt"){ if(/^([01]\d|2[0-3]):[0-5]\d$/.test(t.value)){ S.remTime = t.value; save(); const p = document.getElementById("intent"); if(p) p.textContent = intention(); } return; }
+  if(k === "subject"){ sync(); if(t.value === "random" || SUBJ[t.value]){ S.subject = t.value; save(); render(); } return; }
+  if(k === "cue"){ const v = t.value.replace(/\s+/g, " ").trim().slice(0, 40); S.remCue = v || "coffee"; save(); render(); return; }
+  if(k === "bkopen" && t.files && t.files[0]){
+    const file = t.files[0];
+    if(file.size > 20 * 1024 * 1024){ notice("That file is too big to be a backup"); return; }
+    file.text().then(readBackup).then(data => { if(restoreFrom(data)){ go("home"); notice("Progress restored"); } })
+      .catch(() => notice("That file isn't a Prelims Daily backup"));
+    t.value = "";
   }
 });
-document.addEventListener("keydown", e => { if(e.key === "Enter" && view === "welcome"){ e.preventDefault(); setName(); } });
-document.addEventListener("change", e => { if(e.target && e.target.id === "rt" && e.target.value){ S.remTime = e.target.value; save(); } });
-document.addEventListener("visibilitychange", () => { if(document.visibilityState === "visible" && view === "home") render(); });
-window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredPrompt = e; if(view === "home") render(); });
-window.addEventListener("appinstalled", () => { deferredPrompt = null; S.installDismissed = true; save(); if(view === "home") render(); });
+document.addEventListener("input", e => {
+  const t = e.target;
+  if(t && t.id === "rpt"){ reportDraft = t.value.slice(0, 600); return; }
+  if(t && t.id === "rt" && /^([01]\d|2[0-3]):[0-5]\d$/.test(t.value)){ S.remTime = t.value; const p = document.getElementById("intent"); if(p) p.textContent = intention(); }
+});
+document.addEventListener("keydown", e => {
+  const tag = e.target && e.target.tagName;
+  if(tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT"){ if(view === "welcome" && e.key === "Enter"){ e.preventDefault(); setName(); } return; }
+  if(tag === "BUTTON" && (e.key === "Enter" || e.key === " ")) return;
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = (e.key || "").toLowerCase();
+  if(view === "quiz"){
+    const set = getSet(curDate, curKey, true); if(!set) return;
+    const q = QBY[set.ids[qi]]; if(!q) return;
+    if(set.ans[q.id]){ if(k === "enter" || k === " "){ e.preventDefault(); handle("next", ""); } return; }
+    const idx = "1234".indexOf(k) > -1 ? +k - 1 : "abcd".indexOf(k);
+    if(k.length === 1 && idx > -1){ sel = idx; render(); return; }
+    if(q.mode === "easy" && k === "enter" && sel !== null){ e.preventDefault(); doAnswer(sel, null); return; }
+    if(q.mode === "exam" && sel !== null){ const m = {s:"sure", "5":"5050", g:"guess"}[k]; if(m){ doAnswer(sel, m); } }
+  } else if(view === "coffee"){
+    const cur = S.fun.cur; if(!cur || cbIdx < 0) return;
+    if(cur.a[cbIdx] === null){ if(k === "1" || k === "arrowleft") handle("cb", "fact"); else if(k === "2" || k === "arrowright") handle("cb", "fiction"); }
+    else if(k === "enter" || k === " "){ e.preventDefault(); handle("cbnext", ""); }
+  }
+});
+window.addEventListener("storage", e => { if(e.key === KEY || e.key === null){ if(sync()){ sel = null; render(); } } });
+window.addEventListener("popstate", () => { if(view !== "home" && view !== "welcome") go("home", {fromPop:true}); });
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState !== "visible") return;
+  const changed = sync();
+  sendUsage("open");
+  // Back after a day or more on an old set: start from today's home screen instead.
+  if(curDate !== today() && (view === "quiz" || view === "summary")){ go("home"); return; }
+  if(changed || view === "home") render();
+});
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredPrompt = e; if(view === "home" || view === "summary") render(); });
+window.addEventListener("appinstalled", () => { deferredPrompt = null; S.installDismissed = true; save(); persist(); if(view === "home") render(); });
 
+/* ---------- start ---------- */
+// If today's set is half-done, open straight on the next question.
+if(view === "home" && LOADED){
+  const keys = keysToday(curDate, baseKey()), k = keys[keys.length-1], set = k ? getSet(curDate, k, true) : null;
+  if(set && set.ids.length){
+    const done = set.ids.filter(id => set.ans[id]).length;
+    if(done > 0 && done < set.ids.length){ curKey = k; qi = set.ids.findIndex(id => !set.ans[id]); view = "quiz"; }
+  }
+}
+save();
 render();
-window.__PD = {get state(){ return S; }, answer: answer, getSet: getSet, today: today, dayType: dayType};
+if(view === "quiz"){ try{ if(!(history.state && history.state.pd)) history.pushState({pd:1}, ""); }catch(e){} }
+setTimeout(() => sendUsage("open"), 1500);
+window.__PD = {get state(){ return S; }, set state(v){ S = v; }, answer:answer, getSet:getSet, buildSet:buildSet, today:today, dayType:dayType, normalize:normalize,
+  whyNot:whyNot, parseOpt:parseOpt, facts:FACTS, streakInfo:streakInfo, cbNewRound:cbNewRound, cbAnswer:cbAnswer, cbFinish:cbFinish, sync:sync, save:save, statsOn:STATS_ON, sendUsage:sendUsage,
+  get view(){ return view; }, get curKey(){ return curKey; }, get curDate(){ return curDate; }, get qi(){ return qi; }};
 })();
 </script>
 </body>
